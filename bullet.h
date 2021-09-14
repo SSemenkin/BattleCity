@@ -2,17 +2,23 @@
 #define BULLET_H
 
 #include <QGraphicsEllipseItem>
+#include <QGraphicsScene>
 
-class Bullet : public QGraphicsEllipseItem
+class Bullet : public QObject, public QGraphicsPixmapItem
 {
+    Q_OBJECT
 public:
-    Bullet(int dx, int dy, QGraphicsItem *parent = nullptr);
-
+    Bullet(int dx, int dy, QObject *parent = nullptr);
+signals:
+    void destroyed();
 protected:
     void advance(int phase) override;
 private:
     int m_dx;
     int m_dy;
+private:
+    void rotatePixmap(qreal angle);
+    bool deleteOnNextIteration {false};
 };
 
 #endif // BULLET_H

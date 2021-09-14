@@ -2,6 +2,7 @@
 
 int Player::CURRENT_SPEED = 0;
 int Player::PLAYER_SPEED = 3;
+int Player::BULLET_SPEED = 5;
 
 Player::Player(const QPixmap &pixmap, QGraphicsItem *parent) :
     QGraphicsPixmapItem(pixmap, parent)
@@ -19,6 +20,9 @@ void Player::keyPressEvent(QKeyEvent *e)
     case Qt::Key_Down:
         mDirection = newDirection(static_cast<Qt::Key>(e->key()));
         CURRENT_SPEED = PLAYER_SPEED;
+        break;
+    case Qt::Key_Space:
+        fire();
         break;
     default:
         QGraphicsPixmapItem::keyPressEvent(e);
@@ -148,4 +152,34 @@ void Player::rotatePixmap(qreal angle)
     t.rotate(angle);
 
     setPixmap(p.transformed(t));
+}
+
+void Player::fire()
+{
+    Bullet *newBullet;
+    QPoint bulletPosition;
+    switch (mDirection) {
+    case Direction::UP:
+        newBullet = new Bullet(0, -BULLET_SPEED);
+        bulletPosition.setX(scenePos().x() + pixmap().width()/2 - newBullet->pixmap().width()/2);
+        bulletPosition.setY(scenePos().y() - 10);
+        break;
+    case Direction::DOWN:
+        newBullet = new Bullet(0, BULLET_SPEED);
+        bulletPosition.setX(scenePos().x() + pixmap().width()/2 - newBullet->pixmap().width()/2);
+        bulletPosition.setY(scenePos().y() + pixmap().height());
+        break;
+    case Direction::LEFT:
+        newBullet = new Bullet(-BULLET_SPEED, 0);
+        bulletPosition.setX(scenePos().x() - 10);
+        bulletPosition.setY(scenePos().y() + pixmap().height()/2 - newBullet->pixmap().height()/2);
+        break;
+    case Direction::RIGHT:
+        newBullet = new Bullet(BULLET_SPEED, 0);
+        bulletPosition.setX(scenePos().x() + pixmap().width());
+        bulletPosition.setY(scenePos().y() + pixmap().height()/2 - newBullet->pixmap().width()/2);
+        break;
+    }
+    scene()->addItem(newBullet);
+    newBullet->setPos(bulletPosition);
 }

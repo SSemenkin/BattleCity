@@ -27,6 +27,7 @@ protected:
 private:
     static int CURRENT_SPEED;
     static int PLAYER_SPEED;
+    static int BULLET_SPEED;
     Direction mDirection {Direction::UP};
 private:
     bool canDoNextStep(const QPointF &point) const;
@@ -34,6 +35,7 @@ private:
     void moveByIfNotWall(int x, int y);
     Direction newDirection(Qt::Key key);
     void rotatePixmap(qreal angle);
+    void fire();
 };
 
 #endif // PLAYER_H
