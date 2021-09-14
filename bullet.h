@@ -4,6 +4,8 @@
 #include <QGraphicsEllipseItem>
 #include <QGraphicsScene>
 
+#include "explosion.h"
+
 class Bullet : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
@@ -19,6 +21,7 @@ private:
 private:
     void rotatePixmap(qreal angle);
     bool deleteOnNextIteration {false};
+    QPointF centerOfItem(QGraphicsPixmapItem *item);
 };
 
 #endif // BULLET_H

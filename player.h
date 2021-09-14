@@ -9,10 +9,11 @@
 
 #include "bullet.h"
 
-class Player : public QGraphicsPixmapItem
+class Player : public QObject, public QGraphicsPixmapItem
 {
+    Q_OBJECT
 public:
-    Player(const QPixmap &pixmap, QGraphicsItem *parent = nullptr);
+    Player(const QPixmap &pixmap = QPixmap(":/images/tank.png"), QGraphicsItem *parent = nullptr);
     enum class Direction {
         UP = 0,
         DOWN = 1,
@@ -29,6 +30,7 @@ private:
     static int PLAYER_SPEED;
     static int BULLET_SPEED;
     Direction mDirection {Direction::UP};
+    bool canFire {true};
 private:
     bool canDoNextStep(const QPointF &point) const;
     bool canDoNextStep(int x, int y) const;

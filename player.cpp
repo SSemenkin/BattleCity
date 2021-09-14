@@ -156,6 +156,10 @@ void Player::rotatePixmap(qreal angle)
 
 void Player::fire()
 {
+    if (!canFire) {
+        return;
+    }
+    canFire = false;
     Bullet *newBullet;
     QPoint bulletPosition;
     switch (mDirection) {
@@ -182,4 +186,5 @@ void Player::fire()
     }
     scene()->addItem(newBullet);
     newBullet->setPos(bulletPosition);
+    connect(newBullet, &Bullet::destroyed, this, [this] () { canFire = true; });
 }

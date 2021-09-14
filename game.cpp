@@ -5,10 +5,11 @@ bool Game::init()
 {
     static MenuScene initScene;
     static Multimedia mPlayer;
-    mPlayer.playMainTheme();
+    //mPlayer.playMainTheme();
     initScene.init();
     static QTimer timer;
     static QGraphicsView view(&initScene);
+
     QObject::connect (&initScene, &MenuScene::playTrigerred, [] () {
         view.setScene(new GameScene);
         view.scene()->setStickyFocus(true);

@@ -19,6 +19,7 @@ Bullet::Bullet(int dx, int dy, QObject *parent) :
 void Bullet::advance(int phase)
 {
     if (deleteOnNextIteration) {
+        emit destroyed();
         delete this;
         return;
     }
@@ -33,6 +34,13 @@ void Bullet::advance(int phase)
         delete this;
         return;
     } if (!collidingItems().isEmpty()) {
+        Explosion *e = new Explosion;
+        scene()->addItem(e);
+        e->setPos(centerOfItem(qgraphicsitem_cast<QGraphicsPixmapItem*>(collidingItems().first())));
+        e->startAnimation();
+
+        delete collidingItems().first();
+
         deleteOnNextIteration = true;
     }
 }
@@ -43,4 +51,12 @@ void Bullet::rotatePixmap(qreal angle)
     QTransform t;
     t.rotate(angle);
     setPixmap(m.transformed(t));
+}
+
+QPointF Bullet::centerOfItem(QGraphicsPixmapItem *item)
+{
+    QPointF r = item->scenePos();
+    r.setX(r.x());
+    r.setY(r.y());
+    return r;
 }

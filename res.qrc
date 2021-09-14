@@ -6,5 +6,10 @@
         <file>images/tank.png</file>
         <file>sounds/main.mp3</file>
         <file>images/bullet.png</file>
+        <file>images/explosion/explosion1.png</file>
+        <file>images/explosion/explosion2.png</file>
+        <file>images/explosion/explosion3.png</file>
+        <file>images/explosion/explosion4.png</file>
+        <file>images/explosion/explosion5.png</file>
     </qresource>
 </RCC>

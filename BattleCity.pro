@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     bullet.cpp \
+    explosion.cpp \
     game.cpp \
     gamescene.cpp \
     level.cpp \
@@ -21,6 +22,7 @@ SOURCES += \
 
 HEADERS += \
     bullet.h \
+    explosion.h \
     game.h \
     gamescene.h \
     level.h \
