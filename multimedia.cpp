@@ -6,8 +6,6 @@ Multimedia::Multimedia(QObject *parent) :
 {
     playlist.addMedia(QUrl("qrc:/sounds/main.mp3"));
     playlist.setPlaybackMode(QMediaPlaylist::Loop);
-
-
 }
 
 void Multimedia::playMainTheme()

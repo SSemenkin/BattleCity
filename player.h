@@ -11,29 +11,29 @@
 
 class Player : public QGraphicsPixmapItem
 {
+public:
+    Player(const QPixmap &pixmap, QGraphicsItem *parent = nullptr);
     enum class Direction {
-        left,
-        right,
-        up,
-        down
+        UP = 0,
+        DOWN = 1,
+        LEFT = 2,
+        RIGHT = 3
     };
 
-public:
-    Player(const QPixmap& pixmap, QGraphicsItem *parent = nullptr);
-
 protected:
-    void keyPressEvent(QKeyEvent *event) override;
-    void keyReleaseEvent(QKeyEvent *event) override;
+    void keyPressEvent(QKeyEvent *e) override;
+    void keyReleaseEvent(QKeyEvent *e) override;
     void advance(int phase) override;
-    virtual void fire();
-    bool isItemAtPosition(const QPointF& point);
-    void moveByIfNoItemAtPosition(const QPointF& point, int m_dx, int m_dy);
-    QPointF& adjusted(QPointF& source, qreal x, qreal y);
-
 private:
+    static int CURRENT_SPEED;
+    static int PLAYER_SPEED;
+    Direction mDirection {Direction::UP};
+private:
+    bool canDoNextStep(const QPointF &point) const;
+    bool canDoNextStep(int x, int y) const;
+    void moveByIfNotWall(int x, int y);
+    Direction newDirection(Qt::Key key);
     void rotatePixmap(qreal angle);
-    Direction m_direction {Direction::up};
-    static int speed;
 };
 
 #endif // PLAYER_H

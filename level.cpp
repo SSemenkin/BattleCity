@@ -15,7 +15,7 @@ Level::Level(const QString &path)
         m_matrix.reserve(rows.size());
         QVector<int> r;
 
-        for (const QString& row : rows) {
+        for (const QString& row : qAsConst(rows)) {
             r.reserve(row.size());
             for (const QChar& c : row) {
                 r.push_back(c.toLatin1());

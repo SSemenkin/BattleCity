@@ -3,7 +3,6 @@
         <file>images/logo.png</file>
         <file>levels/1_level.txt</file>
         <file>images/brick.png</file>
-        <file>images/1.png</file>
         <file>images/tank.png</file>
         <file>sounds/main.mp3</file>
     </qresource>
