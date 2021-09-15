@@ -31,7 +31,7 @@ StaticBlock::StaticBlock(Type type, int blockSide, QGraphicsItem *parent) :
             setPixmap(QPixmap(":/images/static_blocks/concrete.png").scaled(blockSide, blockSide));
             mTankSpeed = 0;
             mHealth = 2;
-            mDestructible = true;
+            mDestructible = false;
             mPerforating = false;
             setData(6, false);
             break;
@@ -40,7 +40,7 @@ StaticBlock::StaticBlock(Type type, int blockSide, QGraphicsItem *parent) :
         {
             setPixmap(QPixmap(":/images/static_blocks/water1.png").scaled(blockSide, blockSide));
             mWaterTimer = new QTimer(this);
-            connect(mWaterTimer, &QTimer::timeout, this, [this, blockSide] () {
+            QObject::connect(mWaterTimer, &QTimer::timeout, this, [this, blockSide] () {
                swapWater ?
                             setPixmap(QPixmap(":/images/static_blocks/water2.png").scaled(blockSide, blockSide)):
                             setPixmap(QPixmap(":/images/static_blocks/water1.png").scaled(blockSide, blockSide));

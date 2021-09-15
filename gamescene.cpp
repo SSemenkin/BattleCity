@@ -166,8 +166,8 @@ void GameScene::createBorderAroundBase()
 void GameScene::removeItemAndCreateSteel(int x, int y)
 {
     QGraphicsItem *item = itemAt(x+mWidthBrick/2,y+mWidthBrick/2, QTransform());
-    qDebug() << item;
-    if (item) {
+    if (item && (item->data(0).toString() == "StaticBody" ||
+            item->data(0).toString() == "Bonus")) {
         delete item;
     }
 

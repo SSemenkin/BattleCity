@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     base.cpp \
+    blink.cpp \
     bonusitem.cpp \
     bullet.cpp \
     enemytank.cpp \
@@ -28,6 +29,7 @@ SOURCES += \
 
 HEADERS += \
     base.h \
+    blink.h \
     bonusitem.h \
     bullet.h \
     enemytank.h \

@@ -10,6 +10,7 @@ Player::Player(const QPixmap &pixmap, QGraphicsItem *parent) :
     setFlag(QGraphicsItem::GraphicsItemFlag::ItemIsFocusable);
     setFocus();
     setData(0, "Player");
+    createHelmet();
 }
 
 void Player::pickupBonus(BonusItem::BonusType bonusType)
@@ -217,7 +218,7 @@ void Player::updateTankSpeed(QGraphicsItem *item) const
 
 void Player::createHelmet()
 {
-    scene()->addItem(new Shield(this));
+    new Shield(this);
 }
 
 void Player::fire()

@@ -70,7 +70,8 @@ void Bullet::createExplosion(QGraphicsItem *item)
 {
     Explosion *e = new Explosion;
     scene()->addItem(e);
-    e->setFixedScenePos(centerOfItem(qgraphicsitem_cast<QGraphicsPixmapItem*>(item)));
+    //e->setFixedScenePos(centerOfItem(qgraphicsitem_cast<QGraphicsPixmapItem*>(item)));
+    e->setFixedScenePos(scenePos());
     e->startAnimation();
 }
 
@@ -83,14 +84,14 @@ void Bullet::destroy()
 void Bullet::handleStaticBodyCollision(QGraphicsItem *item)
 {
     if (item->data(1).toBool()) return; // if Performating
-    if (!item->data(2).toBool()) return; // if not destructible
-
+    if (item->data(2).toBool()) { // if destructible
+        int itemHealth = item->data(3).toInt();
+        --itemHealth;
+        itemHealth <= 0 ? item->setData(5, true) : item->setData(3, itemHealth);
+    }
     createExplosion(item);
-    int itemHealth = item->data(3).toInt();
-    --itemHealth;
-
-    itemHealth <= 0 ? item->setData(5, true) : item->setData(3, itemHealth);
     mIsDestroy = true;
+
 }
 
 void Bullet::handleDynamicBodyCollision(QGraphicsItem *item)

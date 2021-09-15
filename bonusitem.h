@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QGraphicsPixmapItem>
+#include <QTimer>
 
 class BonusItem : public QObject, public QGraphicsPixmapItem
 {
@@ -22,6 +23,11 @@ protected:
     void advance(int phase) override;
 private:
     BonusType mType;
+    QTimer *mRemainingTimer;
+    QTimer *mSwapTimer;
+    QPixmap mPixmap;
+    int calls {0};
+    bool mSwap {true};
 };
 
 #endif // BONUSITEM_H
