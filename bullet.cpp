@@ -18,30 +18,29 @@ Bullet::Bullet(int dx, int dy, QObject *parent) :
 
 void Bullet::advance(int phase)
 {
-    if (deleteOnNextIteration) {
-        emit destroyed();
-        delete this;
-        return;
-    }
     if (phase) {
         moveBy(m_dx, m_dy);
-    }
-    if (scenePos().x() > scene()->width() + 1 ||
-          scenePos().x() < scene()->sceneRect().x() ||
-          scenePos().y() < scene()->sceneRect().y() ||
-          scenePos().y() > scene()->height() + 1) {
-        emit destroyed();
-        delete this;
-        return;
-    } if (!collidingItems().isEmpty()) {
-        Explosion *e = new Explosion;
-        scene()->addItem(e);
-        e->setPos(centerOfItem(qgraphicsitem_cast<QGraphicsPixmapItem*>(collidingItems().first())));
-        e->startAnimation();
+    } else {
+        if (scenePos().x() > scene()->width() || scenePos().x() < scene()->sceneRect().x() ||
+            scenePos().y() < scene()->sceneRect().y() || scenePos().y() > scene()->height()) {
+            emit destroyed();
+            delete this;
+            return;
+        } else {
+            auto items = collidingItems(Qt::ItemSelectionMode::IntersectsItemBoundingRect);
+            if (!items.isEmpty()) {
 
-        delete collidingItems().first();
-
-        deleteOnNextIteration = true;
+                 for (QGraphicsItem *item : items) {
+                     Explosion *e = new Explosion;
+                     scene()->addItem(e);
+                     e->setFixedScenePos(centerOfItem(qgraphicsitem_cast<QGraphicsPixmapItem*>(item)));
+                     e->startAnimation();
+                     delete item;
+                 }
+                 emit destroyed();
+                 delete this;
+            }
+        }
     }
 }
 
@@ -50,13 +49,18 @@ void Bullet::rotatePixmap(qreal angle)
     QPixmap m = pixmap();
     QTransform t;
     t.rotate(angle);
-    setPixmap(m.transformed(t));
+    setPixmap(std::move(m.transformed(t)));
 }
 
 QPointF Bullet::centerOfItem(QGraphicsPixmapItem *item)
 {
     QPointF r = item->scenePos();
-    r.setX(r.x());
-    r.setY(r.y());
+    r.setX(r.x() + item->pixmap().width() / 2);
+    r.setY(r.y() + item->pixmap().height() / 2);
     return r;
+}
+
+bool Bullet::isExplosion(QGraphicsItem *item) const
+{
+    return qgraphicsitem_cast<Explosion*>(item) != nullptr;
 }

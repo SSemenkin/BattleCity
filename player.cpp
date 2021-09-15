@@ -9,6 +9,7 @@ Player::Player(const QPixmap &pixmap, QGraphicsItem *parent) :
 {
     setFlag(QGraphicsItem::GraphicsItemFlag::ItemIsFocusable);
     setFocus();
+    setData(0, "Player");
 }
 
 void Player::keyPressEvent(QKeyEvent *e)
@@ -166,25 +167,25 @@ void Player::fire()
     case Direction::UP:
         newBullet = new Bullet(0, -BULLET_SPEED);
         bulletPosition.setX(scenePos().x() + pixmap().width()/2 - newBullet->pixmap().width()/2);
-        bulletPosition.setY(scenePos().y() - 10);
+        bulletPosition.setY(scenePos().y() - 15);
         break;
     case Direction::DOWN:
         newBullet = new Bullet(0, BULLET_SPEED);
         bulletPosition.setX(scenePos().x() + pixmap().width()/2 - newBullet->pixmap().width()/2);
-        bulletPosition.setY(scenePos().y() + pixmap().height());
+        bulletPosition.setY(scenePos().y() + pixmap().height() + 1);
         break;
     case Direction::LEFT:
         newBullet = new Bullet(-BULLET_SPEED, 0);
-        bulletPosition.setX(scenePos().x() - 10);
+        bulletPosition.setX(scenePos().x() - 15);
         bulletPosition.setY(scenePos().y() + pixmap().height()/2 - newBullet->pixmap().height()/2);
         break;
     case Direction::RIGHT:
         newBullet = new Bullet(BULLET_SPEED, 0);
-        bulletPosition.setX(scenePos().x() + pixmap().width());
+        bulletPosition.setX(scenePos().x() + pixmap().width() + 1);
         bulletPosition.setY(scenePos().y() + pixmap().height()/2 - newBullet->pixmap().width()/2);
         break;
     }
     scene()->addItem(newBullet);
     newBullet->setPos(bulletPosition);
-    connect(newBullet, &Bullet::destroyed, this, [this] () { canFire = true; });
+    QObject::connect(newBullet, &Bullet::destroyed, this, [this] () { canFire = true; });
 }

@@ -1,23 +1,36 @@
 ﻿#include "gamescene.h"
 #include <QTimer>
 
-GameScene::GameScene(const Level &level, QObject *parent) :
+std::array<Level, 1> GameScene::levels = {
+  Level(":/levels/1_level.txt")
+};
+
+GameScene::GameScene(int level, QObject *parent) :
     QGraphicsScene(parent)
 {
-    setBackgroundBrush(Qt::black);
+    setBackgroundBrush(Qt::gray);
     setSceneRect(qApp->primaryScreen()->availableGeometry());
-    setSceneRect(0, 0, 1930, 1090);
-    initLevelStructure(level);
+    loadLevel(level);
 }
 
-void GameScene::initLevelStructure(const Level &level)
+GameScene::GameScene(QObject *parent) :
+    QGraphicsScene(parent)
 {
-    matrix<int> structure = level.levelStructure();
+    setBackgroundBrush(Qt::gray);
+    setSceneRect(qApp->primaryScreen()->availableGeometry());
+}
+
+void GameScene::loadLevel(int levelID)
+{
+    const Level level = levels[levelID];
+    matrix<int> structure = level.getLevelStructure();
 
     if(structure.size()) {
 
-        int heightBrick = height() / structure.size();
-        int widthBrick = width() / structure.first().size();
+        heightBrick = height() / structure.size();
+        widthBrick = width() / structure.first().size();
+        std::min(heightBrick, widthBrick) == heightBrick ? widthBrick = heightBrick :
+                                                           heightBrick = widthBrick ;
 
         static QPixmap brick(":/images/brick.png");
         brick = brick.scaled(widthBrick, heightBrick);
@@ -31,5 +44,26 @@ void GameScene::initLevelStructure(const Level &level)
                 }
             }
         }
+        initPlayer(level.getPlayerPosition());
+        initBase(level.getBasePosition());
     }
 }
+
+void GameScene::initPlayer(const QPair<int, int> &playerPos)
+{
+    Player *player = new Player;
+    player->setPixmap(player->pixmap().scaled(widthBrick, heightBrick));
+    addItem(player);
+    player->setPos(playerPos.first * widthBrick,
+                   playerPos.second * heightBrick);
+}
+
+void GameScene::initBase(const QPair<int, int> &basePos)
+{
+    Base *base = new Base;
+    base->setPixmap(base->pixmap().scaled(widthBrick, heightBrick));
+    addItem(base);
+    base->setPos(basePos.first * widthBrick,
+                 basePos.second * heightBrick);
+}
+

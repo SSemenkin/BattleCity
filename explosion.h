@@ -17,6 +17,7 @@ public:
     void setFrame(int frame) {
         mCurrentFrame = frame;
     }
+    void setFixedScenePos(const QPointF& fixedPos);
 
 signals:
 
@@ -25,8 +26,10 @@ private:
     int mCurrentFrame {0};
     QTimer *mTimer;
     QVector<QPixmap> mAnimationFrames;
+    QPointF mCenterExplosion;
 private:
     void onTimeout();
+    void updateScenePosition();
 };
 
 #endif // EXPLOSION_H

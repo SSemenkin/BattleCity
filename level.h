@@ -11,19 +11,25 @@ using matrix = QVector<QVector<T>>;
 class Level
 {
 public:
-    Level(const QString &path);
 
-    matrix<int> levelStructure() const {
-        return m_matrix;
-    }
+    explicit Level(const QString &path);
+    Level();
+    bool isOk() const;
+    bool load(const QString &path);
+    int getLevelID() const;
+    matrix<int> getLevelStructure() const;
+    QPair<int, int> getPlayerPosition() const;
+    QPair<int, int> getBasePosition() const;
 
-    int id() const {
-        return m_id;
-    }
 
 private:
-    matrix<int> m_matrix;
-    int m_id {1};
+    matrix<int> mStructure;
+    QPair<int, int> mPlayerPosition;
+    QPair<int, int> mBasePosition;
+    int mLevelID{-1};
+
+private:
+    void fillPrivateData(const QStringList &rows);
 };
 
 #endif // LEVEL_H

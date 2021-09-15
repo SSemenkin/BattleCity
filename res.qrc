@@ -11,5 +11,6 @@
         <file>images/explosion/explosion3.png</file>
         <file>images/explosion/explosion4.png</file>
         <file>images/explosion/explosion5.png</file>
+        <file>images/base.png</file>
     </qresource>
 </RCC>

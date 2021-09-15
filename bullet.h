@@ -5,14 +5,13 @@
 #include <QGraphicsScene>
 
 #include "explosion.h"
+#include "player.h"
 
 class Bullet : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
     Bullet(int dx, int dy, QObject *parent = nullptr);
-signals:
-    void destroyed();
 protected:
     void advance(int phase) override;
 private:
@@ -22,6 +21,7 @@ private:
     void rotatePixmap(qreal angle);
     bool deleteOnNextIteration {false};
     QPointF centerOfItem(QGraphicsPixmapItem *item);
+    bool isExplosion(QGraphicsItem *item) const;
 };
 
 #endif // BULLET_H
