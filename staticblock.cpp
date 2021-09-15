@@ -62,6 +62,11 @@ bool StaticBlock::isPerforating() const
     return mPerforating;
 }
 
+int StaticBlock::tankSpeed() const
+{
+    return mTankSpeed;
+}
+
 int StaticBlock::health() const
 {
     return mHealth;

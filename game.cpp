@@ -14,6 +14,7 @@ bool Game::init()
         gameScene->loadLevel(0);
         view.setScene(gameScene);
     });
+    QObject::connect(&initScene, &MenuScene::quitTrigerred, &view, &QGraphicsView::close);
 
 
     view.setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);

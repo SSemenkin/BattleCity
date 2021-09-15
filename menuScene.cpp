@@ -32,7 +32,7 @@ void MenuScene::keyPressEvent(QKeyEvent *event)
     case Qt::Key_Return:
     case Qt::Key_Enter:
         if (quit->isCurrent()) {
-            QCoreApplication::quit();
+            emit quitTrigerred();
         } else {
             emit playTrigerred();
         }

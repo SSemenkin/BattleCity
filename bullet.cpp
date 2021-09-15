@@ -18,7 +18,7 @@ Bullet::Bullet(int dx, int dy, QObject *parent) :
 void Bullet::advance(int phase)
 {
     if (scenePos().x() > scene()->width() || scenePos().x() < scene()->sceneRect().x() ||
-            scenePos().y() < scene()->sceneRect().y() || scenePos().y() > scene()->height() || isDestroy) {
+            scenePos().y() < scene()->sceneRect().y() || scenePos().y() > scene()->height() || mIsDestroy) {
         destroy(); // check if bullet is in scene or collide with object on previous iteration
         return;
     }
@@ -90,12 +90,12 @@ void Bullet::handleStaticBodyCollision(QGraphicsItem *item)
     --itemHealth;
 
     itemHealth <= 0 ? item->setData(5, true) : item->setData(3, itemHealth);
-    isDestroy = true;
+    mIsDestroy = true;
 }
 
 void Bullet::handleDynamicBodyCollision(QGraphicsItem *item)
 {
     createExplosion(item);
     delete item;
-    isDestroy = true;
+    mIsDestroy = true;
 }

@@ -29,20 +29,20 @@ private:
     static int BONUS_RESPAWN_DELTA;
     static int ENEMY_RESPAWN_DELTA;
 
-    QTimer gameTimer;
-    QTimer bonusItemTimer;
-    QTimer enemyRespawnTimer;
+    QTimer mGameTimer;
+    QTimer mBonusItemTimer;
+    QTimer mEnemyRespawnTimer;
 
-    int heightBrick;
-    int widthBrick;
-    int widthBrickCount;
-    int heightBrickCount;
-    Base *base;
-    Player *player;
+    int mHeightBrick;
+    int mWidthBrick;
+    int mWidthBrickCount;
+    int mHeightBrickCount;
+    Base *mBase;
+    Player *mPlayer;
     int mCurrentLevel{-1};
 private:
-    void initPlayer(const QPair<int, int> &playerPos);
-    void initBase(const QPair<int, int> &basePos);
+    void initPlayer(const QPair<int,int> &position);
+    void initBase(const QPair<int, int> &position);
     void spawnEnemy();
     void spawnBonus();
     void gameOver();

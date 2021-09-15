@@ -18,7 +18,7 @@ protected:
 private:
     int m_dx;
     int m_dy;
-    bool isDestroy {false};
+    bool mIsDestroy {false};
 private:
     void rotatePixmap(qreal angle);
     QPointF centerOfItem(QGraphicsPixmapItem *item);

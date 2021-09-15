@@ -11,17 +11,17 @@ public:
                  QGraphicsItem *parent = nullptr);
 
     inline void setCurrent(bool state) {
-        current = state;
-        current ? setDefaultTextColor(Qt::red) : setDefaultTextColor(Qt::white);
+        mCurrent = state;
+        mCurrent ? setDefaultTextColor(Qt::red) : setDefaultTextColor(Qt::white);
     }
     inline bool isCurrent() const {
-        return current;
+        return mCurrent;
     }
 
 private:
     static QFont m_font;
 
-    bool current{false};
+    bool mCurrent{false};
 };
 
 #endif // MENUTEXTITEM_H

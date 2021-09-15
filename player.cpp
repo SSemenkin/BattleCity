@@ -14,7 +14,7 @@ Player::Player(const QPixmap &pixmap, QGraphicsItem *parent) :
 
 void Player::keyPressEvent(QKeyEvent *e)
 {
-    released = false;
+
     switch(e->key()) {
     case Qt::Key_Left:
     case Qt::Key_Right:
@@ -22,6 +22,7 @@ void Player::keyPressEvent(QKeyEvent *e)
     case Qt::Key_Down:
         mDirection = newDirection(static_cast<Qt::Key>(e->key()));
         CURRENT_SPEED = PLAYER_SPEED;
+        mReleased = false;
         break;
     case Qt::Key_Space:
         fire();
@@ -33,13 +34,13 @@ void Player::keyPressEvent(QKeyEvent *e)
 
 void Player::keyReleaseEvent(QKeyEvent *e)
 {
-    released = true;
     switch(e->key()) {
     case Qt::Key_Left:
     case Qt::Key_Right:
     case Qt::Key_Up:
     case Qt::Key_Down:
         CURRENT_SPEED = 0;
+        mReleased = true;
         break;
     default:
         QGraphicsPixmapItem::keyPressEvent(e);
@@ -49,6 +50,7 @@ void Player::keyReleaseEvent(QKeyEvent *e)
 void Player::advance(int phase)
 {
     if (!phase) return;
+    if (mReleased) return;
     switch(mDirection) {
     case Direction::DOWN:
         moveByIfNotWall(0, CURRENT_SPEED);
@@ -166,17 +168,17 @@ void Player::rotatePixmap(qreal angle)
 
 void Player::updateTankSpeed(QGraphicsItem *item) const
 {
-    CURRENT_SPEED = released ? 0 :
+    CURRENT_SPEED = mReleased ? 0 :
                                item->data(0) == "StaticBody" ? item->data(4).toInt() :
                                                                PLAYER_SPEED;
 }
 
 void Player::fire()
 {
-    if (!canFire) {
+    if (!mCanFire) {
         return;
     }
-    canFire = false;
+    mCanFire = false;
     Bullet *newBullet {nullptr};
     QPoint bulletPosition;
     switch (mDirection) {
@@ -203,7 +205,7 @@ void Player::fire()
     }
     scene()->addItem(newBullet);
     newBullet->setPos(bulletPosition);
-    QObject::connect(newBullet, &Bullet::destroyed, this, [this] () { canFire = true; });
+    QObject::connect(newBullet, &Bullet::destroyed, this, [this] () { mCanFire = true; });
 }
 
 

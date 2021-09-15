@@ -2,15 +2,15 @@
 
 Multimedia::Multimedia(QObject *parent) :
     QObject(parent),
-    player(new QMediaPlayer(this))
+    mPlayer(new QMediaPlayer(this))
 {
-    playlist.addMedia(QUrl("qrc:/sounds/main.mp3"));
-    playlist.setPlaybackMode(QMediaPlaylist::Loop);
+    mPlaylist.addMedia(QUrl("qrc:/sounds/main.mp3"));
+    mPlaylist.setPlaybackMode(QMediaPlaylist::Loop);
 }
 
 void Multimedia::playMainTheme()
 {
-    player->setPlaylist(&playlist);
-    player->setVolume(100);
-    player->play();
+    mPlayer->setPlaylist(&mPlaylist);
+    mPlayer->setVolume(100);
+    mPlayer->play();
 }

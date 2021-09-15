@@ -30,8 +30,8 @@ private:
     static int PLAYER_SPEED;
     static int BULLET_SPEED;
     Direction mDirection {Direction::UP};
-    bool canFire {true};
-    bool released {false};
+    bool mCanFire {true};
+    bool mReleased {true};
 private:
     bool canDoNextStep(const QPointF &point) const;
     bool canDoNextStep(int x, int y) const;

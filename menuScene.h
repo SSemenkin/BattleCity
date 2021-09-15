@@ -29,6 +29,7 @@ public:
 
 signals:
     void playTrigerred();
+    void quitTrigerred();
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;

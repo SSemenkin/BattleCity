@@ -26,7 +26,7 @@ GameScene::GameScene(QObject *parent) :
 
 void GameScene::loadLevel(int levelID)
 {
-    gameTimer.stop();
+    mGameTimer.stop();
     const Level level = levels[levelID];
     if(level.isOk()) {
         mCurrentLevel = levelID;
@@ -34,21 +34,21 @@ void GameScene::loadLevel(int levelID)
     matrix<int> structure = level.getLevelStructure();
 
     if(structure.size()) {
-        heightBrickCount = structure.size();
-        widthBrickCount = structure.first().size();
+        mHeightBrickCount = structure.size();
+        mWidthBrickCount = structure.first().size();
 
-        heightBrick = height() / structure.size();
-        widthBrick = width() / structure.first().size();
-        std::min(heightBrick, widthBrick) == heightBrick ? widthBrick = heightBrick :
-                                                           heightBrick = widthBrick ;
+        mHeightBrick = height() / structure.size();
+        mWidthBrick = width() / structure.first().size();
+        std::min(mHeightBrick, mWidthBrick) == mHeightBrick ? mWidthBrick = mHeightBrick :
+                                                           mHeightBrick = mWidthBrick ;
 
 
         for (int i = 0 ; i < structure.size(); ++i) {
             for (int j = 0; j < structure.at(i).size(); ++j) {
                 if (structure.at(i).at(j) != 32) {
-                    StaticBlock *item = new StaticBlock(static_cast<StaticBlock::Type>(structure.at(i).at(j) - '0'), widthBrick);
+                    StaticBlock *item = new StaticBlock(static_cast<StaticBlock::Type>(structure.at(i).at(j) - '0'), mWidthBrick);
                     addItem(item);
-                    item->setPos(j * widthBrick, i * heightBrick);
+                    item->setPos(j * mWidthBrick, i * mHeightBrick);
 
                 }
             }
@@ -57,31 +57,31 @@ void GameScene::loadLevel(int levelID)
         initBase(level.getBasePosition());
     }
 
-    QObject::connect(&gameTimer, &QTimer::timeout, this, &QGraphicsScene::advance);
-    QObject::connect(base, &Base::gameOver, this, &GameScene::gameOver);
-    QObject::connect(&enemyRespawnTimer, &QTimer::timeout, this, &GameScene::spawnEnemy);
-    QObject::connect(&bonusItemTimer, &QTimer::timeout, this, &GameScene::spawnBonus);
-    gameTimer.start(FPS_REFRESH_DELTA);
-    enemyRespawnTimer.start(ENEMY_RESPAWN_DELTA);
-    bonusItemTimer.start(BONUS_RESPAWN_DELTA);
+    QObject::connect(&mGameTimer, &QTimer::timeout, this, &QGraphicsScene::advance);
+    QObject::connect(mBase, &Base::gameOver, this, &GameScene::gameOver);
+    QObject::connect(&mEnemyRespawnTimer, &QTimer::timeout, this, &GameScene::spawnEnemy);
+    QObject::connect(&mBonusItemTimer, &QTimer::timeout, this, &GameScene::spawnBonus);
+    mGameTimer.start(FPS_REFRESH_DELTA);
+    mEnemyRespawnTimer.start(ENEMY_RESPAWN_DELTA);
+    mBonusItemTimer.start(BONUS_RESPAWN_DELTA);
 }
 
-void GameScene::initPlayer(const QPair<int, int> &playerPos)
+void GameScene::initPlayer(const QPair<int, int> &position)
 {
-    player = new Player;
-    player->setPixmap(player->pixmap().scaled(widthBrick, heightBrick));
-    addItem(player);
-    player->setPos(playerPos.first * widthBrick,
-                   playerPos.second * heightBrick);
+    mPlayer = new Player;
+    mPlayer->setPixmap(mPlayer->pixmap().scaled(mWidthBrick, mHeightBrick));
+    addItem(mPlayer);
+    mPlayer->setPos(position.first * mWidthBrick,
+                    position.second * mHeightBrick);
 }
 
-void GameScene::initBase(const QPair<int, int> &basePos)
+void GameScene::initBase(const QPair<int, int> &position)
 {
-    base = new Base;
-    base->setPixmap(base->pixmap().scaled(widthBrick, heightBrick));
-    addItem(base);
-    base->setPos(basePos.first * widthBrick,
-                 basePos.second * heightBrick);
+    mBase = new Base;
+    mBase->setPixmap(mBase->pixmap().scaled(mWidthBrick, mHeightBrick));
+    addItem(mBase);
+    mBase->setPos(position.first * mWidthBrick,
+                  position.second * mHeightBrick);
 }
 
 void GameScene::spawnEnemy()
@@ -90,18 +90,16 @@ void GameScene::spawnEnemy()
     int rand_height;
 
     for (;;) {
-        rand_width  = rand() % static_cast<int>(widthBrick * widthBrickCount);
-        rand_height = rand() % static_cast<int>((heightBrick * heightBrickCount - 1));
-        rand_height -= heightBrick;
+        rand_width  = rand() % static_cast<int>(mWidthBrick * mWidthBrickCount);
+        rand_height = rand() % static_cast<int>((mHeightBrick * mHeightBrickCount - 1));
+        rand_height -= mHeightBrick;
 
         if(isCellAvaliable(rand_width, rand_height)) {
             break;
         }
     }
 
-    QGraphicsPixmapItem *enemy = new QGraphicsPixmapItem(QPixmap(":/images/tank1up.png").scaled(widthBrick, heightBrick));
-    addItem(enemy);
-    enemy->setPos(rand_width, rand_height);
+    // TODO init enemy at pos (x, y)
 }
 
 void GameScene::spawnBonus()
@@ -115,27 +113,25 @@ void GameScene::gameOver()
 
     GameOver *gameOverItem = new GameOver(QPointF(width()/2, height()/2));
     addItem(gameOverItem);
-    gameOverItem->setPos(widthBrickCount / 2 * widthBrick - gameOverItem->pixmap().width()/2,
+    gameOverItem->setPos(mWidthBrickCount / 2 * mWidthBrick - gameOverItem->pixmap().width()/2,
                          height());
-    delete player;
+    delete mPlayer;
 
-    enemyRespawnTimer.stop();
-    bonusItemTimer.stop();
+    mEnemyRespawnTimer.stop();
+    mBonusItemTimer.stop();
 }
 
 bool GameScene::isCellAvaliable(int width, int height)
 {
     QTransform t;
     auto leftTop = itemAt(QPointF(width, height), t);
-    auto rightTop = itemAt(QPointF(width + widthBrick, height),t);
-    auto leftBot = itemAt(QPointF(width, height + heightBrick), t);
-    auto rightBot = itemAt(QPointF(width + widthBrick, height + heightBrick), t);
-    auto center = itemAt(QPointF(width + widthBrick/2, height + heightBrick/2), t);
+    auto rightTop = itemAt(QPointF(width + mWidthBrick, height),t);
+    auto leftBot = itemAt(QPointF(width, height + mHeightBrick), t);
+    auto rightBot = itemAt(QPointF(width + mWidthBrick, height + mHeightBrick), t);
+    auto center = itemAt(QPointF(width + mWidthBrick/2, height + mHeightBrick/2), t);
 
 
     return leftTop == nullptr && leftBot == nullptr
             && rightTop == nullptr && rightBot == nullptr && center == nullptr;
 }
-
-
 

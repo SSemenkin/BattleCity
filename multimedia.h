@@ -16,8 +16,8 @@ public:
 signals:
 
 private:
-    QMediaPlayer *player;
-    QMediaPlaylist playlist;
+    QMediaPlayer *mPlayer;
+    QMediaPlaylist mPlaylist;
 };
 
 #endif // MULTIMEDIA_H
