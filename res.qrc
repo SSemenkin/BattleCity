@@ -17,5 +17,9 @@
         <file>images/static_blocks/bush.png</file>
         <file>images/static_blocks/concrete.png</file>
         <file>images/static_blocks/water1.png</file>
+        <file>images/bonus/granade.png</file>
+        <file>images/bonus/helmet.png</file>
+        <file>images/bonus/shovel.png</file>
+        <file>images/bonus/star.png</file>
     </qresource>
 </RCC>

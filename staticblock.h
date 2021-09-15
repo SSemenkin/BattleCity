@@ -10,7 +10,7 @@ public:
         Brick = 0,
         Bush = 1,
         Concrete = 2,
-        Water = 3
+        Water
     };
     StaticBlock(Type type, int blockSide, QGraphicsItem *parent = nullptr);
 

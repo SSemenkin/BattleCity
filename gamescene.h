@@ -13,6 +13,7 @@
 #include "base.h"
 #include "gameover.h"
 #include "staticblock.h"
+#include "bonusitem.h"
 
 class GameScene : public QGraphicsScene
 {
@@ -47,7 +48,8 @@ private:
     void spawnBonus();
     void gameOver();
 
-    bool isCellAvaliable(int width, int height);
+    QPair<int, int> getRandomAndAvaliableCell() const;
+    bool isCellAvaliable(int width, int height) const;
 
 };
 

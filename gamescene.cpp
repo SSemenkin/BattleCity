@@ -2,8 +2,8 @@
 
 int GameScene::FPS = 60;
 int GameScene::FPS_REFRESH_DELTA = 1000/FPS;
-int GameScene::ENEMY_RESPAWN_DELTA = 1000;
-int GameScene::BONUS_RESPAWN_DELTA = 10000;
+int GameScene::ENEMY_RESPAWN_DELTA = 4000;
+int GameScene::BONUS_RESPAWN_DELTA = 5000;
 
 std::array<Level, 1> GameScene::levels = {
   Level(":/levels/1_level.txt")
@@ -13,8 +13,8 @@ GameScene::GameScene(int level, QObject *parent) :
     QGraphicsScene(parent)
 {
     setBackgroundBrush(Qt::black);
-    setSceneRect(qApp->primaryScreen()->availableGeometry());
     loadLevel(level);
+    setSceneRect(qApp->primaryScreen()->availableGeometry());
 }
 
 GameScene::GameScene(QObject *parent) :
@@ -64,6 +64,7 @@ void GameScene::loadLevel(int levelID)
     mGameTimer.start(FPS_REFRESH_DELTA);
     mEnemyRespawnTimer.start(ENEMY_RESPAWN_DELTA);
     mBonusItemTimer.start(BONUS_RESPAWN_DELTA);
+
 }
 
 void GameScene::initPlayer(const QPair<int, int> &position)
@@ -86,25 +87,24 @@ void GameScene::initBase(const QPair<int, int> &position)
 
 void GameScene::spawnEnemy()
 {
-    int rand_width;
-    int rand_height;
 
-    for (;;) {
-        rand_width  = rand() % static_cast<int>(mWidthBrick * mWidthBrickCount);
-        rand_height = rand() % static_cast<int>((mHeightBrick * mHeightBrickCount - 1));
-        rand_height -= mHeightBrick;
-
-        if(isCellAvaliable(rand_width, rand_height)) {
-            break;
-        }
-    }
 
     // TODO init enemy at pos (x, y)
 }
 
 void GameScene::spawnBonus()
 {
+    auto point = getRandomAndAvaliableCell();
 
+    int randomBonus = rand() % 4;
+
+    BonusItem *item = new BonusItem(static_cast<BonusItem::Type>(randomBonus), mWidthBrick);
+    addItem(item);
+
+    item->setPos(point.first,
+                 point.second);
+
+    qDebug() << "Spawn bonus at " << item->scenePos();
 }
 
 void GameScene::gameOver()
@@ -121,7 +121,24 @@ void GameScene::gameOver()
     mBonusItemTimer.stop();
 }
 
-bool GameScene::isCellAvaliable(int width, int height)
+QPair<int, int> GameScene::getRandomAndAvaliableCell() const
+{
+    int rand_width;
+    int rand_height;
+
+    for (;;) {
+        rand_width  = rand() % static_cast<int>(mWidthBrick * mWidthBrickCount);
+        rand_height = rand() % static_cast<int>((mHeightBrick * mHeightBrickCount - 1));
+        rand_height -= mHeightBrick;
+
+        if(isCellAvaliable(rand_width, rand_height)) {
+           return QPair<int, int> (rand_width, rand_height);
+        }
+    }
+}
+
+
+bool GameScene::isCellAvaliable(int width, int height) const
 {
     QTransform t;
     auto leftTop = itemAt(QPointF(width, height), t);
