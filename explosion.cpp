@@ -11,6 +11,7 @@ Explosion::Explosion( QObject *parent) : QObject(parent)
         QPixmap(":/images/explosion/explosion4.png"),
         QPixmap(":/images/explosion/explosion5.png")
     };
+    setData(0, "Explosion");
 
     setPixmap(mAnimationFrames[mCurrentFrame++]);
 }

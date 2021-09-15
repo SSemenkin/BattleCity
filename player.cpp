@@ -72,8 +72,10 @@ bool Player::canDoNextStep(const QPointF &point) const
 
     QGraphicsItem *l = scene()->itemAt(basePoint, sceneTransform());
 
-    return !l && l != this && basePoint.x() > 0 && basePoint.x() < scene()->width()
-            && basePoint.y() > 0 && basePoint.y() < scene()->height();
+    if (l->data(0) != "StaticBody") {
+        return !l && l != this && basePoint.x() > 0 && basePoint.x() < scene()->width()
+                && basePoint.y() > 0 && basePoint.y() < scene()->height();
+    } else return l->data(1).toBool();
 }
 
 bool Player::canDoNextStep(int x, int y) const

@@ -12,6 +12,7 @@
 #include "player.h"
 #include "base.h"
 #include "gameover.h"
+#include "staticblock.h"
 
 class GameScene : public QGraphicsScene
 {

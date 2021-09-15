@@ -10,7 +10,9 @@ CONFIG += c++11
 
 SOURCES += \
     base.cpp \
+    bonusitem.cpp \
     bullet.cpp \
+    enemytank.cpp \
     explosion.cpp \
     game.cpp \
     gameover.cpp \
@@ -20,11 +22,14 @@ SOURCES += \
     menuScene.cpp \
     menutextitem.cpp \
     multimedia.cpp \
-    player.cpp
+    player.cpp \
+    staticblock.cpp
 
 HEADERS += \
     base.h \
+    bonusitem.h \
     bullet.h \
+    enemytank.h \
     explosion.h \
     game.h \
     gameover.h \
@@ -33,7 +38,8 @@ HEADERS += \
     menuScene.h \
     menutextitem.h \
     multimedia.h \
-    player.h
+    player.h \
+    staticblock.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

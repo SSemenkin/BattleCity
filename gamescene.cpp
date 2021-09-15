@@ -42,15 +42,14 @@ void GameScene::loadLevel(int levelID)
         std::min(heightBrick, widthBrick) == heightBrick ? widthBrick = heightBrick :
                                                            heightBrick = widthBrick ;
 
-        static QPixmap brick(":/images/brick.png");
-        brick = brick.scaled(widthBrick, heightBrick);
 
         for (int i = 0 ; i < structure.size(); ++i) {
             for (int j = 0; j < structure.at(i).size(); ++j) {
-                if(structure.at(i).at(j) == 42) {
-                    QGraphicsPixmapItem *item = new QGraphicsPixmapItem(brick);
+                if (structure.at(i).at(j) != 32) {
+                    StaticBlock *item = new StaticBlock(static_cast<StaticBlock::Type>(structure.at(i).at(j) - '0'), widthBrick);
                     addItem(item);
-                    item->setPos(j * widthBrick, i * heightBrick );
+                    item->setPos(j * widthBrick, i * heightBrick);
+
                 }
             }
         }
@@ -91,7 +90,7 @@ void GameScene::spawnEnemy()
     int rand_height;
 
     for (;;) {
-        rand_width = rand() % static_cast<int>(widthBrick * widthBrickCount);
+        rand_width  = rand() % static_cast<int>(widthBrick * widthBrickCount);
         rand_height = rand() % static_cast<int>((heightBrick * heightBrickCount - 1));
         rand_height -= heightBrick;
 
@@ -126,11 +125,16 @@ void GameScene::gameOver()
 
 bool GameScene::isCellAvaliable(int width, int height)
 {
-    auto leftTop = itemAt(QPointF(width, height), QTransform());
-    auto rightTop = itemAt(QPointF(width + widthBrick, height), QTransform());
-    auto leftBot = itemAt(QPointF(width, height + heightBrick), QTransform());
-    auto rightBot = itemAt(QPointF(width + widthBrick, height + heightBrick), QTransform());
-    return !leftTop && !leftBot && !rightTop && !rightBot;
+    QTransform t;
+    auto leftTop = itemAt(QPointF(width, height), t);
+    auto rightTop = itemAt(QPointF(width + widthBrick, height),t);
+    auto leftBot = itemAt(QPointF(width, height + heightBrick), t);
+    auto rightBot = itemAt(QPointF(width + widthBrick, height + heightBrick), t);
+    auto center = itemAt(QPointF(width + widthBrick/2, height + heightBrick/2), t);
+
+
+    return leftTop == nullptr && leftBot == nullptr
+            && rightTop == nullptr && rightBot == nullptr && center == nullptr;
 }
 
 

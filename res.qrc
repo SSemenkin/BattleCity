@@ -2,7 +2,6 @@
     <qresource prefix="/">
         <file>images/logo.png</file>
         <file>levels/1_level.txt</file>
-        <file>images/brick.png</file>
         <file>images/tank.png</file>
         <file>sounds/main.mp3</file>
         <file>images/bullet.png</file>
@@ -14,5 +13,9 @@
         <file>images/base.png</file>
         <file>images/gameover.png</file>
         <file>images/tank1up.png</file>
+        <file>images/static_blocks/brick.png</file>
+        <file>images/static_blocks/bush.png</file>
+        <file>images/static_blocks/concrete.png</file>
+        <file>images/static_blocks/water1.png</file>
     </qresource>
 </RCC>

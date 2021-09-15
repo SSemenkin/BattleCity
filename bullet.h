@@ -18,11 +18,16 @@ protected:
 private:
     int m_dx;
     int m_dy;
+    bool isDestroy {false};
 private:
     void rotatePixmap(qreal angle);
     QPointF centerOfItem(QGraphicsPixmapItem *item);
     bool isExplosion(QGraphicsItem *item) const;
     bool isBase(QGraphicsItem *item) const;
+    void createExplosion(QGraphicsItem *item);
+    void destroy();
+    void handleStaticBodyCollision(QGraphicsItem *item);
+    void handleDynamicBodyCollision(QGraphicsItem *item);
 };
 
 #endif // BULLET_H

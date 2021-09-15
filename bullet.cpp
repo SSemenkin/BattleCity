@@ -17,28 +17,25 @@ Bullet::Bullet(int dx, int dy, QObject *parent) :
 
 void Bullet::advance(int phase)
 {
+    if (scenePos().x() > scene()->width() || scenePos().x() < scene()->sceneRect().x() ||
+            scenePos().y() < scene()->sceneRect().y() || scenePos().y() > scene()->height() || isDestroy) {
+        destroy(); // check if bullet is in scene or collide with object on previous iteration
+        return;
+    }
+
     if (phase) {
         moveBy(m_dx, m_dy);
-    } else {
-        if (scenePos().x() > scene()->width() || scenePos().x() < scene()->sceneRect().x() ||
-            scenePos().y() < scene()->sceneRect().y() || scenePos().y() > scene()->height()) {
-            emit destroyed();
-            delete this;
-            return;
-        } else {
-            auto items = collidingItems(Qt::ItemSelectionMode::IntersectsItemBoundingRect);
-            if (!items.isEmpty()) {
+    }
 
-                 for (QGraphicsItem *item : items) {
-                     Explosion *e = new Explosion;
-                     scene()->addItem(e);
-                     e->setFixedScenePos(centerOfItem(qgraphicsitem_cast<QGraphicsPixmapItem*>(item)));
-                     e->startAnimation();
-                     isBase(item) ? item->setData(1, true) : delete item;
-                 }
-                 emit destroyed();
-                 delete this;
+    auto collItems = collidingItems();
+
+    if (!collItems.isEmpty()) {
+        for (QGraphicsItem *item : collItems) {
+            if (item->data(0) == "Explosion")  {
+                continue;
             }
+            item->data(0) == "StaticBody" ? handleStaticBodyCollision(item) :
+                                            handleDynamicBodyCollision(item);
         }
     }
 }
@@ -67,4 +64,38 @@ bool Bullet::isExplosion(QGraphicsItem *item) const
 bool Bullet::isBase(QGraphicsItem *item) const
 {
     return qgraphicsitem_cast<Base*>(item) != nullptr && item->data(0).toString() == "Base";
+}
+
+void Bullet::createExplosion(QGraphicsItem *item)
+{
+    Explosion *e = new Explosion;
+    scene()->addItem(e);
+    e->setFixedScenePos(centerOfItem(qgraphicsitem_cast<QGraphicsPixmapItem*>(item)));
+    e->startAnimation();
+}
+
+void Bullet::destroy()
+{
+    emit destroyed();
+    delete this;
+}
+
+void Bullet::handleStaticBodyCollision(QGraphicsItem *item)
+{
+    if (item->data(1).toBool()) return; // if Performating
+    if (!item->data(2).toBool()) return; // if not destructible
+
+    createExplosion(item);
+    int itemHealth = item->data(3).toInt();
+    --itemHealth;
+
+    itemHealth <= 0 ? item->setData(4, true) : item->setData(3, itemHealth);
+    isDestroy = true;
+}
+
+void Bullet::handleDynamicBodyCollision(QGraphicsItem *item)
+{
+    createExplosion(item);
+    delete item;
+    isDestroy = true;
 }

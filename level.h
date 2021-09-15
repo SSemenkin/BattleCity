@@ -26,7 +26,7 @@ private:
     matrix<int> mStructure;
     QPair<int, int> mPlayerPosition;
     QPair<int, int> mBasePosition;
-    int mLevelID{-1};
+    int mLevelID {-1};
 
 private:
     void fillPrivateData(const QStringList &rows);
