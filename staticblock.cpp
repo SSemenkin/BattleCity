@@ -12,6 +12,7 @@ StaticBlock::StaticBlock(Type type, int blockSide, QGraphicsItem *parent) :
             mHealth = 1;
             mDestructible = true;
             mPerforating = false;
+            setData(6, false);
             break;
         }
         case Type::Bush:
@@ -22,6 +23,7 @@ StaticBlock::StaticBlock(Type type, int blockSide, QGraphicsItem *parent) :
             mHealth = 1;
             mDestructible = false;
             mPerforating = true;
+            setData(6, true);
             break;
         }
         case Type::Concrete:
@@ -31,6 +33,7 @@ StaticBlock::StaticBlock(Type type, int blockSide, QGraphicsItem *parent) :
             mHealth = 2;
             mDestructible = true;
             mPerforating = false;
+            setData(6, false);
             break;
         }
         case Type::Water:
@@ -48,6 +51,7 @@ StaticBlock::StaticBlock(Type type, int blockSide, QGraphicsItem *parent) :
             mHealth = 1;
             mDestructible = false;
             mPerforating = true;
+            setData(6, false);
             break;
         }
     }

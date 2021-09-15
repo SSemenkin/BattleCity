@@ -61,6 +61,7 @@ void GameScene::loadLevel(int levelID)
     QObject::connect(mBase, &Base::gameOver, this, &GameScene::gameOver);
     QObject::connect(&mEnemyRespawnTimer, &QTimer::timeout, this, &GameScene::spawnEnemy);
     QObject::connect(&mBonusItemTimer, &QTimer::timeout, this, &GameScene::spawnBonus);
+    QObject::connect(mPlayer, &Player::createBorder, this, &GameScene::createBorderAroundBase);
     mGameTimer.start(FPS_REFRESH_DELTA);
     mEnemyRespawnTimer.start(ENEMY_RESPAWN_DELTA);
     mBonusItemTimer.start(BONUS_RESPAWN_DELTA);
@@ -148,5 +149,30 @@ bool GameScene::isCellAvaliable(int width, int height) const
 
     return leftTop == nullptr && leftBot == nullptr
             && rightTop == nullptr && rightBot == nullptr && center == nullptr;
+}
+
+void GameScene::createBorderAroundBase()
+{
+   auto pos = mBase->pos();
+
+   removeItemAndCreateSteel(pos.x() + mWidthBrick, pos.y());
+   removeItemAndCreateSteel(pos.x() + mWidthBrick, pos.y() - mHeightBrick);
+   removeItemAndCreateSteel(pos.x(), pos.y() - mHeightBrick);
+   removeItemAndCreateSteel(pos.x() - mWidthBrick, pos.y() - mHeightBrick);
+   removeItemAndCreateSteel(pos.x() - mWidthBrick, pos.y());
+
+}
+
+void GameScene::removeItemAndCreateSteel(int x, int y)
+{
+    QGraphicsItem *item = itemAt(x+mWidthBrick/2,y+mWidthBrick/2, QTransform());
+    qDebug() << item;
+    if (item) {
+        delete item;
+    }
+
+    StaticBlock *steel = new StaticBlock(StaticBlock::Type::Concrete, mWidthBrick);
+    addItem(steel);
+    steel->setPos(x, y);
 }
 

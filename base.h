@@ -9,6 +9,7 @@ class Base : public QObject, public QGraphicsPixmapItem
     Q_OBJECT
 public:
     explicit Base(const QPixmap& pixmap = QPixmap(":/images/base.png"), QObject *parent = nullptr);
+    QPair<int, int> pseudoPos() const;
 
 signals:
     void gameOver();

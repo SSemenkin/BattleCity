@@ -44,12 +44,17 @@ private:
 private:
     void initPlayer(const QPair<int,int> &position);
     void initBase(const QPair<int, int> &position);
+
     void spawnEnemy();
     void spawnBonus();
+
     void gameOver();
 
     QPair<int, int> getRandomAndAvaliableCell() const;
     bool isCellAvaliable(int width, int height) const;
+
+    void createBorderAroundBase();
+    void removeItemAndCreateSteel(int x, int y);
 
 };
 

@@ -23,6 +23,7 @@ SOURCES += \
     menutextitem.cpp \
     multimedia.cpp \
     player.cpp \
+    shield.cpp \
     staticblock.cpp
 
 HEADERS += \
@@ -39,6 +40,7 @@ HEADERS += \
     menutextitem.h \
     multimedia.h \
     player.h \
+    shield.h \
     staticblock.h
 
 # Default rules for deployment.

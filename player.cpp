@@ -15,16 +15,18 @@ Player::Player(const QPixmap &pixmap, QGraphicsItem *parent) :
 void Player::pickupBonus(BonusItem::BonusType bonusType)
 {
     switch (bonusType) {
-       case BonusItem::BonusType::Granade:
-       {
+        case BonusItem::BonusType::Granade:
+        {
             break;
-       }
+        }
         case BonusItem::BonusType::Helmet:
         {
+             createHelmet();
              break;
         }
         case BonusItem::BonusType::Shovel:
         {
+             emit createBorder();
              break;
         }
         case BonusItem::BonusType::Star:
@@ -98,20 +100,33 @@ bool Player::canDoNextStep(const QPointF &point) const
 
     QGraphicsItem *l = scene()->itemAt(basePoint, sceneTransform());
 
-    updateTankSpeed(l);
-
     const QString objectType = l->data(0).toString();
 
     if (objectType == "Bonus") {
         l->setData(5, true);
         return true;
-    } else if (objectType != "StaticBody") {
+    }
+
+    bool isRealistic = true;
+    if (!isRealistic) {
+        updateTankSpeed(l);
+
+
+    if (objectType != "StaticBody") {
         return !l && l != this && basePoint.x() > 0 && basePoint.x() < scene()->width()
                 && basePoint.y() > 0 && basePoint.y() < scene()->height();
     } else {
         return l->data(1).toBool();
+    }} else {
+        if (l->data(0) == "StaticBody") {
+            return l->data(6).toBool();
+        } else {
+            return !l && l != this && basePoint.x() > 0 && basePoint.x() < scene()->width()
+                    && basePoint.y() > 0 && basePoint.y() < scene()->height();
+        }
     }
 }
+
 
 bool Player::canDoNextStep(int x, int y) const
 {
@@ -198,6 +213,11 @@ void Player::updateTankSpeed(QGraphicsItem *item) const
     CURRENT_SPEED = mReleased ? 0 :
                                item->data(0) == "StaticBody" ? item->data(4).toInt() :
                                                                PLAYER_SPEED;
+}
+
+void Player::createHelmet()
+{
+    scene()->addItem(new Shield(this));
 }
 
 void Player::fire()

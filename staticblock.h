@@ -18,6 +18,7 @@ public:
 
     bool isDestructible() const;
     bool isPerforating() const;
+    bool isTankCanMoveHover() const;
     int tankSpeed() const;
     int health() const;
 

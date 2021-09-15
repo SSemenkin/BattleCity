@@ -9,6 +9,7 @@
 
 #include "bullet.h"
 #include "bonusitem.h"
+#include "shield.h"
 
 class Player : public QObject, public QGraphicsPixmapItem
 {
@@ -22,6 +23,8 @@ public:
         RIGHT = 3
     };
     void pickupBonus(BonusItem::BonusType bonusType);
+signals:
+    void createBorder();
 
 protected:
     void keyPressEvent(QKeyEvent *e) override;

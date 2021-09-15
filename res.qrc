@@ -22,5 +22,7 @@
         <file>images/bonus/shovel.png</file>
         <file>images/bonus/star.png</file>
         <file>images/static_blocks/water2.png</file>
+        <file>images/shield/shield1.png</file>
+        <file>images/shield/shield2.png</file>
     </qresource>
 </RCC>
