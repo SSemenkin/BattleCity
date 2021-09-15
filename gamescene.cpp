@@ -1,5 +1,10 @@
 ﻿#include "gamescene.h"
 
+int GameScene::FPS = 60;
+int GameScene::FPS_REFRESH_DELTA = 1000/FPS;
+int GameScene::ENEMY_RESPAWN_DELTA = 1000;
+int GameScene::BONUS_RESPAWN_DELTA = 10000;
+
 std::array<Level, 1> GameScene::levels = {
   Level(":/levels/1_level.txt")
 };
@@ -23,9 +28,14 @@ void GameScene::loadLevel(int levelID)
 {
     gameTimer.stop();
     const Level level = levels[levelID];
+    if(level.isOk()) {
+        mCurrentLevel = levelID;
+    }
     matrix<int> structure = level.getLevelStructure();
 
     if(structure.size()) {
+        heightBrickCount = structure.size();
+        widthBrickCount = structure.first().size();
 
         heightBrick = height() / structure.size();
         widthBrick = width() / structure.first().size();
@@ -50,7 +60,11 @@ void GameScene::loadLevel(int levelID)
 
     QObject::connect(&gameTimer, &QTimer::timeout, this, &QGraphicsScene::advance);
     QObject::connect(base, &Base::gameOver, this, &GameScene::gameOver);
-    gameTimer.start(1000/60);
+    QObject::connect(&enemyRespawnTimer, &QTimer::timeout, this, &GameScene::spawnEnemy);
+    QObject::connect(&bonusItemTimer, &QTimer::timeout, this, &GameScene::spawnBonus);
+    gameTimer.start(FPS_REFRESH_DELTA);
+    enemyRespawnTimer.start(ENEMY_RESPAWN_DELTA);
+    bonusItemTimer.start(BONUS_RESPAWN_DELTA);
 }
 
 void GameScene::initPlayer(const QPair<int, int> &playerPos)
@@ -71,14 +85,52 @@ void GameScene::initBase(const QPair<int, int> &basePos)
                  basePos.second * heightBrick);
 }
 
+void GameScene::spawnEnemy()
+{
+    int rand_width;
+    int rand_height;
+
+    for (;;) {
+        rand_width = rand() % static_cast<int>(widthBrick * widthBrickCount);
+        rand_height = rand() % static_cast<int>((heightBrick * heightBrickCount - 1));
+        rand_height -= heightBrick;
+
+        if(isCellAvaliable(rand_width, rand_height)) {
+            break;
+        }
+    }
+
+    QGraphicsPixmapItem *enemy = new QGraphicsPixmapItem(QPixmap(":/images/tank1up.png").scaled(widthBrick, heightBrick));
+    addItem(enemy);
+    enemy->setPos(rand_width, rand_height);
+}
+
+void GameScene::spawnBonus()
+{
+
+}
+
 void GameScene::gameOver()
 {
     //gameTimer.stop();
 
     GameOver *gameOverItem = new GameOver(QPointF(width()/2, height()/2));
     addItem(gameOverItem);
-    gameOverItem->setPos((width() / widthBrick / 2) * widthBrick - widthBrick/2, height());
+    gameOverItem->setPos(widthBrickCount / 2 * widthBrick - gameOverItem->pixmap().width()/2,
+                         height());
     delete player;
+
+    enemyRespawnTimer.stop();
+    bonusItemTimer.stop();
+}
+
+bool GameScene::isCellAvaliable(int width, int height)
+{
+    auto leftTop = itemAt(QPointF(width, height), QTransform());
+    auto rightTop = itemAt(QPointF(width + widthBrick, height), QTransform());
+    auto leftBot = itemAt(QPointF(width, height + heightBrick), QTransform());
+    auto rightBot = itemAt(QPointF(width + widthBrick, height + heightBrick), QTransform());
+    return !leftTop && !leftBot && !rightTop && !rightBot;
 }
 
 

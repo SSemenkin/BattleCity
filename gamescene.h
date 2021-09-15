@@ -23,15 +23,30 @@ public:
 
 private:
     static std::array<Level, 1> levels;
+    static int FPS;
+    static int FPS_REFRESH_DELTA;
+    static int BONUS_RESPAWN_DELTA;
+    static int ENEMY_RESPAWN_DELTA;
+
     QTimer gameTimer;
+    QTimer bonusItemTimer;
+    QTimer enemyRespawnTimer;
+
     int heightBrick;
     int widthBrick;
+    int widthBrickCount;
+    int heightBrickCount;
     Base *base;
     Player *player;
+    int mCurrentLevel{-1};
 private:
     void initPlayer(const QPair<int, int> &playerPos);
     void initBase(const QPair<int, int> &basePos);
+    void spawnEnemy();
+    void spawnBonus();
     void gameOver();
+
+    bool isCellAvaliable(int width, int height);
 
 };
 

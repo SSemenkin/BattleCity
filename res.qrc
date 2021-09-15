@@ -13,5 +13,6 @@
         <file>images/explosion/explosion5.png</file>
         <file>images/base.png</file>
         <file>images/gameover.png</file>
+        <file>images/tank1up.png</file>
     </qresource>
 </RCC>
