@@ -8,6 +8,7 @@ StaticBlock::StaticBlock(Type type, int blockSide, QGraphicsItem *parent) :
         case Type::Brick:
         {
             setPixmap(QPixmap(":/images/static_blocks/brick.png").scaled(blockSide, blockSide));
+            mTankSpeed = 0;
             mHealth = 1;
             mDestructible = true;
             mPerforating = false;
@@ -17,6 +18,7 @@ StaticBlock::StaticBlock(Type type, int blockSide, QGraphicsItem *parent) :
         {
             setZValue(2);
             setPixmap(QPixmap(":/images/static_blocks/bush.png").scaled(blockSide, blockSide));
+            mTankSpeed = 2;
             mHealth = 1;
             mDestructible = false;
             mPerforating = true;
@@ -25,6 +27,7 @@ StaticBlock::StaticBlock(Type type, int blockSide, QGraphicsItem *parent) :
         case Type::Concrete:
         {
             setPixmap(QPixmap(":/images/static_blocks/concrete.png").scaled(blockSide, blockSide));
+            mTankSpeed = 0;
             mHealth = 2;
             mDestructible = true;
             mPerforating = false;
@@ -33,6 +36,7 @@ StaticBlock::StaticBlock(Type type, int blockSide, QGraphicsItem *parent) :
         case Type::Water:
         {
             setPixmap(QPixmap(":/images/static_blocks/water1.png").scaled(blockSide, blockSide));
+            mTankSpeed = 1;
             mHealth = 1;
             mDestructible = false;
             mPerforating = true;
@@ -44,7 +48,8 @@ StaticBlock::StaticBlock(Type type, int blockSide, QGraphicsItem *parent) :
     setData(1, mPerforating);
     setData(2, mDestructible);
     setData(3, mHealth);
-    setData(4, false); // is need to destroy
+    setData(4, mTankSpeed);
+    setData(5, false); // is need to destroy
 }
 
 bool StaticBlock::isDestructible() const
@@ -64,7 +69,7 @@ int StaticBlock::health() const
 
 void StaticBlock::advance(int phase)
 {
-    if (phase && data(4).toBool()) {
+    if (phase && data(5).toBool()) {
         delete this;
     }
 }

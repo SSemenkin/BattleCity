@@ -16,6 +16,7 @@ public:
 
     bool isDestructible() const;
     bool isPerforating() const;
+    int tankSpeed() const;
     int health() const;
 
 protected:
@@ -25,6 +26,7 @@ private:
     bool mDestructible;
     bool mPerforating;
     int mHealth {0};
+    int mTankSpeed;
 };
 
 #endif // STATICBLOCK_H

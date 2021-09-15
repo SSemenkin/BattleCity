@@ -14,6 +14,7 @@ Player::Player(const QPixmap &pixmap, QGraphicsItem *parent) :
 
 void Player::keyPressEvent(QKeyEvent *e)
 {
+    released = false;
     switch(e->key()) {
     case Qt::Key_Left:
     case Qt::Key_Right:
@@ -32,6 +33,7 @@ void Player::keyPressEvent(QKeyEvent *e)
 
 void Player::keyReleaseEvent(QKeyEvent *e)
 {
+    released = true;
     switch(e->key()) {
     case Qt::Key_Left:
     case Qt::Key_Right:
@@ -72,10 +74,14 @@ bool Player::canDoNextStep(const QPointF &point) const
 
     QGraphicsItem *l = scene()->itemAt(basePoint, sceneTransform());
 
+    updateTankSpeed(l);
+
     if (l->data(0) != "StaticBody") {
         return !l && l != this && basePoint.x() > 0 && basePoint.x() < scene()->width()
                 && basePoint.y() > 0 && basePoint.y() < scene()->height();
-    } else return l->data(1).toBool();
+    } else  {
+        return l->data(1).toBool();
+    }
 }
 
 bool Player::canDoNextStep(int x, int y) const
@@ -158,6 +164,13 @@ void Player::rotatePixmap(qreal angle)
     setPixmap(p.transformed(t));
 }
 
+void Player::updateTankSpeed(QGraphicsItem *item) const
+{
+    CURRENT_SPEED = released ? 0 :
+                               item->data(0) == "StaticBody" ? item->data(4).toInt() :
+                                                               PLAYER_SPEED;
+}
+
 void Player::fire()
 {
     if (!canFire) {
@@ -192,3 +205,5 @@ void Player::fire()
     newBullet->setPos(bulletPosition);
     QObject::connect(newBullet, &Bullet::destroyed, this, [this] () { canFire = true; });
 }
+
+

@@ -31,6 +31,7 @@ private:
     static int BULLET_SPEED;
     Direction mDirection {Direction::UP};
     bool canFire {true};
+    bool released {false};
 private:
     bool canDoNextStep(const QPointF &point) const;
     bool canDoNextStep(int x, int y) const;
@@ -38,6 +39,8 @@ private:
     Direction newDirection(Qt::Key key);
     void rotatePixmap(qreal angle);
     void fire();
+    void updateTankSpeed(QGraphicsItem *item) const;
+
 };
 
 #endif // PLAYER_H

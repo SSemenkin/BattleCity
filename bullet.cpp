@@ -89,7 +89,7 @@ void Bullet::handleStaticBodyCollision(QGraphicsItem *item)
     int itemHealth = item->data(3).toInt();
     --itemHealth;
 
-    itemHealth <= 0 ? item->setData(4, true) : item->setData(3, itemHealth);
+    itemHealth <= 0 ? item->setData(5, true) : item->setData(3, itemHealth);
     isDestroy = true;
 }
 

@@ -13,7 +13,7 @@ Base::Base(const QPixmap &pixmap, QObject *parent) :
 void Base::advance(int phase)
 {
    if (phase) {
-       if (data(4).toBool()) {
+       if (data(5).toBool()) {
            emit gameOver();
            delete this;
        }
