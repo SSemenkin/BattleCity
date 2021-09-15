@@ -2,9 +2,11 @@
 #define STATICBLOCK_H
 
 #include <QGraphicsPixmapItem>
+#include <QTimer>
 
-class StaticBlock : public QGraphicsPixmapItem
+class StaticBlock : public QObject, public QGraphicsPixmapItem
 {
+    Q_OBJECT
 public:
     enum class Type : int8_t {
         Brick = 0,
@@ -27,6 +29,8 @@ private:
     bool mPerforating;
     int mHealth {0};
     int mTankSpeed;
+    bool swapWater {true};
+    QTimer *mWaterTimer;
 };
 
 #endif // STATICBLOCK_H

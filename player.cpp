@@ -12,6 +12,28 @@ Player::Player(const QPixmap &pixmap, QGraphicsItem *parent) :
     setData(0, "Player");
 }
 
+void Player::pickupBonus(BonusItem::BonusType bonusType)
+{
+    switch (bonusType) {
+       case BonusItem::BonusType::Granade:
+       {
+            break;
+       }
+        case BonusItem::BonusType::Helmet:
+        {
+             break;
+        }
+        case BonusItem::BonusType::Shovel:
+        {
+             break;
+        }
+        case BonusItem::BonusType::Star:
+        {
+             break;
+        }
+    }
+}
+
 void Player::keyPressEvent(QKeyEvent *e)
 {
 
@@ -78,10 +100,15 @@ bool Player::canDoNextStep(const QPointF &point) const
 
     updateTankSpeed(l);
 
-    if (l->data(0) != "StaticBody") {
+    const QString objectType = l->data(0).toString();
+
+    if (objectType == "Bonus") {
+        l->setData(5, true);
+        return true;
+    } else if (objectType != "StaticBody") {
         return !l && l != this && basePoint.x() > 0 && basePoint.x() < scene()->width()
                 && basePoint.y() > 0 && basePoint.y() < scene()->height();
-    } else  {
+    } else {
         return l->data(1).toBool();
     }
 }

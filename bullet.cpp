@@ -31,7 +31,7 @@ void Bullet::advance(int phase)
 
     if (!collItems.isEmpty()) {
         for (QGraphicsItem *item : collItems) {
-            if (item->data(0) == "Explosion")  {
+            if (item->data(0) == "Explosion" || item->data(0) == "Bonus")  {
                 continue;
             }
             item->data(0) == "StaticBody" ? handleStaticBodyCollision(item) :

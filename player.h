@@ -8,6 +8,7 @@
 #include <QDebug>
 
 #include "bullet.h"
+#include "bonusitem.h"
 
 class Player : public QObject, public QGraphicsPixmapItem
 {
@@ -20,6 +21,7 @@ public:
         LEFT = 2,
         RIGHT = 3
     };
+    void pickupBonus(BonusItem::BonusType bonusType);
 
 protected:
     void keyPressEvent(QKeyEvent *e) override;
@@ -40,6 +42,7 @@ private:
     void rotatePixmap(qreal angle);
     void fire();
     void updateTankSpeed(QGraphicsItem *item) const;
+    void createHelmet();
 
 };
 

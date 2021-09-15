@@ -16,11 +16,12 @@ public:
     };
     explicit BonusItem(Type type, int sideWidth, QGraphicsItem *parent = nullptr, QObject *objectParent = nullptr);
 
-
 signals:
     void picked(Type t);
 protected:
     void advance(int phase) override;
+private:
+    Type mType;
 };
 
 #endif // BONUSITEM_H

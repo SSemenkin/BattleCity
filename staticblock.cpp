@@ -36,6 +36,14 @@ StaticBlock::StaticBlock(Type type, int blockSide, QGraphicsItem *parent) :
         case Type::Water:
         {
             setPixmap(QPixmap(":/images/static_blocks/water1.png").scaled(blockSide, blockSide));
+            mWaterTimer = new QTimer(this);
+            connect(mWaterTimer, &QTimer::timeout, this, [this, blockSide] () {
+               swapWater ?
+                            setPixmap(QPixmap(":/images/static_blocks/water2.png").scaled(blockSide, blockSide)):
+                            setPixmap(QPixmap(":/images/static_blocks/water1.png").scaled(blockSide, blockSide));
+               swapWater = !swapWater;
+            });
+            mWaterTimer->start(200);
             mTankSpeed = 1;
             mHealth = 1;
             mDestructible = false;

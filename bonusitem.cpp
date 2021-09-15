@@ -1,28 +1,29 @@
 ﻿#include "bonusitem.h"
 
-BonusItem::BonusItem(Type type, int sideWidth, QGraphicsItem *parent, QObject *objectParent)
+BonusItem::BonusItem(BonusType type, int sideWidth, QGraphicsItem *parent, QObject *objectParent)
     : QObject(objectParent),
-    QGraphicsPixmapItem(parent)
+    QGraphicsPixmapItem(parent),
+    mType(type)
 {
     setZValue(3);
 
     switch(type) {
-        case Type::Granade:
+        case BonusType::Granade:
         {
             setPixmap(QPixmap(":/images/bonus/granade.png").scaled(sideWidth, sideWidth));
             break;
         }
-        case Type::Helmet:
+        case BonusType::Helmet:
         {
             setPixmap(QPixmap(":/images/bonus/helmet.png").scaled(sideWidth, sideWidth));
             break;
         }
-        case Type::Shovel:
+        case BonusType::Shovel:
         {
             setPixmap(QPixmap(":/images/bonus/shovel.png").scaled(sideWidth, sideWidth));
             break;
         }
-        case Type::Star:
+        case BonusType::Star:
         {
             setPixmap(QPixmap(":/images/bonus/star.png").scaled(sideWidth, sideWidth));
             break;
@@ -36,6 +37,7 @@ BonusItem::BonusItem(Type type, int sideWidth, QGraphicsItem *parent, QObject *o
 void BonusItem::advance(int phase)
 {
     if (phase && data(5).toBool()) {
+        emit picked(mType);
         delete this;
     }
 }

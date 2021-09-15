@@ -88,8 +88,6 @@ void GameScene::initBase(const QPair<int, int> &position)
 void GameScene::spawnEnemy()
 {
 
-
-    // TODO init enemy at pos (x, y)
 }
 
 void GameScene::spawnBonus()
@@ -98,13 +96,13 @@ void GameScene::spawnBonus()
 
     int randomBonus = rand() % 4;
 
-    BonusItem *item = new BonusItem(static_cast<BonusItem::Type>(randomBonus), mWidthBrick);
+    BonusItem *item = new BonusItem(static_cast<BonusItem::BonusType>(randomBonus), mWidthBrick);
     addItem(item);
 
     item->setPos(point.first,
                  point.second);
+    QObject::connect(item, &BonusItem::picked, mPlayer, &Player::pickupBonus);
 
-    qDebug() << "Spawn bonus at " << item->scenePos();
 }
 
 void GameScene::gameOver()
