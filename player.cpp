@@ -66,13 +66,14 @@ void Player::advance(int phase)
 
 bool Player::canDoNextStep(const QPointF &point) const
 {
-    QPointF leftTopPoint = scenePos();
-    leftTopPoint.setX(leftTopPoint.x() + point.x());
-    leftTopPoint.setY(leftTopPoint.y() + point.y());
+    QPointF basePoint = scenePos();
+    basePoint.setX(basePoint.x() + point.x());
+    basePoint.setY(basePoint.y() + point.y());
 
-    QGraphicsItem *l = scene()->itemAt(leftTopPoint, sceneTransform());
+    QGraphicsItem *l = scene()->itemAt(basePoint, sceneTransform());
 
-    return !l && l != this /*&& !r && r != this*/;
+    return !l && l != this && basePoint.x() > 0 && basePoint.x() < scene()->width()
+            && basePoint.y() > 0 && basePoint.y() < scene()->height();
 }
 
 bool Player::canDoNextStep(int x, int y) const
@@ -161,7 +162,7 @@ void Player::fire()
         return;
     }
     canFire = false;
-    Bullet *newBullet;
+    Bullet *newBullet {nullptr};
     QPoint bulletPosition;
     switch (mDirection) {
     case Direction::UP:

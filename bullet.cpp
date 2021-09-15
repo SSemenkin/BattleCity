@@ -1,5 +1,4 @@
 ﻿#include "bullet.h"
-#include <QPen>
 
 Bullet::Bullet(int dx, int dy, QObject *parent) :
     QObject(parent),
@@ -35,7 +34,7 @@ void Bullet::advance(int phase)
                      scene()->addItem(e);
                      e->setFixedScenePos(centerOfItem(qgraphicsitem_cast<QGraphicsPixmapItem*>(item)));
                      e->startAnimation();
-                     delete item;
+                     isBase(item) ? item->setData(1, true) : delete item;
                  }
                  emit destroyed();
                  delete this;
@@ -63,4 +62,9 @@ QPointF Bullet::centerOfItem(QGraphicsPixmapItem *item)
 bool Bullet::isExplosion(QGraphicsItem *item) const
 {
     return qgraphicsitem_cast<Explosion*>(item) != nullptr;
+}
+
+bool Bullet::isBase(QGraphicsItem *item) const
+{
+    return qgraphicsitem_cast<Base*>(item) != nullptr && item->data(0).toString() == "Base";
 }

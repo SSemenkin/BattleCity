@@ -11,7 +11,10 @@ public:
     explicit Base(const QPixmap& pixmap = QPixmap(":/images/base.png"), QObject *parent = nullptr);
 
 signals:
+    void gameOver();
 
+protected:
+    void advance(int phase) override;
 };
 
 #endif // BASE_H

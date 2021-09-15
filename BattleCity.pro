@@ -13,6 +13,7 @@ SOURCES += \
     bullet.cpp \
     explosion.cpp \
     game.cpp \
+    gameover.cpp \
     gamescene.cpp \
     level.cpp \
     main.cpp \
@@ -26,6 +27,7 @@ HEADERS += \
     bullet.h \
     explosion.h \
     game.h \
+    gameover.h \
     gamescene.h \
     level.h \
     menuScene.h \

@@ -1,5 +1,4 @@
 ﻿#include "gamescene.h"
-#include <QTimer>
 
 std::array<Level, 1> GameScene::levels = {
   Level(":/levels/1_level.txt")
@@ -8,7 +7,7 @@ std::array<Level, 1> GameScene::levels = {
 GameScene::GameScene(int level, QObject *parent) :
     QGraphicsScene(parent)
 {
-    setBackgroundBrush(Qt::gray);
+    setBackgroundBrush(Qt::black);
     setSceneRect(qApp->primaryScreen()->availableGeometry());
     loadLevel(level);
 }
@@ -16,12 +15,13 @@ GameScene::GameScene(int level, QObject *parent) :
 GameScene::GameScene(QObject *parent) :
     QGraphicsScene(parent)
 {
-    setBackgroundBrush(Qt::gray);
+    setBackgroundBrush(Qt::black);
     setSceneRect(qApp->primaryScreen()->availableGeometry());
 }
 
 void GameScene::loadLevel(int levelID)
 {
+    gameTimer.stop();
     const Level level = levels[levelID];
     matrix<int> structure = level.getLevelStructure();
 
@@ -47,11 +47,15 @@ void GameScene::loadLevel(int levelID)
         initPlayer(level.getPlayerPosition());
         initBase(level.getBasePosition());
     }
+
+    QObject::connect(&gameTimer, &QTimer::timeout, this, &QGraphicsScene::advance);
+    QObject::connect(base, &Base::gameOver, this, &GameScene::gameOver);
+    gameTimer.start(1000/60);
 }
 
 void GameScene::initPlayer(const QPair<int, int> &playerPos)
 {
-    Player *player = new Player;
+    player = new Player;
     player->setPixmap(player->pixmap().scaled(widthBrick, heightBrick));
     addItem(player);
     player->setPos(playerPos.first * widthBrick,
@@ -60,10 +64,22 @@ void GameScene::initPlayer(const QPair<int, int> &playerPos)
 
 void GameScene::initBase(const QPair<int, int> &basePos)
 {
-    Base *base = new Base;
+    base = new Base;
     base->setPixmap(base->pixmap().scaled(widthBrick, heightBrick));
     addItem(base);
     base->setPos(basePos.first * widthBrick,
                  basePos.second * heightBrick);
 }
+
+void GameScene::gameOver()
+{
+    //gameTimer.stop();
+
+    GameOver *gameOverItem = new GameOver(QPointF(width()/2, height()/2));
+    addItem(gameOverItem);
+    gameOverItem->setPos((width() / widthBrick / 2) * widthBrick - widthBrick/2, height());
+    delete player;
+}
+
+
 

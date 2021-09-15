@@ -6,6 +6,7 @@
 
 #include "explosion.h"
 #include "player.h"
+#include "base.h"
 
 class Bullet : public QObject, public QGraphicsPixmapItem
 {
@@ -19,9 +20,9 @@ private:
     int m_dy;
 private:
     void rotatePixmap(qreal angle);
-    bool deleteOnNextIteration {false};
     QPointF centerOfItem(QGraphicsPixmapItem *item);
     bool isExplosion(QGraphicsItem *item) const;
+    bool isBase(QGraphicsItem *item) const;
 };
 
 #endif // BULLET_H
