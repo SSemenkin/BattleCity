@@ -38,14 +38,11 @@ class Player : public GraphicsPixmapObject
     Q_OBJECT
 public:
     Player(const QPixmap &pixmap = QPixmap(":/images/tank.png"), QGraphicsItem *parent = nullptr);
-
-
     void pickupBonus(BonusItem::BonusType bonusType);
     void setRespawnPosition(const QPointF &respawn);
 signals:
     void destroyEnemies();
     void createBorder();
-    void refreshTimer();
     void currentHealthChanged(int currentHealth);
 protected:
     void keyPressEvent(QKeyEvent *e) override;
@@ -54,14 +51,14 @@ protected:
     virtual void advance(int phase) override;
 private:
     void createShield();
+    void createStarBonus();
     void destroy();
     void takeDamage();
     void respawn();
 private:
     QPointF mRespawnPosition;
-
     mShield shield;
-
+    static int STAR_BONUS_DURATION;
 };
 
 #endif // PLAYER_H

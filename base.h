@@ -16,7 +16,7 @@ signals:
 
 protected:
     void advance(int phase) override;
-    void do_staff() = delete;
+    bool isDelete {false};
 };
 
 #endif // BASE_H

@@ -28,7 +28,7 @@ public:
     virtual ~MenuScene();
 
 signals:
-    void playTrigerred();
+    void playTrigerred(int value);
     void quitTrigerred();
 
 protected:

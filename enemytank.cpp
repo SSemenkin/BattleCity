@@ -1,6 +1,6 @@
 ﻿#include "enemytank.h"
 
-int EnemyTank::CHANGE_DIRECTION_DELTA = 1000; // 5 seconds;
+int EnemyTank::CHANGE_DIRECTION_DELTA = 1000; // 1 seconds;
 int EnemyTank::FIRE_DELTA = CHANGE_DIRECTION_DELTA;
 
 EnemyTank::EnemyTank(int widthBlock, QObject *parent) :

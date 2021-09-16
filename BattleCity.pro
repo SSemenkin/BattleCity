@@ -19,6 +19,7 @@ SOURCES += \
     gameover.cpp \
     gamescene.cpp \
     graphicspixmapobject.cpp \
+    interface.cpp \
     level.cpp \
     main.cpp \
     menuScene.cpp \
@@ -40,6 +41,7 @@ HEADERS += \
     gameover.h \
     gamescene.h \
     graphicspixmapobject.h \
+    interface.h \
     level.h \
     menuScene.h \
     menutextitem.h \

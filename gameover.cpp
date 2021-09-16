@@ -9,7 +9,11 @@ GameOver::GameOver(const QPointF &finishPos, const QPixmap &pixmap, QGraphicsIte
 
 void GameOver::advance(int phase)
 {
-    if (phase  && scenePos().y() > mFinish.y()) {
-       moveBy(0, -3);
+    if (phase) {
+       if (scenePos().y() > mFinish.y()) {
+            moveBy(0, -3);
+       } else {
+           emit gameOver();
+       }
     }
 }

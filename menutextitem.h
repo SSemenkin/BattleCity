@@ -19,7 +19,6 @@ public:
     }
 
 private:
-    static QFont m_font;
 
     bool mCurrent{false};
 };

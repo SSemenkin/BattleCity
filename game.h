@@ -11,11 +11,18 @@
 #include "gamescene.h"
 #include "player.h"
 
-class Game
+class Game : public QObject
 {
+    Q_OBJECT
 public:
-    static bool init();
+    explicit Game(QObject *parent = nullptr);
+    bool init();
 private:
+    MenuScene *menuScene;
+    Multimedia *multimedia;
+    QGraphicsView *view;
+private:
+    void startGameAtLevel(int level);
 };
 
 #endif // GAME_H

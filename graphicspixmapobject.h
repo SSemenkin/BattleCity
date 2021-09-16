@@ -33,6 +33,7 @@ protected:
 
     Direction mDirection {Direction::UP};
     bool mCanFire {true};
+    bool isStarBonus {false};
 
     int CURRENT_SPEED {0};
     int PLAYER_MAX_SPEED {3};

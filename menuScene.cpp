@@ -34,7 +34,7 @@ void MenuScene::keyPressEvent(QKeyEvent *event)
         if (quit->isCurrent()) {
             emit quitTrigerred();
         } else {
-            emit playTrigerred();
+            emit playTrigerred(0);
         }
         break;
     default:

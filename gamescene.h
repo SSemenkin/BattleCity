@@ -19,6 +19,8 @@
 #include "bonusitem.h"
 #include "blink.h"
 
+#include "interface.h"
+
 class GameScene : public QGraphicsScene
 {
     Q_OBJECT
@@ -27,12 +29,16 @@ public:
     explicit GameScene(QObject *parent = nullptr);
     void loadLevel(int level);
 
+signals:
+    void swapScenes();
+
 private:
     static std::array<Level, 1> levels;
     static int FPS;
     static int FPS_REFRESH_DELTA;
     static int BONUS_RESPAWN_DELTA;
     static int ENEMY_RESPAWN_DELTA;
+    static int ENEMY_MAX_COUNTER;
 
     QTimer mGameTimer;
     QTimer mBonusItemTimer;
@@ -42,13 +48,18 @@ private:
     int mWidthBrick;
     int mWidthBrickCount;
     int mHeightBrickCount;
+    int mCurrentLevel{-1};
+    int mEnemiesSpawned {0};
+    int mDestroyed {0};
+
     Base *mBase;
     Player *mPlayer;
-    int mCurrentLevel{-1};
+    Interface *mInterface;
 
 private:
     void initPlayer(const QPair<int,int> &position);
     void initBase(const QPair<int, int> &position);
+    void initInterface();
 
     void spawnBlink();
     void spawnBonus();

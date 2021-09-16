@@ -71,7 +71,9 @@ void Bullet::createExplosion(QGraphicsItem *item)
 {
     Explosion *e = new Explosion;
     scene()->addItem(e);
-    e->setFixedScenePos(centerOfItem(qgraphicsitem_cast<QGraphicsPixmapItem*>(item)));
+    QPointF p = qgraphicsitem_cast<QGraphicsPixmapItem*>(item) ? centerOfItem(qgraphicsitem_cast<QGraphicsPixmapItem*>(item)) :
+                                                                 centerOfItem(this);
+    e->setFixedScenePos(p);
     //e->setFixedScenePos(scenePos());
     e->startAnimation();
 }

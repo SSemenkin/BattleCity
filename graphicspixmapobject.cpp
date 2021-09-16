@@ -82,37 +82,38 @@ void GraphicsPixmapObject::moveByIfNotWall(int x, int y)
 
 void GraphicsPixmapObject::fire()
 {
-    if (!mCanFire) {
-        return;
+    if (mCanFire || isStarBonus) {
+        Bullet *newBullet {nullptr};
+        QPoint bulletPosition;
+        switch (mDirection) {
+        case Direction::UP:
+            newBullet = new Bullet(0, -BULLET_SPEED);
+            bulletPosition.setX(scenePos().x() + pixmap().width()/2 - newBullet->pixmap().width()/2);
+            bulletPosition.setY(scenePos().y() - 15);
+            break;
+        case Direction::DOWN:
+            newBullet = new Bullet(0, BULLET_SPEED);
+            bulletPosition.setX(scenePos().x() + pixmap().width()/2 - newBullet->pixmap().width()/2);
+            bulletPosition.setY(scenePos().y() + pixmap().height() + 1);
+            break;
+        case Direction::LEFT:
+            newBullet = new Bullet(-BULLET_SPEED, 0);
+            bulletPosition.setX(scenePos().x() - 15);
+            bulletPosition.setY(scenePos().y() + pixmap().height()/2 - newBullet->pixmap().height()/2);
+            break;
+        case Direction::RIGHT:
+            newBullet = new Bullet(BULLET_SPEED, 0);
+            bulletPosition.setX(scenePos().x() + pixmap().width() + 1);
+            bulletPosition.setY(scenePos().y() + pixmap().height()/2 - newBullet->pixmap().width()/2);
+            break;
+        }
+        scene()->addItem(newBullet);
+        newBullet->setPos(bulletPosition);
+        if (mCanFire) {
+            QObject::connect(newBullet, &Bullet::destroyed, this, [this] () { mCanFire = true; });
+        }
+        mCanFire = false;
     }
-    mCanFire = false;
-    Bullet *newBullet {nullptr};
-    QPoint bulletPosition;
-    switch (mDirection) {
-    case Direction::UP:
-        newBullet = new Bullet(0, -BULLET_SPEED);
-        bulletPosition.setX(scenePos().x() + pixmap().width()/2 - newBullet->pixmap().width()/2);
-        bulletPosition.setY(scenePos().y() - 15);
-        break;
-    case Direction::DOWN:
-        newBullet = new Bullet(0, BULLET_SPEED);
-        bulletPosition.setX(scenePos().x() + pixmap().width()/2 - newBullet->pixmap().width()/2);
-        bulletPosition.setY(scenePos().y() + pixmap().height() + 1);
-        break;
-    case Direction::LEFT:
-        newBullet = new Bullet(-BULLET_SPEED, 0);
-        bulletPosition.setX(scenePos().x() - 15);
-        bulletPosition.setY(scenePos().y() + pixmap().height()/2 - newBullet->pixmap().height()/2);
-        break;
-    case Direction::RIGHT:
-        newBullet = new Bullet(BULLET_SPEED, 0);
-        bulletPosition.setX(scenePos().x() + pixmap().width() + 1);
-        bulletPosition.setY(scenePos().y() + pixmap().height()/2 - newBullet->pixmap().width()/2);
-        break;
-    }
-    scene()->addItem(newBullet);
-    newBullet->setPos(bulletPosition);
-    QObject::connect(newBullet, &Bullet::destroyed, this, [this] () { mCanFire = true; });
 }
 
 GraphicsPixmapObject::Direction GraphicsPixmapObject::newDirection(Qt::Key key)

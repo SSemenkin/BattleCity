@@ -29,5 +29,8 @@
         <file>images/blink/blink3.png</file>
         <file>images/blink/blink4.png</file>
         <file>images/100point.png</file>
+        <file>images/health.png</file>
+        <file>images/loss.png</file>
+        <file>images/player2right.png</file>
     </qresource>
 </RCC>

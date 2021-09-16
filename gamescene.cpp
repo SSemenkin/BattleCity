@@ -4,6 +4,7 @@ int GameScene::FPS = 60;
 int GameScene::FPS_REFRESH_DELTA = 1000/FPS;
 int GameScene::ENEMY_RESPAWN_DELTA = 4500;
 int GameScene::BONUS_RESPAWN_DELTA = 5000;
+int GameScene::ENEMY_MAX_COUNTER = 10;
 
 std::array<Level, 1> GameScene::levels = {
   Level(":/levels/1_level.txt")
@@ -30,6 +31,9 @@ void GameScene::loadLevel(int levelID)
     const Level level = levels[levelID];
     if(level.isOk()) {
         mCurrentLevel = levelID;
+    } else {
+        qDebug() << "Failed to load " << levelID << " level.";
+        return;
     }
     matrix<int> structure = level.getLevelStructure();
 
@@ -55,6 +59,7 @@ void GameScene::loadLevel(int levelID)
         }
         initPlayer(level.getPlayerPosition());
         initBase(level.getBasePosition());
+        initInterface();
     }
 
     QObject::connect(&mGameTimer, &QTimer::timeout, this, &QGraphicsScene::advance);
@@ -88,15 +93,35 @@ void GameScene::initBase(const QPair<int, int> &position)
                   position.second * mHeightBrick);
 }
 
+void GameScene::initInterface()
+{
+    mInterface = new Interface(this);
+    mInterface->initItems(this, mHeightBrick * mHeightBrickCount + mHeightBrick/2, ENEMY_MAX_COUNTER);
+}
+
 void GameScene::spawnBlink()
 {
+    if (mEnemiesSpawned == ENEMY_MAX_COUNTER) { // made not possible to generate new enemy;
+        return;
+    }
+
     auto point = getRandomAndAvaliableCell();
 
     Blink *blink = new Blink(mWidthBrick);
 
+    QObject::connect(blink, &Blink::enemyCreated, this, [this] (EnemyTank *tank) {
+        QObject::connect(tank, &EnemyTank::destroyed, this, [this] () {
+            mInterface->removeItem(mDestroyed++);
+            if (mDestroyed == ENEMY_MAX_COUNTER) {
+                emit swapScenes();
+            }
+        });
+    });
+
     addItem(blink);
     blink->setPos(point.first, point.second);
     blink->startAnimation();
+    mEnemiesSpawned++;
 }
 
 void GameScene::spawnBonus()
@@ -119,6 +144,7 @@ void GameScene::gameOver()
     //gameTimer.stop();
 
     GameOver *gameOverItem = new GameOver(QPointF(width()/2, height()/2));
+    QObject::connect(gameOverItem, &GameOver::gameOver, this, &GameScene::swapScenes);
     addItem(gameOverItem);
     gameOverItem->setPos(mWidthBrickCount / 2 * mWidthBrick - gameOverItem->pixmap().width()/2,
                          height());
@@ -155,8 +181,9 @@ bool GameScene::isCellAvaliable(int width, int height) const
     auto center = itemAt(QPointF(width + mWidthBrick/2, height + mHeightBrick/2), t);
 
 
-    return leftTop == nullptr && leftBot == nullptr
-            && rightTop == nullptr && rightBot == nullptr && center == nullptr;
+    return leftTop == nullptr && leftBot == nullptr &&
+           rightTop == nullptr && rightBot == nullptr &&
+           center == nullptr;
 }
 
 void GameScene::createBorderAroundBase()

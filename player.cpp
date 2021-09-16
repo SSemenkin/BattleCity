@@ -1,5 +1,7 @@
 ﻿#include "player.h"
 
+int Player::STAR_BONUS_DURATION = 10000; // 10 seconds;
+
 Player::Player(const QPixmap &pixmap, QGraphicsItem *parent) :
     GraphicsPixmapObject(pixmap, parent)
 {
@@ -29,6 +31,7 @@ void Player::pickupBonus(BonusItem::BonusType bonusType)
         }
         case BonusItem::BonusType::Star:
         {
+             createStarBonus();
              break;
         }
     }
@@ -134,4 +137,15 @@ void Player::respawn()
     setPos(mRespawnPosition);
     setFocus();
     createShield();
+}
+
+void Player::createStarBonus()
+{
+    QTimer *starTimer = new QTimer(this);
+    isStarBonus  = true;
+    QObject::connect(starTimer, &QTimer::timeout, this, [this] () {
+        isStarBonus = false;
+    });
+    starTimer->start(STAR_BONUS_DURATION);
+
 }

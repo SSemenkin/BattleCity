@@ -13,9 +13,15 @@ Base::Base(const QPixmap &pixmap, QObject *parent) :
 void Base::advance(int phase)
 {
    if (phase) {
+
+       if (isDelete) {
+           return;
+       }
+
        if (data(5).toBool()) {
            emit gameOver();
-           delete this;
+           setPixmap(QPixmap(":/images/loss.png").scaled(pixmap().size()));
+           isDelete = true;
        }
    }
 }
