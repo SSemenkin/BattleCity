@@ -1,34 +1,29 @@
 ﻿#ifndef ENEMYTANK_H
 #define ENEMYTANK_H
 
-#include <QObject>
-#include <QGraphicsPixmapItem>
+#include "graphicspixmapobject.h"
 
-#include "bullet.h"
 #include "score.h"
 
-class EnemyTank : public QObject, public QGraphicsPixmapItem
+class EnemyTank : public GraphicsPixmapObject
 {
     Q_OBJECT
 public:
     explicit EnemyTank(int widthBlock, QObject *parent = nullptr);
-    enum class Direction : int8_t {
-        UP,
-        DOWN,
-        LEFT,
-        RIGHT
-    };
 
-
+    static int CHANGE_DIRECTION_DELTA;
+    static int FIRE_DELTA;
 signals:
 protected:
     void advance(int phase) override;
 private:
-    bool mCanFire {true};
     int mWidthBlock;
 private:
-    void fire();
     void spawnScore();
+    void changeDirection();
+private:
+    QTimer *mDirectionTimer;
+    QTimer *mFireTimer;
 };
 
 #endif // ENEMYTANK_H

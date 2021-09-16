@@ -16,8 +16,6 @@ Shield::Shield(QGraphicsPixmapItem *player, QObject *parent) :
            delete this;
        }
     });
-    QObject::connect(qgraphicsitem_cast<Player*>(player), &Player::refreshTimer, this, [this] () {
-       calls = 0;
-    });
+
     mChangeTimer->start(150);
 }

@@ -1,52 +1,41 @@
 ﻿#ifndef PLAYER_H
 #define PLAYER_H
 
-#include <QGraphicsPixmapItem>
+#include "graphicspixmapobject.h"
+
 #include <QKeyEvent>
-#include <QGraphicsScene>
 
-#include <QDebug>
-
-#include "bullet.h"
 #include "bonusitem.h"
 #include "shield.h"
 
-class Player : public QObject, public QGraphicsPixmapItem
+class Player : public GraphicsPixmapObject
 {
     Q_OBJECT
 public:
     Player(const QPixmap &pixmap = QPixmap(":/images/tank.png"), QGraphicsItem *parent = nullptr);
-    enum class Direction {
-        UP = 0,
-        DOWN = 1,
-        LEFT = 2,
-        RIGHT = 3
-    };
+
+
     void pickupBonus(BonusItem::BonusType bonusType);
+    void setRespawnPosition(const QPointF &respawn);
 signals:
+    void destroyEnemies();
     void createBorder();
     void refreshTimer();
-
+    void currentHealthChanged(int currentHealth);
 protected:
     void keyPressEvent(QKeyEvent *e) override;
     void keyReleaseEvent(QKeyEvent *e) override;
-    void advance(int phase) override;
+    virtual bool canDoNextStep(const QPointF &point) const override;
+    virtual void advance(int phase) override;
 private:
-    static int CURRENT_SPEED;
-    static int PLAYER_SPEED;
-    static int BULLET_SPEED;
-    Direction mDirection {Direction::UP};
-    bool mCanFire {true};
-    bool mReleased {true};
+    void createShield();
+    void destroy();
+    void takeDamage();
+    void respawn();
 private:
-    bool canDoNextStep(const QPointF &point) const;
-    bool canDoNextStep(int x, int y) const;
-    void moveByIfNotWall(int x, int y);
-    Direction newDirection(Qt::Key key);
-    void rotatePixmap(qreal angle);
-    void fire();
-    void updateTankSpeed(QGraphicsItem *item) const;
-    void createHelmet();
+    QPointF mRespawnPosition;
+
+    Shield *mShield;
 
 };
 

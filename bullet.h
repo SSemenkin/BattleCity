@@ -5,7 +5,6 @@
 #include <QGraphicsScene>
 
 #include "explosion.h"
-#include "player.h"
 #include "base.h"
 
 class Bullet : public QObject, public QGraphicsPixmapItem

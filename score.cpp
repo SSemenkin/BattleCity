@@ -3,7 +3,7 @@
 Score::Score(QObject *parent) : QObject(parent),
     QGraphicsPixmapItem(QPixmap(":/images/100point.png"))
 {
-
+    setData(0, "Score");
 }
 
 void Score::startAnimation()

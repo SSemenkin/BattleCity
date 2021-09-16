@@ -1,10 +1,8 @@
 ﻿#ifndef BLINK_H
 #define BLINK_H
 
-#include <QObject>
 #include <QTimer>
-#include <QGraphicsPixmapItem>
-#include <QGraphicsScene>
+
 
 #include "enemytank.h"
 
@@ -16,11 +14,12 @@ public:
     void startAnimation();
 
 signals:
+    void enemyCreated(EnemyTank *enemy);
 
 private:
     QTimer *mTimer;
     int mFrame {0};
-    int mWidhtBlock;
+    int mBlockWidth;
 private:
     void spawnEnemy();
 };

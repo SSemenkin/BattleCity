@@ -2,8 +2,8 @@
 
 int GameScene::FPS = 60;
 int GameScene::FPS_REFRESH_DELTA = 1000/FPS;
-int GameScene::ENEMY_RESPAWN_DELTA = 4000;
-int GameScene::BONUS_RESPAWN_DELTA = 1000;
+int GameScene::ENEMY_RESPAWN_DELTA = 4500;
+int GameScene::BONUS_RESPAWN_DELTA = 5000;
 
 std::array<Level, 1> GameScene::levels = {
   Level(":/levels/1_level.txt")
@@ -62,10 +62,11 @@ void GameScene::loadLevel(int levelID)
     QObject::connect(&mEnemyRespawnTimer, &QTimer::timeout, this, &GameScene::spawnBlink);
     QObject::connect(&mBonusItemTimer, &QTimer::timeout, this, &GameScene::spawnBonus);
     QObject::connect(mPlayer, &Player::createBorder, this, &GameScene::createBorderAroundBase);
+    QObject::connect(mPlayer, &Player::destroyEnemies, this, &GameScene::destroyAllEnemies);
+
     mGameTimer.start(FPS_REFRESH_DELTA);
     mEnemyRespawnTimer.start(ENEMY_RESPAWN_DELTA);
     mBonusItemTimer.start(BONUS_RESPAWN_DELTA);
-
 }
 
 void GameScene::initPlayer(const QPair<int, int> &position)
@@ -73,8 +74,8 @@ void GameScene::initPlayer(const QPair<int, int> &position)
     mPlayer = new Player;
     mPlayer->setPixmap(mPlayer->pixmap().scaled(mWidthBrick - 1, mHeightBrick - 1));
     addItem(mPlayer);
-    mPlayer->setPos(position.first * mWidthBrick,
-                    position.second * mHeightBrick );
+    mPlayer->setRespawnPosition(QPointF(position.first * mWidthBrick,
+                                        position.second * mHeightBrick));
 }
 
 void GameScene::initBase(const QPair<int, int> &position)
@@ -95,6 +96,13 @@ void GameScene::spawnBlink()
     addItem(blink);
     blink->setPos(point.first, point.second);
     blink->startAnimation();
+    QObject::connect(blink, &Blink::enemyCreated, this, [this] (EnemyTank *enemy) {
+        mEnemiesList.push_back(enemy);
+        QObject::connect(enemy, &EnemyTank::destroyed, this, [this] (QObject* object) {
+            mEnemiesList.removeOne(qobject_cast<EnemyTank*>(object));
+        });
+    });
+
 }
 
 void GameScene::spawnBonus()
@@ -180,5 +188,24 @@ void GameScene::removeItemAndCreateSteel(int x, int y)
     StaticBlock *steel = new StaticBlock(StaticBlock::Type::Concrete, mWidthBrick);
     addItem(steel);
     steel->setPos(x, y);
+}
+
+void GameScene::destroyAllEnemies()
+{
+    while (!mEnemiesList.isEmpty()) {
+        if (!mEnemiesList.first()) {
+            mEnemiesList.pop_front();
+        }
+        createExplosionAt(mEnemiesList.first()->scenePos());
+        mEnemiesList.first()->setData(5, true);
+    }
+}
+
+void GameScene::createExplosionAt(const QPointF &point)
+{
+    Explosion *explosion = new Explosion;
+    addItem(explosion);
+    explosion->setFixedScenePos(point);
+    explosion->startAnimation();
 }
 

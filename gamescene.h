@@ -42,6 +42,9 @@ private:
     Base *mBase;
     Player *mPlayer;
     int mCurrentLevel{-1};
+
+    QList<EnemyTank *> mEnemiesList;
+
 private:
     void initPlayer(const QPair<int,int> &position);
     void initBase(const QPair<int, int> &position);
@@ -56,6 +59,9 @@ private:
 
     void createBorderAroundBase();
     void removeItemAndCreateSteel(int x, int y);
+
+    void destroyAllEnemies();
+    void createExplosionAt(const QPointF &point);
 
 };
 

@@ -32,9 +32,6 @@ void Bullet::advance(int phase)
 
     if (!collItems.isEmpty()) {
         for (QGraphicsItem *item : collItems) {
-            if(item->data(0) == "Bullet") {
-
-            }
             if (item->data(0) == "Explosion" || item->data(0) == "Bonus")  {
                 continue;
             }
@@ -74,8 +71,8 @@ void Bullet::createExplosion(QGraphicsItem *item)
 {
     Explosion *e = new Explosion;
     scene()->addItem(e);
-    //e->setFixedScenePos(centerOfItem(qgraphicsitem_cast<QGraphicsPixmapItem*>(item)));
-    e->setFixedScenePos(scenePos());
+    e->setFixedScenePos(centerOfItem(qgraphicsitem_cast<QGraphicsPixmapItem*>(item)));
+    //e->setFixedScenePos(scenePos());
     e->startAnimation();
 }
 
