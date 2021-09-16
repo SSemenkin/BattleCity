@@ -218,7 +218,12 @@ void Player::updateTankSpeed(QGraphicsItem *item) const
 
 void Player::createHelmet()
 {
-    new Shield(this);
+    if (!data(2).toBool()) {// isShield
+        new Shield(this);
+        setData(2, true);
+    } else {
+        emit refreshTimer();
+    }
 }
 
 void Player::fire()

@@ -25,6 +25,7 @@ public:
     void pickupBonus(BonusItem::BonusType bonusType);
 signals:
     void createBorder();
+    void refreshTimer();
 
 protected:
     void keyPressEvent(QKeyEvent *e) override;

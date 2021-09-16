@@ -5,6 +5,8 @@
 #include <QGraphicsPixmapItem>
 #include <QTimer>
 
+#include "player.h"
+
 class Shield : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT

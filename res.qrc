@@ -24,5 +24,10 @@
         <file>images/static_blocks/water2.png</file>
         <file>images/shield/shield1.png</file>
         <file>images/shield/shield2.png</file>
+        <file>images/blink/blink1.png</file>
+        <file>images/blink/blink2.png</file>
+        <file>images/blink/blink3.png</file>
+        <file>images/blink/blink4.png</file>
+        <file>images/100point.png</file>
     </qresource>
 </RCC>

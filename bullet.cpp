@@ -6,6 +6,7 @@ Bullet::Bullet(int dx, int dy, QObject *parent) :
     m_dx(dx),
     m_dy(dy)
 {
+    setData(0, "Bullet");
     if (dx == 0  && dy > 0) {
         rotatePixmap(180);
     } else if (dx > 0 && dy == 0) {
@@ -31,6 +32,9 @@ void Bullet::advance(int phase)
 
     if (!collItems.isEmpty()) {
         for (QGraphicsItem *item : collItems) {
+            if(item->data(0) == "Bullet") {
+
+            }
             if (item->data(0) == "Explosion" || item->data(0) == "Bonus")  {
                 continue;
             }
@@ -97,6 +101,6 @@ void Bullet::handleStaticBodyCollision(QGraphicsItem *item)
 void Bullet::handleDynamicBodyCollision(QGraphicsItem *item)
 {
     createExplosion(item);
-    delete item;
+    item->setData(5, true);
     mIsDestroy = true;
 }

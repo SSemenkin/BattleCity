@@ -12,8 +12,12 @@ Shield::Shield(QGraphicsPixmapItem *player, QObject *parent) :
                    setPixmap(QPixmap(":/images/shield/shield1.png"));
        swapImage = !swapImage;
        if (calls++ == 50) {
+           parentItem()->setData(2, false);
            delete this;
        }
+    });
+    QObject::connect(qgraphicsitem_cast<Player*>(player), &Player::refreshTimer, this, [this] () {
+       calls = 0;
     });
     mChangeTimer->start(150);
 }

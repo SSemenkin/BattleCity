@@ -14,6 +14,7 @@
 #include "gameover.h"
 #include "staticblock.h"
 #include "bonusitem.h"
+#include "blink.h"
 
 class GameScene : public QGraphicsScene
 {
@@ -45,7 +46,7 @@ private:
     void initPlayer(const QPair<int,int> &position);
     void initBase(const QPair<int, int> &position);
 
-    void spawnEnemy();
+    void spawnBlink();
     void spawnBonus();
 
     void gameOver();

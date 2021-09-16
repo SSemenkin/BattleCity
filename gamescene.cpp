@@ -3,7 +3,7 @@
 int GameScene::FPS = 60;
 int GameScene::FPS_REFRESH_DELTA = 1000/FPS;
 int GameScene::ENEMY_RESPAWN_DELTA = 4000;
-int GameScene::BONUS_RESPAWN_DELTA = 5000;
+int GameScene::BONUS_RESPAWN_DELTA = 1000;
 
 std::array<Level, 1> GameScene::levels = {
   Level(":/levels/1_level.txt")
@@ -59,7 +59,7 @@ void GameScene::loadLevel(int levelID)
 
     QObject::connect(&mGameTimer, &QTimer::timeout, this, &QGraphicsScene::advance);
     QObject::connect(mBase, &Base::gameOver, this, &GameScene::gameOver);
-    QObject::connect(&mEnemyRespawnTimer, &QTimer::timeout, this, &GameScene::spawnEnemy);
+    QObject::connect(&mEnemyRespawnTimer, &QTimer::timeout, this, &GameScene::spawnBlink);
     QObject::connect(&mBonusItemTimer, &QTimer::timeout, this, &GameScene::spawnBonus);
     QObject::connect(mPlayer, &Player::createBorder, this, &GameScene::createBorderAroundBase);
     mGameTimer.start(FPS_REFRESH_DELTA);
@@ -71,10 +71,10 @@ void GameScene::loadLevel(int levelID)
 void GameScene::initPlayer(const QPair<int, int> &position)
 {
     mPlayer = new Player;
-    mPlayer->setPixmap(mPlayer->pixmap().scaled(mWidthBrick, mHeightBrick));
+    mPlayer->setPixmap(mPlayer->pixmap().scaled(mWidthBrick - 1, mHeightBrick - 1));
     addItem(mPlayer);
     mPlayer->setPos(position.first * mWidthBrick,
-                    position.second * mHeightBrick);
+                    position.second * mHeightBrick );
 }
 
 void GameScene::initBase(const QPair<int, int> &position)
@@ -86,9 +86,15 @@ void GameScene::initBase(const QPair<int, int> &position)
                   position.second * mHeightBrick);
 }
 
-void GameScene::spawnEnemy()
+void GameScene::spawnBlink()
 {
+    auto point = getRandomAndAvaliableCell();
 
+    Blink *blink = new Blink(mWidthBrick);
+
+    addItem(blink);
+    blink->setPos(point.first, point.second);
+    blink->startAnimation();
 }
 
 void GameScene::spawnBonus()
@@ -168,7 +174,7 @@ void GameScene::removeItemAndCreateSteel(int x, int y)
     QGraphicsItem *item = itemAt(x+mWidthBrick/2,y+mWidthBrick/2, QTransform());
     if (item && (item->data(0).toString() == "StaticBody" ||
             item->data(0).toString() == "Bonus")) {
-        delete item;
+        item->setData(5, true);
     }
 
     StaticBlock *steel = new StaticBlock(StaticBlock::Type::Concrete, mWidthBrick);

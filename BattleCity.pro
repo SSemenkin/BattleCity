@@ -24,6 +24,7 @@ SOURCES += \
     menutextitem.cpp \
     multimedia.cpp \
     player.cpp \
+    score.cpp \
     shield.cpp \
     staticblock.cpp
 
@@ -42,6 +43,7 @@ HEADERS += \
     menutextitem.h \
     multimedia.h \
     player.h \
+    score.h \
     shield.h \
     staticblock.h
 
