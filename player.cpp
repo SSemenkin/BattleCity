@@ -41,6 +41,10 @@ void Player::keyPressEvent(QKeyEvent *e)
     case Qt::Key_Right:
     case Qt::Key_Up:
     case Qt::Key_Down:
+    case Qt::Key_W:
+    case Qt::Key_S:
+    case Qt::Key_A:
+    case Qt::Key_D:
         mDirection = newDirection(static_cast<Qt::Key>(e->key()));
         CURRENT_SPEED = PLAYER_MAX_SPEED;
         break;
@@ -59,6 +63,10 @@ void Player::keyReleaseEvent(QKeyEvent *e)
     case Qt::Key_Right:
     case Qt::Key_Up:
     case Qt::Key_Down:
+    case Qt::Key_W:
+    case Qt::Key_S:
+    case Qt::Key_A:
+    case Qt::Key_D:
         CURRENT_SPEED = 0;
         break;
     default:
@@ -83,7 +91,7 @@ void Player::advance(int phase)
 {
     GraphicsPixmapObject::advance(phase);
     if (data(5).toBool() == true) {
-        mShield ? takeDamage() : setData(5, false);
+        data(2).toBool() ? setData(5, false) : takeDamage();
     }
 }
 
@@ -95,10 +103,10 @@ void Player::setRespawnPosition(const QPointF &respawnPoint)
 
 void Player::createShield()
 {
-    if (mShield) {
-        delete mShield;
+    if (data(2).toBool() == true) {
+        shield.deinit();
     }
-    mShield = new Shield(this);
+    shield.init(this);
     setData(2, true);
 }
 
@@ -112,17 +120,18 @@ void Player::takeDamage()
     int currHealth = data(1).toInt();
     currHealth = currHealth - 1;
     emit currentHealthChanged(currHealth);
-    respawn();
-    setData(1, currHealth);
+
+    if (currHealth < 1) {
+        destroy();
+    } else {
+        respawn();
+        setData(1, currHealth);
+    }
 }
 
 void Player::respawn()
 {
     setPos(mRespawnPosition);
+    setFocus();
     createShield();
 }
-
-
-
-
-

@@ -59,6 +59,7 @@ void GameScene::loadLevel(int levelID)
 
     QObject::connect(&mGameTimer, &QTimer::timeout, this, &QGraphicsScene::advance);
     QObject::connect(mBase, &Base::gameOver, this, &GameScene::gameOver);
+    QObject::connect(mBase, &Base::gameOver, this, &GameScene::destroyAllEnemies);
     QObject::connect(&mEnemyRespawnTimer, &QTimer::timeout, this, &GameScene::spawnBlink);
     QObject::connect(&mBonusItemTimer, &QTimer::timeout, this, &GameScene::spawnBonus);
     QObject::connect(mPlayer, &Player::createBorder, this, &GameScene::createBorderAroundBase);
@@ -96,13 +97,6 @@ void GameScene::spawnBlink()
     addItem(blink);
     blink->setPos(point.first, point.second);
     blink->startAnimation();
-    QObject::connect(blink, &Blink::enemyCreated, this, [this] (EnemyTank *enemy) {
-        mEnemiesList.push_back(enemy);
-        QObject::connect(enemy, &EnemyTank::destroyed, this, [this] (QObject* object) {
-            mEnemiesList.removeOne(qobject_cast<EnemyTank*>(object));
-        });
-    });
-
 }
 
 void GameScene::spawnBonus()
@@ -192,13 +186,12 @@ void GameScene::removeItemAndCreateSteel(int x, int y)
 
 void GameScene::destroyAllEnemies()
 {
-    while (!mEnemiesList.isEmpty()) {
-        if (!mEnemiesList.first()) {
-            mEnemiesList.pop_front();
-        }
-        createExplosionAt(mEnemiesList.first()->scenePos());
-        mEnemiesList.first()->setData(5, true);
-    }
+   for (QGraphicsItem *item : items()) {
+       if (item->data(0).toString() == "Enemy") {
+           createExplosionAt(item->scenePos());
+           item->setData(5, true);
+       }
+   }
 }
 
 void GameScene::createExplosionAt(const QPointF &point)
@@ -208,4 +201,5 @@ void GameScene::createExplosionAt(const QPointF &point)
     explosion->setFixedScenePos(point);
     explosion->startAnimation();
 }
+
 

@@ -117,6 +117,19 @@ void GraphicsPixmapObject::fire()
 
 GraphicsPixmapObject::Direction GraphicsPixmapObject::newDirection(Qt::Key key)
 {
+    if (key == Qt::Key_A) {
+        key = Qt::Key_Left;
+    }
+    if (key == Qt::Key_D) {
+        key = Qt::Key_Right;
+    }
+    if (key == Qt::Key_S) {
+        key = Qt::Key_Down;
+    }
+    if (key == Qt::Key_W) {
+        key = Qt::Key_Up;
+    }
+
     if(mDirection == Direction::UP && key == Qt::Key_Left) {
         rotatePixmap(-90);
         return Direction::LEFT;

@@ -1,6 +1,6 @@
 ﻿#include "shield.h"
 
-Shield::Shield(QGraphicsPixmapItem *player, QObject *parent) :
+Shield::Shield(QGraphicsItem *player, QObject *parent) :
     QObject(parent),
     QGraphicsPixmapItem(QPixmap(":/images/shield/shield1.png"), player),
     mChangeTimer(new QTimer(this))

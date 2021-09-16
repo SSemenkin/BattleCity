@@ -5,6 +5,9 @@
 #include <QScreen>
 #include <QApplication>
 #include <QTimer>
+#include <mutex>
+#include <utility>
+#include <functional>
 
 #include <QGraphicsPixmapItem>
 
@@ -42,8 +45,6 @@ private:
     Base *mBase;
     Player *mPlayer;
     int mCurrentLevel{-1};
-
-    QList<EnemyTank *> mEnemiesList;
 
 private:
     void initPlayer(const QPair<int,int> &position);

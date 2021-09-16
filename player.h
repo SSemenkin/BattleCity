@@ -8,6 +8,31 @@
 #include "bonusitem.h"
 #include "shield.h"
 
+struct mShield : public QObject {
+    Q_OBJECT
+public:
+    mShield () {
+    }
+    Shield *shield;
+    operator bool (){
+        return isNull;
+    }
+    QGraphicsItem* init(QGraphicsItem *item) {
+        shield = new Shield(item);
+        QObject::connect(shield, &Shield::destroyed, this, [this] () {
+            isNull = true;
+        });
+        isNull = false;
+        return shield;
+    }
+    void deinit() {
+        isNull = true;
+        delete shield;
+    }
+private:
+    bool isNull {true};
+};
+
 class Player : public GraphicsPixmapObject
 {
     Q_OBJECT
@@ -35,7 +60,7 @@ private:
 private:
     QPointF mRespawnPosition;
 
-    Shield *mShield;
+    mShield shield;
 
 };
 

@@ -9,6 +9,7 @@ EnemyTank::EnemyTank(int widthBlock, QObject *parent) :
     mDirectionTimer(new QTimer(this)),
     mFireTimer(new QTimer(this))
 {
+    setData(0, "Enemy");
     CURRENT_SPEED = PLAYER_MAX_SPEED;
     changeDirection();
 
