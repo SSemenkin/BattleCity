@@ -12,7 +12,8 @@ void Interface::initItems(QGraphicsScene *scene, int height, int counter)
     enemiesLeft->setPos(50, height);
 
     mScoreItem = new MenuTextItem("Score : 0");
-
+    scene->addItem(mScoreItem);
+    mScoreItem->setPos(scene->width()/2, height);
 
 
     items = new QGraphicsPixmapItem[counter];
@@ -32,6 +33,7 @@ void Interface::initItems(QGraphicsScene *scene, int height, int counter)
 void Interface::removeItem(int counter)
 {
     delete itemAtIndex(counter);
+    updateScore(100);
 }
 
 void Interface::updateScore(int appedValue)

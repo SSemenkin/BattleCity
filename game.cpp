@@ -31,6 +31,8 @@ void Game::startGameAtLevel(int level)
     scene->loadLevel(level);
     view->setScene(scene);
     QObject::connect(scene, &GameScene::swapScenes, this, [this] () {
+       QGraphicsScene *s = view->scene();
+       delete s;
        view->setScene(menuScene);
     });
 }
