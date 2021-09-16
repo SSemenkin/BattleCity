@@ -145,6 +145,7 @@ void GameScene::gameOver()
 
     GameOver *gameOverItem = new GameOver(QPointF(width()/2, height()/2));
     QObject::connect(gameOverItem, &GameOver::gameOver, this, &GameScene::swapScenes);
+    QObject::connect(gameOverItem, &GameOver::gameOver, &mGameTimer, &QTimer::stop);
     addItem(gameOverItem);
     gameOverItem->setPos(mWidthBrickCount / 2 * mWidthBrick - gameOverItem->pixmap().width()/2,
                          height());

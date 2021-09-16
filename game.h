@@ -16,6 +16,7 @@ class Game : public QObject
     Q_OBJECT
 public:
     explicit Game(QObject *parent = nullptr);
+    ~Game();
     bool init();
 private:
     MenuScene *menuScene;
@@ -23,6 +24,7 @@ private:
     QGraphicsView *view;
 private:
     void startGameAtLevel(int level);
+    void swapScenes();
 };
 
 #endif // GAME_H
