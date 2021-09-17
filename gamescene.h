@@ -18,6 +18,7 @@
 #include "blink.h"
 
 #include "interface.h"
+#include "multimedia.h"
 
 class GameScene : public QGraphicsScene
 {
@@ -27,6 +28,7 @@ public:
     explicit GameScene(QObject *parent = nullptr);
     void loadLevel(int level);
     static std::vector<Level> avaliableLevels();
+    void setMultimedia(Multimedia *multimedia);
 
 signals:
     ///
@@ -57,6 +59,7 @@ private:
     Base *mBase;
     Player *mPlayer;
     Interface *mInterface;
+    Multimedia *mMedia {0};
 
 private:
     void initPlayer(const QPair<int,int> &position);

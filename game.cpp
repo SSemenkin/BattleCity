@@ -17,7 +17,7 @@ Game::~Game()
 bool Game::init()
 {
     menuScene = new MenuScene;
-    multimedia = new Multimedia;
+    multimedia = new Multimedia(this);
     multimedia->playMainTheme();
 
     view = new QGraphicsView(menuScene);
@@ -36,6 +36,7 @@ bool Game::init()
 void Game::startGameAtLevel(int level)
 {
     GameScene *scene = new GameScene(this);
+    scene->setMultimedia(multimedia);
     scene->loadLevel(level);
     view->setScene(scene);
 

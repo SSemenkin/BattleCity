@@ -48,7 +48,8 @@ void Player::keyPressEvent(QKeyEvent *e)
     case Qt::Key_S:
     case Qt::Key_A:
     case Qt::Key_D:
-        mDirection = newDirection(static_cast<Qt::Key>(e->key()));
+        dirQueue.push_back(newDirection(static_cast<Qt::Key>(e->key())));
+        mDirection = dirQueue.last();
         CURRENT_SPEED = PLAYER_MAX_SPEED;
         break;
     case Qt::Key_Space:
@@ -70,7 +71,12 @@ void Player::keyReleaseEvent(QKeyEvent *e)
     case Qt::Key_S:
     case Qt::Key_A:
     case Qt::Key_D:
-        CURRENT_SPEED = 0;
+        dirQueue.pop_back();
+        if(dirQueue.isEmpty()) {
+            CURRENT_SPEED = 0;
+        } else {
+            mDirection = dirQueue.last();
+        }
         break;
     default:
         QGraphicsPixmapItem::keyPressEvent(e);

@@ -26,7 +26,7 @@ signals:
 protected:
     void advance(int phase) override;
     ///
-    /// \brief canDoNextStep return can you item move to position (point)
+    /// \brief checks is graphics object in point
     /// \param point
     /// \return
     ///

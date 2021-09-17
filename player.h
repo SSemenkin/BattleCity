@@ -59,6 +59,8 @@ private:
     QPointF mRespawnPosition;
     mShield shield;
     static int STAR_BONUS_DURATION;
+
+    QVector<GraphicsPixmapObject::Direction> dirQueue;
 };
 
 #endif // PLAYER_H

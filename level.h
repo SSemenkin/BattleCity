@@ -23,10 +23,13 @@ public:
 
 
 private:
+    QPair<int, int> INVALID {-1, -1};
+
     matrix<int> mStructure;
-    QPair<int, int> mPlayerPosition;
-    QPair<int, int> mBasePosition;
+    QPair<int, int> mPlayerPosition { INVALID };
+    QPair<int, int> mBasePosition {INVALID};
     int mLevelID {-1};
+
 
 private:
     void fillPrivateData(const QStringList &rows);

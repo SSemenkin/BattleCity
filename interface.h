@@ -16,7 +16,6 @@ public:
     void initItems(QGraphicsScene *scene, int height, int counter);
     void removeItem(int counter);
     void updateScore(int appedValue);
-
 signals:
 
 private:

@@ -8,7 +8,8 @@ int GameScene::ENEMY_MAX_COUNTER = 10;
 
 std::vector<Level> GameScene::levels = {
   Level(":/levels/1_level.txt"),
-  Level(":/levels/2_level.txt")
+  Level(":/levels/2_level.txt"),
+  Level(":/levels/3_level.txt")
 };
 
 GameScene::GameScene(int level, QObject *parent) :
@@ -79,7 +80,18 @@ void GameScene::loadLevel(int levelID)
 
 std::vector<Level> GameScene::avaliableLevels()
 {
-    return levels;
+    std::vector<Level> result;
+    for (const Level& level : levels) {
+        if (level.isOk()) {
+            result.push_back(level);
+        }
+    }
+    return result;
+}
+
+void GameScene::setMultimedia(Multimedia *multimedia)
+{
+    mMedia = multimedia;
 }
 
 void GameScene::initPlayer(const QPair<int, int> &position)
@@ -231,6 +243,7 @@ void GameScene::destroyAllEnemies()
 
 void GameScene::createExplosionAt(const QPointF &point)
 {
+    if (mMedia) {mMedia->playSound(Multimedia::Sound::Explosion);}
     Explosion *explosion = new Explosion;
     addItem(explosion);
     explosion->setFixedScenePos(point);

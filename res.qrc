@@ -33,5 +33,8 @@
         <file>images/loss.png</file>
         <file>images/player2right.png</file>
         <file>levels/2_level.txt</file>
+        <file>levels/3_level.txt</file>
+        <file>sounds/explosion.wav</file>
+        <file>sounds/shot.wav</file>
     </qresource>
 </RCC>

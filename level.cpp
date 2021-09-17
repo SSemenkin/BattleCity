@@ -12,7 +12,7 @@ Level::Level()
 
 bool Level::isOk() const
 {
-    return mLevelID != -1;
+    return mLevelID != -1 && mPlayerPosition != INVALID && mBasePosition != INVALID;
 }
 
 bool Level::load(const QString &path)
