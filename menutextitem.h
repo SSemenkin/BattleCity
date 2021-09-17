@@ -10,16 +10,9 @@ public:
     explicit MenuTextItem(const QString &text,
                  QGraphicsItem *parent = nullptr);
 
-    inline void setCurrent(bool state) {
-        mCurrent = state;
-        mCurrent ? setDefaultTextColor(Qt::red) : setDefaultTextColor(Qt::white);
-    }
-    inline bool isCurrent() const {
-        return mCurrent;
-    }
-
+    void setCurrent(bool state);
+    bool isCurrent() const;
 private:
-
     bool mCurrent{false};
 };
 

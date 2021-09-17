@@ -22,6 +22,7 @@ bool Game::init()
     multimedia->playMainTheme();
 
     view = new QGraphicsView(menuScene);
+
     QObject::connect(menuScene, &MenuScene::playTrigerred, this, &Game::startGameAtLevel);
     QObject::connect(menuScene, &MenuScene::quitTrigerred, view, &QGraphicsView::close);
 
@@ -34,7 +35,7 @@ bool Game::init()
 
 void Game::startGameAtLevel(int level)
 {
-    GameScene *scene = new GameScene();
+    GameScene *scene = new GameScene(this);
     scene->loadLevel(level);
     view->setScene(scene);
     QObject::connect(scene, &GameScene::swapScenes, this, &Game::swapScenes);
@@ -42,7 +43,5 @@ void Game::startGameAtLevel(int level)
 
 void Game::swapScenes()
 {
-    QGraphicsScene *gScene = view->scene();
     view->setScene(menuScene);
-    delete gScene;
 }
