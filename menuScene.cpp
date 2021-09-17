@@ -25,14 +25,30 @@ MenuScene::MenuScene(QObject *parent) :
     back->hide();
 
     displayItems({play, quit});
+    play->setCurrent(true);
+
+    QObject::connect(play, &MenuTextItem::clicked, this, [this] () {
+        emit playTrigerred();
+    });
+    QObject::connect(back, &MenuTextItem::clicked, this, [this] () {
+        displayItems({play, quit});
+    });
+    QObject::connect(quit, &MenuTextItem::clicked, this, [this] () {
+        emit quitTrigerred();
+    });
+
 }
 
 void MenuScene::initLevels(const std::vector<Level> &levels)
 {
     if (levelItems.isEmpty()) {
         for(std::vector<Level>::size_type i = 0; i < levels.size(); ++i) {
-            levelItems.push_back(new MenuTextItem(QString::number(levels[i].getLevelID()) + " LEVEL"));
-            addItem(levelItems.last());
+            MenuTextItem *item = new MenuTextItem(QString::number(levels[i].getLevelID()) + " LEVEL");
+            levelItems.push_back(item);
+            addItem(item);
+            QObject::connect(item, &MenuTextItem::clicked, this, [this, i] () {
+               emit startGameAtLevel(i);
+            });
         }
     }
 

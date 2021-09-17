@@ -31,4 +31,21 @@ bool MenuTextItem::isCurrent() const
     return mCurrent;
 }
 
+void MenuTextItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+{
+    setCurrent(true);
+    QGraphicsTextItem::hoverEnterEvent(event);
+}
 
+void MenuTextItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+    setCurrent(false);
+    QGraphicsTextItem::hoverLeaveEvent(event);
+}
+
+void MenuTextItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    setCurrent(event);
+    emit clicked(this);
+    QGraphicsTextItem::mousePressEvent(event);
+}
