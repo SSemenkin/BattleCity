@@ -25,6 +25,7 @@ private:
 private:
     void startGameAtLevel(int level);
     void swapScenes();
+    void initLevels();
 };
 
 #endif // GAME_H
