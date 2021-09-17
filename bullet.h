@@ -32,7 +32,6 @@ private:
     /// \brief create an explosion at centerOfItem(item)
     ///
     void createExplosion(QGraphicsItem *item);
-    void destroy();
     void handleStaticBodyCollision(QGraphicsItem *item);
     void handleDynamicBodyCollision(QGraphicsItem *item);
 };

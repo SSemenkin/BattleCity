@@ -17,6 +17,10 @@ public:
     StaticBlock(Type type, int blockSide, QGraphicsItem *parent = nullptr);
 
     bool isDestructible() const;
+    ///
+    /// \brief return is bullet can move over item
+    /// \return
+    ///
     bool isPerforating() const;
     bool isTankCanMoveHover() const;
     int tankSpeed() const;
@@ -31,7 +35,7 @@ private:
     int mHealth {0};
     int mTankSpeed;
     bool swapWater {true};
-    QTimer *mWaterTimer;
+    QTimer *mWaterTimer; // timer for swap pixmap of water
 };
 
 #endif // STATICBLOCK_H

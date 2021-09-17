@@ -76,7 +76,6 @@ private:
 
     void destroyAllEnemies();
     void createExplosionAt(const QPointF &point);
-
 };
 
 #endif // GAMESCENE_H

@@ -17,6 +17,10 @@ public:
     void setFrame(int frame) {
         mCurrentFrame = frame;
     }
+    ///
+    /// \brief setFixedScenePos position where explosion is need to located for each frame
+    /// \param fixedPos
+    ///
     void setFixedScenePos(const QPointF& fixedPos);
 
 signals:
