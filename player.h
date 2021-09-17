@@ -17,8 +17,8 @@ public:
     operator bool (){
         return isNull;
     }
-    QGraphicsItem* init(QGraphicsItem *item) {
-        shield = new Shield(item);
+    QGraphicsItem* init(QGraphicsItem *item, int blockSize) {
+        shield = new Shield(item, blockSize);
         QObject::connect(shield, &Shield::destroyed, this, [this] () {
             isNull = true;
         });

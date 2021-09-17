@@ -17,13 +17,15 @@ Game::~Game()
 bool Game::init()
 {
     menuScene = new MenuScene;
-    menuScene->init();
     multimedia = new Multimedia;
     multimedia->playMainTheme();
 
     view = new QGraphicsView(menuScene);
 
-    QObject::connect(menuScene, &MenuScene::playTrigerred, this, &Game::startGameAtLevel);
+    QObject::connect(menuScene, &MenuScene::playTrigerred, this,[this] () {
+        menuScene->initLevels(GameScene::avaliableLevels());
+    });
+    QObject::connect(menuScene, &MenuScene::startGameAtLevel, this, &Game::startGameAtLevel);
     QObject::connect(menuScene, &MenuScene::quitTrigerred, view, &QGraphicsView::close);
 
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);

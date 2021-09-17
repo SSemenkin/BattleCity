@@ -9,7 +9,7 @@ class Shield : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
-    explicit Shield(QGraphicsItem *player, QObject *parent = nullptr);
+    explicit Shield(QGraphicsItem *player, int block, QObject *parent = nullptr);
 
 signals:
 

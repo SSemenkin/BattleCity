@@ -5,9 +5,7 @@
 #include <QScreen>
 #include <QApplication>
 #include <QTimer>
-#include <mutex>
-#include <utility>
-#include <functional>
+#include <vector>
 
 #include <QGraphicsPixmapItem>
 
@@ -28,12 +26,13 @@ public:
     explicit GameScene(int level, QObject *parent = nullptr);
     explicit GameScene(QObject *parent = nullptr);
     void loadLevel(int level);
+    static std::vector<Level> avaliableLevels();
 
 signals:
     void swapScenes();
 
 private:
-    static std::array<Level, 1> levels;
+    static std::vector<Level> levels;
     static int FPS;
     static int FPS_REFRESH_DELTA;
     static int BONUS_RESPAWN_DELTA;

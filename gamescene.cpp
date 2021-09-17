@@ -6,8 +6,9 @@ int GameScene::ENEMY_RESPAWN_DELTA = 4500;
 int GameScene::BONUS_RESPAWN_DELTA = 5000;
 int GameScene::ENEMY_MAX_COUNTER = 10;
 
-std::array<Level, 1> GameScene::levels = {
-  Level(":/levels/1_level.txt")
+std::vector<Level> GameScene::levels = {
+  Level(":/levels/1_level.txt"),
+  Level(":/levels/2_level.txt")
 };
 
 GameScene::GameScene(int level, QObject *parent) :
@@ -73,6 +74,11 @@ void GameScene::loadLevel(int levelID)
     mGameTimer.start(FPS_REFRESH_DELTA);
     mEnemyRespawnTimer.start(ENEMY_RESPAWN_DELTA);
     mBonusItemTimer.start(BONUS_RESPAWN_DELTA);
+}
+
+std::vector<Level> GameScene::avaliableLevels()
+{
+    return levels;
 }
 
 void GameScene::initPlayer(const QPair<int, int> &position)

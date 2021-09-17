@@ -109,7 +109,7 @@ void Player::createShield()
     if (data(2).toBool() == true) {
         shield.deinit();
     }
-    shield.init(this);
+    shield.init(this, pixmap().width());
     setData(2, true);
 }
 

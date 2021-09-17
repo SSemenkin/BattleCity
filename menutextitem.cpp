@@ -11,6 +11,15 @@ MenuTextItem::MenuTextItem(const QString &text, QGraphicsItem *parent) :
     setFont(newFont);
 }
 
+MenuTextItem::MenuTextItem()
+{
+    setDefaultTextColor(Qt::white);
+
+    QFont newFont = font();
+    newFont.setPointSize(newFont.pointSize() * 2);
+    setFont(newFont);
+}
+
 void MenuTextItem::setCurrent(bool state)
 {
     mCurrent = state;

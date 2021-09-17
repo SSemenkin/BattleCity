@@ -14,6 +14,7 @@
 #include <QMediaPlayer>
 
 #include "menutextitem.h"
+#include "level.h"
 
 
 class MenuScene : public QGraphicsScene
@@ -23,19 +24,29 @@ class MenuScene : public QGraphicsScene
 public:
     explicit MenuScene(const QRectF &sceneRect, QObject *parent = nullptr);
     explicit MenuScene(QObject *parent = nullptr);
-    void init();
+    void initLevels(const std::vector<Level> &levels);
 
     virtual ~MenuScene();
 
 signals:
-    void playTrigerred(int value);
+    void startGameAtLevel(int value);
+    void playTrigerred();
     void quitTrigerred();
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
 
 private:
+    void displayItems(const QVector<MenuTextItem *> &items);
+    void hideItems(const QVector<MenuTextItem*> &items);
+    void navigateBetweenButtons(Qt::Key key);
+    void handleEnterPressed();
+private:
+    QVector<MenuTextItem *> mCurrentDisplayed;
     MenuTextItem *play;
     MenuTextItem *quit;
+    MenuTextItem *back;
+    QVector<MenuTextItem*> levelItems;
+    QGraphicsPixmapItem *logo;
 };
 #endif // MENUSCENE_H

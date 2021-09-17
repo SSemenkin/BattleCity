@@ -9,6 +9,7 @@ class MenuTextItem : public QGraphicsTextItem
 public:
     explicit MenuTextItem(const QString &text,
                  QGraphicsItem *parent = nullptr);
+    explicit MenuTextItem();
 
     void setCurrent(bool state);
     bool isCurrent() const;

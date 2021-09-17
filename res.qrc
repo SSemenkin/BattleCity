@@ -32,5 +32,6 @@
         <file>images/health.png</file>
         <file>images/loss.png</file>
         <file>images/player2right.png</file>
+        <file>levels/2_level.txt</file>
     </qresource>
 </RCC>
