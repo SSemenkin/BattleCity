@@ -25,7 +25,6 @@ MenuScene::MenuScene(QObject *parent) :
     back->hide();
 
     displayItems({play, quit});
-    play->setCurrent(true);
 
     QObject::connect(play, &MenuTextItem::clicked, this, [this] () {
         emit playTrigerred();
