@@ -21,6 +21,9 @@ private:
     int mFrame {0};
     int mBlockWidth;
 private:
+    ///
+    /// \brief method that called when animation is finished.
+    ///
     void spawnEnemy();
 };
 

@@ -25,6 +25,11 @@ signals:
 
 protected:
     void advance(int phase) override;
+    ///
+    /// \brief canDoNextStep return can you item move to position (point)
+    /// \param point
+    /// \return
+    ///
     virtual bool canDoNextStep(const QPointF &point) const;
     bool canDoNextStep(int x, int y) const;
     void moveByIfNotWall(int x, int y);

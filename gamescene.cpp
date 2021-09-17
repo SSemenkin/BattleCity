@@ -70,6 +70,7 @@ void GameScene::loadLevel(int levelID)
     QObject::connect(&mBonusItemTimer, &QTimer::timeout, this, &GameScene::spawnBonus);
     QObject::connect(mPlayer, &Player::createBorder, this, &GameScene::createBorderAroundBase);
     QObject::connect(mPlayer, &Player::destroyEnemies, this, &GameScene::destroyAllEnemies);
+    QObject::connect(mPlayer, &Player::destroyed, this, &GameScene::gameOver);
 
     mGameTimer.start(FPS_REFRESH_DELTA);
     mEnemyRespawnTimer.start(ENEMY_RESPAWN_DELTA);

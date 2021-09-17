@@ -20,7 +20,7 @@ void Bullet::advance(int phase)
 {
     if (scenePos().x() > scene()->width() || scenePos().x() < scene()->sceneRect().x() ||
             scenePos().y() < scene()->sceneRect().y() || scenePos().y() > scene()->height() || mIsDestroy) {
-        destroy(); // check if bullet is in scene or collide with object on previous iteration
+        delete this; // check if bullet is in scene or collide with object on previous iteration
         return;
     }
 
@@ -78,11 +78,6 @@ void Bullet::createExplosion(QGraphicsItem *item)
     e->startAnimation();
 }
 
-void Bullet::destroy()
-{
-    emit destroyed();
-    delete this;
-}
 
 void Bullet::handleStaticBodyCollision(QGraphicsItem *item)
 {

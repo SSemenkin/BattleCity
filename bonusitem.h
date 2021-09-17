@@ -23,10 +23,10 @@ protected:
     void advance(int phase) override;
 private:
     BonusType mType;
-    QTimer *mRemainingTimer;
-    QTimer *mSwapTimer;
-    QPixmap mPixmap;
-    int calls {0};
+    QTimer *mRemainingTimer; // it works until the bonus starts flashing
+    QTimer *mSwapTimer; // work while bonus flashing
+    QPixmap mPixmap; 
+    int calls {0}; // flash counter
     bool mSwap {true};
 };
 

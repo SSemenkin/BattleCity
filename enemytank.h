@@ -17,13 +17,13 @@ signals:
 protected:
     void advance(int phase) override;
 private:
-    int mWidthBlock;
-private:
     void spawnScore();
     void changeDirection();
 private:
     QTimer *mDirectionTimer;
     QTimer *mFireTimer;
+    int mWidthBlock;
+
 };
 
 #endif // ENEMYTANK_H

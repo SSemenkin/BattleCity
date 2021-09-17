@@ -29,6 +29,9 @@ public:
     static std::vector<Level> avaliableLevels();
 
 signals:
+    ///
+    /// \brief emits when game over(Base is destroyed) or player is killed all enemies
+    ///
     void swapScenes();
 
 private:

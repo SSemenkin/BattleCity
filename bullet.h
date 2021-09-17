@@ -20,9 +20,17 @@ private:
     bool mIsDestroy {false};
 private:
     void rotatePixmap(qreal angle);
+    ///
+    /// \brief calculate center of item pixmap
+    /// \param item
+    /// \return return point on scene where item is located
+    ///
     QPointF centerOfItem(QGraphicsPixmapItem *item);
     bool isExplosion(QGraphicsItem *item) const;
     bool isBase(QGraphicsItem *item) const;
+    ///
+    /// \brief create an explosion at centerOfItem(item)
+    ///
     void createExplosion(QGraphicsItem *item);
     void destroy();
     void handleStaticBodyCollision(QGraphicsItem *item);
