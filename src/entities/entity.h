@@ -20,9 +20,6 @@ public:
         RequireToDestroy
     };
 
-    void setProperty(const Property &key, const QVariant &value) &;
-    const QVariant& getProperty(const Property &key) const &;
-
     bool isMovable() const;
     void setMovable(bool state);
 
@@ -44,6 +41,8 @@ public:
 protected:
     virtual void advance(int phase) override;
 
+    void setProperty(const Property &key, const QVariant &value) &;
+    const QVariant& getProperty(const Property &key) const &;
 private:
     QMap<Property, QVariant> m_properties;
 };
