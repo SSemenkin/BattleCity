@@ -1,6 +1,6 @@
 ﻿#include "game.h"
 
-Game *Game::instance()
+Game *Game::init()
 {
     static Game game;
     return &game;

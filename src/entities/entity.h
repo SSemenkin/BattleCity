@@ -43,6 +43,8 @@ protected:
 
     void setProperty(const Property &key, const QVariant &value) &;
     const QVariant& getProperty(const Property &key) const &;
+
+
 private:
     QMap<Property, QVariant> m_properties;
 };

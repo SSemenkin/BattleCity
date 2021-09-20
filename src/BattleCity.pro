@@ -11,11 +11,15 @@ CONFIG += c++11
 SOURCES += \
     entities/entity.cpp \
     game.cpp \
-    main.cpp
+    level.cpp \
+    main.cpp \
+    scenes/gamescene.cpp
 
 HEADERS += \
     entities/entity.h \
-    game.h
+    game.h \
+    level.h \
+    scenes/gamescene.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

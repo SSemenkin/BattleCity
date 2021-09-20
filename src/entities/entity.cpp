@@ -1,7 +1,5 @@
 ﻿#include "entity.h"
 
-
-
 Entity::Entity(const QPixmap &pixmap, QGraphicsItem *parentItem, QObject *parent):
     QObject(parent), QGraphicsPixmapItem(pixmap, parentItem)
 {
@@ -79,8 +77,10 @@ void Entity::setRequireToDestroy(bool state)
 
 void Entity::advance(int phase)
 {
-    if (phase && isRequireToDestroy()) {
-        delete this;
+    if (phase) {
+        if (isRequireToDestroy()) {
+            delete this;
+        }
     }
 }
 

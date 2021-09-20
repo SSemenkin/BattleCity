@@ -11,7 +11,7 @@ class Game : public QWidget
 {
     Q_OBJECT
 public:
-    static Game* instance();
+    static Game* init();
     Game(const Game& rhs) = delete;
     Game& operator= (const Game& rhs) = delete;
     virtual ~Game() noexcept;
