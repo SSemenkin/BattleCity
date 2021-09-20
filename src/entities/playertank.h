@@ -4,6 +4,7 @@
 #include <QKeyEvent>
 
 #include "entities/tank.h"
+#include "entities/bonus.h"
 
 
 class PlayerTank final : public Tank
@@ -11,6 +12,7 @@ class PlayerTank final : public Tank
     Q_OBJECT
 public:
     explicit PlayerTank(int width);
+    void pickupBonus(Bonus::Type type);
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;

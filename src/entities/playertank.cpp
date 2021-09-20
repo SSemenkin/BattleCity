@@ -9,6 +9,11 @@ PlayerTank::PlayerTank(int width) :
     setLivesLeft(3);
 }
 
+void PlayerTank::pickupBonus(Bonus::Type type)
+{
+
+}
+
 void PlayerTank::keyPressEvent(QKeyEvent *event)
 {
     switch (event->key()) {

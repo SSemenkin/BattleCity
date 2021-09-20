@@ -3,7 +3,7 @@
 
 #include <QTimer>
 
-#include "tank.h"
+#include "entities/tank.h"
 
 class EnemyTank : public Tank
 {

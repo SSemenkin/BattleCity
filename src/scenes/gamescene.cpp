@@ -41,6 +41,7 @@ bool GameScene::loadLevel(const Level &level)
 
         QObject::connect(m_gameTimer,       &QTimer::timeout, this, &GameScene::advance);
         QObject::connect(m_enemySpawnTimer, &QTimer::timeout, this, &GameScene::spawnEnemy);
+        QObject::connect(m_bonusTimer,      &QTimer::timeout, this, &GameScene::spawnBonus);
 
         m_gameTimer->start(FPS_DELTA);
         m_enemySpawnTimer->start(ENEMY_RESPAWN_DELTA);
@@ -96,10 +97,21 @@ void GameScene::initPlayer(const QPointF &pos)
 void GameScene::spawnEnemy()
 {
     const QPointF spawnPos = getAvaliablePoint();
-    EnemyTank *enemyTank = new EnemyTank(m_lengthBlock);
-    enemyTank->setBorderPoint(m_player->borderPoint());
-    addItem(enemyTank);
-    enemyTank->setPos(spawnPos);
+    Blink *blink = new Blink(m_lengthBlock);
+    blink->setBorderPoint(m_player->borderPoint());
+    addItem(blink);
+    blink->setPos(spawnPos);
+    blink->startAnimation();
+}
+
+void GameScene::spawnBonus()
+{
+    const QPointF spawnPos = getAvaliablePoint();
+    Bonus *bonus = new Bonus(m_lengthBlock);
+    addItem(bonus);
+    bonus->setPos(spawnPos);
+
+    QObject::connect(bonus, &Bonus::picked, m_player, &PlayerTank::pickupBonus);
 }
 
 QPointF GameScene::getAvaliablePoint() const

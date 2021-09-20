@@ -3,14 +3,14 @@
 
 #include <QTimer>
 
-#include "entity.h"
+#include "entities/entity.h"
 
 class Explosion : public Entity
 {
     Q_OBJECT
 public:
     explicit Explosion(const QPointF &fixedCenter, int pixmapWidth);
-    void start();
+    void startAnimation();
 
 private:
     QVector<QPixmap> m_frames;

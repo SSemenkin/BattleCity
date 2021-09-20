@@ -20,7 +20,7 @@ Explosion::Explosion(const QPointF& fixedCenter, int pixmapWidth) :
     changePixmap();
 }
 
-void Explosion::start()
+void Explosion::startAnimation()
 {
     m_frameTimer = new QTimer(this);
     QObject::connect(m_frameTimer, &QTimer::timeout, this, &Explosion::changePixmap);
@@ -29,8 +29,7 @@ void Explosion::start()
 
 void Explosion::changePixmap()
 {
-    setPixmap(m_frames.at(m_frame).scaled(m_pixmapWidth, m_pixmapWidth));
-    m_frame++;
+    setPixmap(m_frames.at(m_frame++).scaled(m_pixmapWidth, m_pixmapWidth));
     setPos(m_center.x() - pixmap().height(),
            m_center.y() - pixmap().width());
     if (m_frame == m_frames.size()) {
