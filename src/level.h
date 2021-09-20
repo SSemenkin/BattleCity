@@ -10,10 +10,10 @@ using LevelStructure = QVector<QString>;
 class Level
 {
 public:
-    explicit Level(const QString &path);
+    Level(const QString &path);
     [[nodiscard]] int levelId() const;
-    [[nodiscard]] QPointF getPlayerPos() const;
-    [[nodiscard]] QPointF getBasePos() const;
+    [[nodiscard]] QPointF playerPos() const;
+    [[nodiscard]] QPointF basePos() const;
     [[nodiscard]] bool isOk() const;
     [[nodiscard]] LevelStructure levelStructure() const;
 

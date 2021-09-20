@@ -10,12 +10,12 @@ int Level::levelId() const
     return m_levelId;
 }
 
-QPointF Level::getPlayerPos() const
+QPointF Level::playerPos() const
 {
     return m_playerPos;
 }
 
-QPointF Level::getBasePos() const
+QPointF Level::basePos() const
 {
     return m_basePos;
 }
@@ -56,12 +56,12 @@ void Level::load(const QString &path)
 
                 if (fileContent.at(i).contains('b', sensitivity)) {
                     m_basePos.setX(fileContent.at(i).indexOf('b', sensitivity));
-                    m_basePos.setY(i);
+                    m_basePos.setY(i - 1);
                 }
 
                 if (fileContent.at(i).contains('p', sensitivity)) {
                     m_playerPos.setX(fileContent.at(i).indexOf('p', sensitivity));
-                    m_playerPos.setY(i);
+                    m_playerPos.setY(i - 1);
                 }
             }
 

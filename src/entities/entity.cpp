@@ -3,6 +3,7 @@
 Entity::Entity(const QPixmap &pixmap, QGraphicsItem *parentItem, QObject *parent):
     QObject(parent), QGraphicsPixmapItem(pixmap, parentItem)
 {
+    setRequireToDestroy(false);
 }
 
 void Entity::setProperty(const Entity::Property &key, const QVariant &value) &
@@ -13,16 +14,6 @@ void Entity::setProperty(const Entity::Property &key, const QVariant &value) &
 const QVariant& Entity::getProperty(const Entity::Property &key) const &
 {
     return *m_properties.find(key);
-}
-
-bool Entity::isMovable() const
-{
-    return getProperty(Entity::Property::Movable).toBool();
-}
-
-void Entity::setMovable(bool state)
-{
-    setProperty(Entity::Property::Movable, state);
 }
 
 bool Entity::isDestructible() const
@@ -63,6 +54,9 @@ uint Entity::livesLeft() const
 void Entity::setLivesLeft(uint livesLeft)
 {
     setProperty(Entity::Property::LivesLeft, livesLeft);
+    if (livesLeft == 0) {
+        setRequireToDestroy();
+    }
 }
 
 bool Entity::isRequireToDestroy() const
@@ -73,6 +67,23 @@ bool Entity::isRequireToDestroy() const
 void Entity::setRequireToDestroy(bool state)
 {
     setProperty(Entity::Property::RequireToDestroy, state);
+}
+
+QString Entity::entityName() const
+{
+    return getProperty(Entity::Property::EntityName).toString();
+}
+
+void Entity::setEntityName(const QString &name)
+{
+    setProperty(Entity::Property::EntityName, name);
+}
+
+void Entity::takeDamage()
+{
+    int lives = livesLeft();
+    lives--;
+    setLivesLeft(lives);
 }
 
 void Entity::advance(int phase)

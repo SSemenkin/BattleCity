@@ -9,19 +9,19 @@ class Entity : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
-    Entity(const QPixmap &pixmap = QPixmap(), QGraphicsItem *parentItem = nullptr, QObject *parent = nullptr);
+    Entity(const QPixmap &pixmap = QPixmap(),
+           QGraphicsItem *parentItem = nullptr,
+           QObject *parent = nullptr);
+
     virtual ~Entity() noexcept {}
     enum class Property : int8_t {
-        Movable,
         Destructible,
         CanBulletMovesThroughObject,
         CanActorMovesThroughObject,
         LivesLeft,
-        RequireToDestroy
+        RequireToDestroy,
+        EntityName
     };
-
-    bool isMovable() const;
-    void setMovable(bool state);
 
     bool isDestructible() const;
     void setDestructible(bool state);
@@ -38,12 +38,16 @@ public:
     bool isRequireToDestroy() const;
     void setRequireToDestroy(bool state = true);
 
+    QString entityName() const;
+    void setEntityName(const QString &name);
+
+    void takeDamage();
+
 protected:
     virtual void advance(int phase) override;
 
     void setProperty(const Property &key, const QVariant &value) &;
     const QVariant& getProperty(const Property &key) const &;
-
 
 private:
     QMap<Property, QVariant> m_properties;
