@@ -14,10 +14,9 @@ public:
     void shoot();
 protected:
     bool m_fire {true};
-    static int TANK_SPEED;
     int m_speed {0};
 protected:
-    bool canMoveInDirection(int dx, int dy) const;
+    virtual bool canMoveInDirection(int dx, int dy) const;
     void moveAndCollide(int dx, int dy);
     void advance(int phase) override;
 

@@ -16,7 +16,6 @@ protected:
 private:
     int m_dx {0};
     int m_dy {0};
-    static int BULLET_SPEED;
 private:
     void init();
     void handleCollision(Entity *entity);

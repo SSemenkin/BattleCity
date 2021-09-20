@@ -1,7 +1,4 @@
 ﻿#include "tank.h"
-#include <QDebug>
-
-int Tank::TANK_SPEED = 4;
 
 Tank::Tank(const QPixmap &pixmap, QGraphicsItem *item, QObject *parent) :
     RigidBody(pixmap, item, parent)

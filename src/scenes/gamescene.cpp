@@ -4,10 +4,11 @@ GameScene::GameScene(QObject *parent) :
     QGraphicsScene(parent),
     m_gameTimer(new QTimer(this)),
     m_bonusTimer(new QTimer(this)),
-    m_enemySpawnTimer(new QTimer(this))
+    m_enemySpawnTimer(new QTimer(this)),
+    m_borderTimer(new QTimer(this)),
+    m_borderBlinkTimer(new QTimer(this))
 {
     calcRects();
-    calcContants();
     setSceneRect(qApp->primaryScreen()->availableGeometry());
     setBackgroundBrush(QColor(47,79,79));
     //addRect(m_gameplayRect);
@@ -38,10 +39,14 @@ bool GameScene::loadLevel(const Level &level)
         }
 
         initPlayer(level.playerPos());
+        initBase(level.basePos());
 
-        QObject::connect(m_gameTimer,       &QTimer::timeout, this, &GameScene::advance);
-        QObject::connect(m_enemySpawnTimer, &QTimer::timeout, this, &GameScene::spawnEnemy);
-        QObject::connect(m_bonusTimer,      &QTimer::timeout, this, &GameScene::spawnBonus);
+        QObject::connect(m_gameTimer,        &QTimer::timeout, this, &GameScene::advance);
+        QObject::connect(m_enemySpawnTimer,  &QTimer::timeout, this, &GameScene::spawnEnemy);
+        QObject::connect(m_bonusTimer,       &QTimer::timeout, this, &GameScene::spawnBonus);
+
+        QObject::connect(m_player, &PlayerTank::picked, this, &GameScene::playerPickedBonus);
+
 
         m_gameTimer->start(FPS_DELTA);
         m_enemySpawnTimer->start(ENEMY_RESPAWN_DELTA);
@@ -78,13 +83,6 @@ void GameScene::calcRects()
     m_interfaceRect = avaliableGeometry.adjusted(3 * avaliableGeometry.width()/4, 0, 0, 0);
 }
 
-void GameScene::calcContants()
-{
-    FPS = 60;
-    FPS_DELTA = 1000/FPS;
-    ENEMY_RESPAWN_DELTA = BONUS_RESPAWN_DELTA =  6000;
-}
-
 void GameScene::initPlayer(const QPointF &pos)
 {
     m_player = new PlayerTank(m_lengthBlock - 4);
@@ -92,6 +90,14 @@ void GameScene::initPlayer(const QPointF &pos)
     m_player->setPos(pos.x() * m_lengthBlock,
                      pos.y() * m_lengthBlock);
     m_player->setBorderPoint(QPointF(m_gameplayRect.width(), m_gameplayRect.height()));
+}
+
+void GameScene::initBase(const QPointF &pos)
+{
+    m_base = new Base(m_lengthBlock);
+    addItem(m_base);
+    m_base->setPos(pos.x() * m_lengthBlock,
+                   pos.y() * m_lengthBlock);
 }
 
 void GameScene::spawnEnemy()
@@ -112,6 +118,109 @@ void GameScene::spawnBonus()
     bonus->setPos(spawnPos);
 
     QObject::connect(bonus, &Bonus::picked, m_player, &PlayerTank::pickupBonus);
+}
+
+void GameScene::spawnBorder()
+{
+    const QPointF basePoint = m_base->scenePos();
+    hideEntityAndCreateConcrete(QPointF(basePoint.x() + m_lengthBlock, basePoint.y()));
+    hideEntityAndCreateConcrete(QPointF(basePoint.x() - m_lengthBlock, basePoint.y()));
+    hideEntityAndCreateConcrete(QPointF(basePoint.x() + m_lengthBlock, basePoint.y() - m_lengthBlock));
+    hideEntityAndCreateConcrete(QPointF(basePoint.x(), basePoint.y() - m_lengthBlock));
+    hideEntityAndCreateConcrete(QPointF(basePoint.x() - m_lengthBlock, basePoint.y() - m_lengthBlock));
+
+
+    resetBorderTimers();
+}
+
+void GameScene::destroyAllEnemies()
+{
+    for (QGraphicsItem *item : items()) {
+        Entity *entity = qgraphicsitem_cast<Entity*>(item);
+        if (entity && entity->entityName() == "Enemy") {
+            entity->setRequireToDestroy();
+        }
+    }
+}
+
+void GameScene::removeBorder()
+{
+    while(!m_border.isEmpty()) {
+        m_border.first()->setRequireToDestroy();
+        m_border.removeFirst();
+    }
+
+    while(!m_hides.isEmpty()) {
+        m_hides.first()->show();
+        m_hides.removeFirst();
+    }
+
+    QObject::disconnect(m_borderBlinkTimer, &QTimer::timeout, this, &GameScene::borderBlink);
+    QObject::connect(m_borderBlinkTimer, &QTimer::timeout, this, &GameScene::startBorderBlinking);
+}
+
+void GameScene::startBorderBlinking()
+{
+    m_borderBlinkTimer->stop();
+    QObject::disconnect(m_borderBlinkTimer, &QTimer::timeout, this, &GameScene::startBorderBlinking);
+    QObject::connect(m_borderBlinkTimer, &QTimer::timeout, this, &GameScene::borderBlink);
+    m_borderBlinkTimer->start(SWAP_PIXMAPS_DELTA);
+}
+
+void GameScene::borderBlink()
+{
+    for (int i = 0; i < m_border.size(); ++i) {
+        m_border.at(i)->isVisible() ? m_border.at(i)->hide() : m_border.at(i)->show();
+    }
+}
+
+void GameScene::resetBorderTimers()
+{
+    if(m_borderTimer->isActive()) {
+        m_borderTimer->stop();
+        m_borderBlinkTimer->stop();
+
+        QObject::disconnect(m_borderBlinkTimer, &QTimer::timeout, this, &GameScene::borderBlink);
+        QObject::disconnect(m_borderBlinkTimer, &QTimer::timeout, this, &GameScene::startBorderBlinking);
+
+
+        for (int i = 0; i < m_border.size(); ++i) {
+            m_border.at(i)->show();
+        }
+    }
+    QObject::connect(m_borderBlinkTimer, &QTimer::timeout, this, &GameScene::startBorderBlinking);
+    QObject::connect(m_borderTimer,      &QTimer::timeout, this, &GameScene::removeBorder);
+
+    m_borderTimer->start(BONUS_DURATION);
+    m_borderBlinkTimer->start(BONUS_DURATION - 2000);
+}
+
+void GameScene::hideEntityAndCreateConcrete(const QPointF &nearPos)
+{
+    QTransform transform;
+    QGraphicsItem *item = itemAt(QPointF(nearPos.x() + m_lengthBlock/2, nearPos.y() + m_lengthBlock/2), transform);
+
+    if (item) {
+        Entity *entity = qgraphicsitem_cast<Entity*>(item);
+        if (entity && entity->entityName() == "StaticBody") {
+            m_hides.push_back(entity);
+            entity->hide();
+
+            m_border.push_back(new StaticBody(StaticBody::Type::Concrete, m_lengthBlock));
+            addItem(m_border.last());
+            m_border.last()->setPos(entity->scenePos());
+        }
+    }
+}
+
+void GameScene::playerPickedBonus(int bonus)
+{
+    Bonus::Type bonusType = static_cast<Bonus::Type>(bonus);
+    if (bonusType == Bonus::Type::Granade) {
+        destroyAllEnemies();
+    } else if (bonusType == Bonus::Type::Shovel) {
+        spawnBorder();
+    }
 }
 
 QPointF GameScene::getAvaliablePoint() const

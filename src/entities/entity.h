@@ -1,6 +1,13 @@
 ﻿#ifndef ENTITY_H
 #define ENTITY_H
 
+#define SWAP_PIXMAPS_DELTA 150
+#define BONUS_DURATION 7000
+#define ENEMY_SWAP_DIRECTION_DELTA 1000
+#define ENEMY_SHOOT_DELTA 1000
+#define TANK_SPEED 4
+#define BULLET_SPEED 6
+
 #include <QObject>
 #include <QGraphicsObject>
 #include <QMap>
@@ -21,9 +28,10 @@ public:
         CanActorMovesThroughObject,
         LivesLeft,
         RequireToDestroy,
-        EntityName
+        EntityName,
+        Pickable,
+        Picked
     };
-
 
 
     bool isDestructible() const;
@@ -48,6 +56,16 @@ public:
 
     void setBorderPoint(const QPointF& point);
     const QPointF& borderPoint() const;
+
+    bool isPicked() const;
+    void setPicked(bool state = true);
+
+    bool isPickable() const;
+    void setPickable(bool state);
+
+signals:
+    void picked(int type);
+    void livesLeftChanged(int health);
 
 protected:
     virtual void advance(int phase) override;
@@ -92,6 +110,16 @@ inline QDebug operator<< (QDebug dbg, const Entity::Property &property)
         case Entity::Property::LivesLeft:
         {
             m_property = "Entity::Property::LivesLeft ";
+            break;
+        }
+        case Entity::Property::Pickable:
+        {
+            m_property = "Entity::Property::Pickable ";
+            break;
+        }
+        case Entity::Property::Picked:
+        {
+            m_property = "Entity::Property::Picked ";
             break;
         }
     }

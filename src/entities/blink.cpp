@@ -21,7 +21,7 @@ void Blink::startAnimation()
 {
     m_framesTimer = new QTimer(this);
     QObject::connect(m_framesTimer, &QTimer::timeout, this, &Blink::changePixmap);
-    m_framesTimer->start(150);
+    m_framesTimer->start(SWAP_PIXMAPS_DELTA);
 }
 
 void Blink::changePixmap()

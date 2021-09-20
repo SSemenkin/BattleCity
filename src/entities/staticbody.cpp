@@ -67,5 +67,5 @@ void StaticBody::createTimer()
 
     QObject::connect(timer, &QTimer::timeout, this, &StaticBody::changePixmap);
 
-    timer->start(200);
+    timer->start(SWAP_PIXMAPS_DELTA);
 }

@@ -24,7 +24,7 @@ void Explosion::startAnimation()
 {
     m_frameTimer = new QTimer(this);
     QObject::connect(m_frameTimer, &QTimer::timeout, this, &Explosion::changePixmap);
-    m_frameTimer->start(100);
+    m_frameTimer->start(SWAP_PIXMAPS_DELTA/2);
 }
 
 void Explosion::changePixmap()

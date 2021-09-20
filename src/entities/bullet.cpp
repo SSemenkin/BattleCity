@@ -1,7 +1,5 @@
 ﻿#include "bullet.h"
 
-int Bullet::BULLET_SPEED = 6;
-
 Bullet::Bullet(RigidBody::Direction direction, int width) :
     RigidBody(QPixmap(":/images/bullet.png").scaled(width, width))
 {

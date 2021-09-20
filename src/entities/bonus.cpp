@@ -12,8 +12,19 @@ Bonus::Bonus(int pixmapWidth, QGraphicsItem *parent) :
         setRequireToDestroy();
     });
     QObject::connect(m_frameTimer, &QTimer::timeout, this, &Bonus::resetTimer);
-    m_frameTimer->start(5000);
-    m_remainingTimer->start(7000);
+    m_frameTimer->start(BONUS_DURATION - 2000);
+    m_remainingTimer->start(BONUS_DURATION);
+}
+
+void Bonus::advance(int phase)
+{
+    if (phase) {
+        if (isPicked()) {
+            emit picked(m_type);
+            setRequireToDestroy();
+        }
+        Entity::advance(phase);
+    }
 }
 
 void Bonus::changePixmap()
@@ -28,7 +39,7 @@ void Bonus::resetTimer()
     m_frameTimer->stop();
     QObject::disconnect(m_frameTimer, &QTimer::timeout, this, &Bonus::resetTimer);
     QObject::connect(m_frameTimer, &QTimer::timeout, this, &Bonus::changePixmap);
-    m_frameTimer->start(200);
+    m_frameTimer->start(SWAP_PIXMAPS_DELTA);
 }
 
 void Bonus::init()
@@ -37,6 +48,8 @@ void Bonus::init()
     setBulletCanMoveThroughObject(true);
     setActorCanMoveThroughObject(true);
     setLivesLeft(1);
+    setEntityName("Bonus");
+
 
     m_type = static_cast<Type>(rand() % 4);
 

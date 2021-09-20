@@ -9,6 +9,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    entities/base.cpp \
     entities/blink.cpp \
     entities/bonus.cpp \
     entities/bullet.cpp \
@@ -17,6 +18,7 @@ SOURCES += \
     entities/explosion.cpp \
     entities/playertank.cpp \
     entities/rigidbody.cpp \
+    entities/shield.cpp \
     entities/staticbody.cpp \
     entities/tank.cpp \
     game.cpp \
@@ -26,6 +28,7 @@ SOURCES += \
     scenes/menuscene.cpp
 
 HEADERS += \
+    entities/base.h \
     entities/blink.h \
     entities/bonus.h \
     entities/bullet.h \
@@ -34,6 +37,7 @@ HEADERS += \
     entities/explosion.h \
     entities/playertank.h \
     entities/rigidbody.h \
+    entities/shield.h \
     entities/staticbody.h \
     entities/tank.h \
     game.h \

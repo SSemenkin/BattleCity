@@ -16,9 +16,8 @@ public:
       Shield
     };
     explicit Bonus(int pixmapWidth, QGraphicsItem *parent = nullptr);
-
-signals:
-    void picked(Bonus::Type type);
+protected:
+    virtual void advance(int phase) override;
 private:
     QTimer *m_frameTimer;
     QTimer *m_remainingTimer;

@@ -7,12 +7,13 @@ EnemyTank::EnemyTank(int pixmapWidth) :
 {
     m_speed = TANK_SPEED;
     setLivesLeft(1);
+    setEntityName("Enemy");
 
     QObject::connect(m_directionTimer, &QTimer::timeout, this, &EnemyTank::changeDirection);
     QObject::connect(m_shootTimer,     &QTimer::timeout, this, &Tank::shoot);
 
-    m_directionTimer->start(1000);
-    m_shootTimer->start(1000);
+    m_directionTimer->start(ENEMY_SWAP_DIRECTION_DELTA);
+    m_shootTimer->start(ENEMY_SHOOT_DELTA);
 }
 
 void EnemyTank::changeDirection()

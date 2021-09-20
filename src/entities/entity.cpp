@@ -1,6 +1,5 @@
 ﻿#include "entity.h"
 
-
 Entity::Entity(const QPixmap &pixmap, QGraphicsItem *parentItem, QObject *parent):
     QObject(parent), QGraphicsPixmapItem(pixmap, parentItem)
 {
@@ -10,6 +9,8 @@ Entity::Entity(const QPixmap &pixmap, QGraphicsItem *parentItem, QObject *parent
     setBulletCanMoveThroughObject(false);
     setActorCanMoveThroughObject(false);
     setLivesLeft(1);
+    setPickable(false);
+    setPicked(false);
     setEntityName("Entity");
 }
 
@@ -61,6 +62,7 @@ uint Entity::livesLeft() const
 void Entity::setLivesLeft(uint livesLeft)
 {
     setProperty(Entity::Property::LivesLeft, livesLeft);
+    emit livesLeftChanged(livesLeft);
     if (livesLeft == 0) {
         setRequireToDestroy();
     }
@@ -101,6 +103,26 @@ void Entity::setBorderPoint(const QPointF &point)
 const QPointF &Entity::borderPoint() const
 {
     return m_border;
+}
+
+bool Entity::isPicked() const
+{
+    return getProperty(Entity::Property::Picked).toBool();
+}
+
+void Entity::setPicked(bool state)
+{
+    setProperty(Entity::Property::Picked, state);
+}
+
+bool Entity::isPickable() const
+{
+    return getProperty(Entity::Property::Pickable).toBool();
+}
+
+void Entity::setPickable(bool state)
+{
+    setProperty(Entity::Property::Pickable, state);
 }
 
 void Entity::advance(int phase)
