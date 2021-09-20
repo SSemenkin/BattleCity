@@ -6,7 +6,9 @@ int Tank::TANK_SPEED = 4;
 Tank::Tank(const QPixmap &pixmap, QGraphicsItem *item, QObject *parent) :
     RigidBody(pixmap, item, parent)
 {
-
+    setDestructible(true);
+    setBulletCanMoveThroughObject(false);
+    setActorCanMoveThroughObject(false);
 }
 
 bool Tank::canMoveInDirection(int dx, int dy) const
@@ -17,15 +19,13 @@ bool Tank::canMoveInDirection(int dx, int dy) const
 
     QGraphicsItem *itemAtPoint = scene()->itemAt(m_pos, sceneTransform());
 
-    if (!itemAtPoint && m_pos.x() > 0 && m_pos.y() > 0
-            && m_pos.x() < scene()->width() && m_pos.y() < scene()->height()) {
-          return true;
-    } else {
-        Entity* entity = qgraphicsitem_cast<Entity*>(itemAtPoint);
-        if (entity) {
-            return entity->isActorCanMoveThroughObject();
-        } else return false;
-    }
+    Entity* entity = qgraphicsitem_cast<Entity*>(itemAtPoint);
+    if (entity) {
+        return entity->isActorCanMoveThroughObject();
+    } else if (!itemAtPoint && m_pos.x() > 0 && m_pos.y() > 0
+               && m_pos.x() < borderPoint().x() && m_pos.y() < borderPoint().y()) {
+        return true;
+    } else return false;
 }
 
 void Tank::moveAndCollide(int dx, int dy)
@@ -70,6 +70,29 @@ void Tank::moveAndCollide(int dx, int dy)
     }
 }
 
+void Tank::advance(int phase)
+{
+    if (phase) {
+        if (m_speed) {
+            switch (m_direction) {
+                case Direction::Up:
+                    moveAndCollide(0, -m_speed);
+                    break;
+                case Direction::Down:
+                    moveAndCollide(0, m_speed);
+                    break;
+                case Direction::Left:
+                    moveAndCollide(-m_speed, 0);
+                    break;
+                case Direction::Right:
+                    moveAndCollide(m_speed, 0);
+                    break;
+            }
+        }
+        RigidBody::advance(phase);
+    }
+}
+
 void Tank::shoot()
 {
     if (!m_fire) {
@@ -79,6 +102,7 @@ void Tank::shoot()
     m_fire = false;
 
     Bullet *bullet = new Bullet(m_direction, pixmap().width() / 5);
+    bullet->setBorderPoint(this->borderPoint());
     scene()->addItem(bullet);
     QPointF pos;
     switch(m_direction) {

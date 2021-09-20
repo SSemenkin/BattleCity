@@ -1,9 +1,16 @@
 ﻿#include "entity.h"
 
+
 Entity::Entity(const QPixmap &pixmap, QGraphicsItem *parentItem, QObject *parent):
     QObject(parent), QGraphicsPixmapItem(pixmap, parentItem)
 {
     setRequireToDestroy(false);
+    setBorderPoint(QPointF(0, 0));
+    setDestructible(false);
+    setBulletCanMoveThroughObject(false);
+    setActorCanMoveThroughObject(false);
+    setLivesLeft(1);
+    setEntityName("Entity");
 }
 
 void Entity::setProperty(const Entity::Property &key, const QVariant &value) &
@@ -84,6 +91,16 @@ void Entity::takeDamage()
     int lives = livesLeft();
     lives--;
     setLivesLeft(lives);
+}
+
+void Entity::setBorderPoint(const QPointF &point)
+{
+    m_border = point;
+}
+
+const QPointF &Entity::borderPoint() const
+{
+    return m_border;
 }
 
 void Entity::advance(int phase)

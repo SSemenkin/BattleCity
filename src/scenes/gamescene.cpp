@@ -9,7 +9,8 @@ GameScene::GameScene(QObject *parent) :
     calcRects();
     calcContants();
     setSceneRect(qApp->primaryScreen()->availableGeometry());
-    setBackgroundBrush(QColor(128, 128, 128));
+    setBackgroundBrush(QColor(47,79,79));
+    //addRect(m_gameplayRect);
 }
 
 bool GameScene::loadLevel(const Level &level)
@@ -30,13 +31,16 @@ bool GameScene::loadLevel(const Level &level)
                     body->setPos(j * m_lengthBlock,
                                  i * m_lengthBlock);
                 }
+                if (i == environment.size() - 1 && j == environment.at(i).size() - 1) {
+                    m_gameplayRect = QRectF(0, 0, j * m_lengthBlock + m_lengthBlock, i * m_lengthBlock + m_lengthBlock);
+                }
             }
         }
 
         initPlayer(level.playerPos());
 
-        connect(m_gameTimer, &QTimer::timeout, this, &GameScene::advance);
-
+        QObject::connect(m_gameTimer,       &QTimer::timeout, this, &GameScene::advance);
+        QObject::connect(m_enemySpawnTimer, &QTimer::timeout, this, &GameScene::spawnEnemy);
 
         m_gameTimer->start(FPS_DELTA);
         m_enemySpawnTimer->start(ENEMY_RESPAWN_DELTA);
@@ -82,8 +86,44 @@ void GameScene::calcContants()
 
 void GameScene::initPlayer(const QPointF &pos)
 {
-    m_player = new PlayerTank(m_lengthBlock);
+    m_player = new PlayerTank(m_lengthBlock - 4);
     addItem(m_player);
     m_player->setPos(pos.x() * m_lengthBlock,
                      pos.y() * m_lengthBlock);
+    m_player->setBorderPoint(QPointF(m_gameplayRect.width(), m_gameplayRect.height()));
+}
+
+void GameScene::spawnEnemy()
+{
+    const QPointF spawnPos = getAvaliablePoint();
+    EnemyTank *enemyTank = new EnemyTank(m_lengthBlock);
+    enemyTank->setBorderPoint(m_player->borderPoint());
+    addItem(enemyTank);
+    enemyTank->setPos(spawnPos);
+}
+
+QPointF GameScene::getAvaliablePoint() const
+{
+    QPointF p;
+
+    for (;;) {
+        p.setX(rand() % static_cast<int>(m_gameplayRect.width()));
+        p.setY(rand() % static_cast<int>(m_gameplayRect.height()));
+
+        if (isCellAvaliable(p)) {
+            return p;
+        }
+    }
+}
+
+bool GameScene::isCellAvaliable(const QPointF &point) const
+{
+    QTransform transform;
+    QGraphicsItem *topLeft = itemAt(point, transform);
+    QGraphicsItem *topRight = itemAt(QPointF(point.x() + m_lengthBlock, point.y()), transform);
+    QGraphicsItem *leftBottom = itemAt(QPointF(point.x(), point.y() + m_lengthBlock), transform);
+    QGraphicsItem *rightBottom = itemAt(QPointF(point.x() + m_lengthBlock, point.y() + m_lengthBlock), transform);
+    QGraphicsItem *center = itemAt(QPointF(point.x() + m_lengthBlock/2, point.y() + m_lengthBlock/2), transform);
+
+    return !topLeft && !topRight && !leftBottom && !rightBottom && !center;
 }

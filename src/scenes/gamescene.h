@@ -8,6 +8,7 @@
 
 #include "entities/staticbody.h"
 #include "entities/playertank.h"
+#include "entities/enemytank.h"
 #include "level.h"
 
 class GameScene : public QGraphicsScene
@@ -48,6 +49,9 @@ private:
     void calcRects();
     void calcContants();
     void initPlayer(const QPointF &pos);
+    void spawnEnemy();
+    [[nodiscard]] QPointF getAvaliablePoint() const;
+    bool isCellAvaliable(const QPointF &point) const;
 };
 
 #endif // GAMESCENE_H

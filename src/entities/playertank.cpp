@@ -5,6 +5,8 @@ PlayerTank::PlayerTank(int width) :
 {
     setFlag(QGraphicsItem::ItemIsFocusable);
     setFocus();
+
+    setLivesLeft(3);
 }
 
 void PlayerTank::keyPressEvent(QKeyEvent *event)
@@ -39,25 +41,3 @@ void PlayerTank::keyReleaseEvent(QKeyEvent *event)
     }
 }
 
-void PlayerTank::advance(int phase)
-{
-    if (phase && m_speed) {
-
-        switch (m_direction) {
-        case Direction::Down:
-            moveAndCollide(0, m_speed);
-            break;
-        case Direction::Up:
-            moveAndCollide(0, -m_speed);
-            break;
-        case Direction::Left:
-            moveAndCollide(-m_speed, 0);
-            break;
-        case Direction::Right:
-            moveAndCollide(m_speed, 0);
-            break;
-        }
-
-        Tank::advance(phase);
-    }
-}

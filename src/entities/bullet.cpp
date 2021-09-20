@@ -68,23 +68,19 @@ void Bullet::handleCollision(Entity *entity)
        entity->takeDamage();
     }
 
-    //createExplostion
+    Explosion *explosion = new Explosion(QPointF(entity->pos().x() + entity->pixmap().width(),
+                                         entity->pos().y() + entity->pixmap().height()),
+                                         entity->pixmap().width());
+    scene()->addItem(explosion);
+    explosion->start();
     setRequireToDestroy();
 
 }
 
 void Bullet::handleBorderOfScene()
 {
-//    GameScene *gameScene = dynamic_cast<GameScene*>(scene());
-//    if (gameScene) {
-//        if (x() < 0 || x() >= gameScene->gameplayRect().width() ||
-//            y() >= gameScene->gameplayRect().height() || y() < 0) {
-//            setRequireToDestroy();
-//        }
-//    } else {
-        if (x() < 0 || x() >= scene()->width() ||
-            y() >= scene()->height() || y() < 0) {
-            setRequireToDestroy();
-        }
-//    }
+    if (x() < 0 || x() >= borderPoint().x() ||
+        y() >= borderPoint().y() || y() < 0) {
+        setRequireToDestroy();
+    }
 }

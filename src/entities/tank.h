@@ -11,14 +11,17 @@ public:
                   QGraphicsItem *item = nullptr,
                   QObject *parent = nullptr);
 
-
+    void shoot();
 protected:
     bool m_fire {true};
     static int TANK_SPEED;
+    int m_speed {0};
+protected:
     bool canMoveInDirection(int dx, int dy) const;
     void moveAndCollide(int dx, int dy);
-protected:
-    void shoot();
+    void advance(int phase) override;
+
+
 };
 
 #endif // TANK_H

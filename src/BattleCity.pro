@@ -10,7 +10,9 @@ CONFIG += c++11
 
 SOURCES += \
     entities/bullet.cpp \
+    entities/enemytank.cpp \
     entities/entity.cpp \
+    entities/explosion.cpp \
     entities/playertank.cpp \
     entities/rigidbody.cpp \
     entities/staticbody.cpp \
@@ -23,7 +25,9 @@ SOURCES += \
 
 HEADERS += \
     entities/bullet.h \
+    entities/enemytank.h \
     entities/entity.h \
+    entities/explosion.h \
     entities/playertank.h \
     entities/rigidbody.h \
     entities/staticbody.h \

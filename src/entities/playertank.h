@@ -2,6 +2,7 @@
 #define PLAYERTANK_H
 
 #include <QKeyEvent>
+
 #include "entities/tank.h"
 
 
@@ -14,10 +15,6 @@ public:
 protected:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
-
-    void advance(int phase) override;
-private:
-    int m_speed {0};
 };
 
 #endif // PLAYERTANK_H

@@ -1,8 +1,10 @@
 ﻿#ifndef BULLET_H
 #define BULLET_H
 
-#include "entities/rigidbody.h"
 #include <QGraphicsScene>
+
+#include "entities/rigidbody.h"
+#include "entities/explosion.h"
 
 class Bullet : public RigidBody
 {
@@ -19,8 +21,6 @@ private:
     void init();
     void handleCollision(Entity *entity);
     void handleBorderOfScene();
-
-    //GameScene *m_gameScene {nullptr};
 };
 
 #endif // BULLET_H

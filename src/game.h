@@ -4,9 +4,9 @@
 #include <QObject>
 #include <QGraphicsView>
 
-#include <entities/entity.h>
-#include <scenes/menuscene.h>
-#include <scenes/gamescene.h>
+#include "entities/entity.h"
+#include "scenes/menuscene.h"
+#include "scenes/gamescene.h"
 
 
 class Game : public QWidget
