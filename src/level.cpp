@@ -41,6 +41,8 @@ void Level::load(const QString &path)
     QFile file(path);
     if (file.exists()) {
         if (file.open(QIODevice::ReadOnly)) {
+            Qt::CaseSensitivity sensitivity = Qt::CaseInsensitive;
+
             const QStringList fileContent = QString(file.readAll()).split(SEPARATOR);
             if (fileContent.isEmpty()) {
                 qDebug() << "File " << path << " is empty";
@@ -51,6 +53,16 @@ void Level::load(const QString &path)
             m_levelStructure.reserve(fileContent.size() - 1);
             for(int i = 1; i < fileContent.size(); ++i) {
                 m_levelStructure.push_back(fileContent.at(i));
+
+                if (fileContent.at(i).contains('b', sensitivity)) {
+                    m_basePos.setX(fileContent.at(i).indexOf('b', sensitivity));
+                    m_basePos.setY(i);
+                }
+
+                if (fileContent.at(i).contains('p', sensitivity)) {
+                    m_playerPos.setX(fileContent.at(i).indexOf('p', sensitivity));
+                    m_playerPos.setY(i);
+                }
             }
 
             file.close();
