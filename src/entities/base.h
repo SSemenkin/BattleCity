@@ -1,8 +1,6 @@
 ﻿#ifndef BASE_H
 #define BASE_H
 
-#include <QGraphicsScene>
-
 #include "entity.h"
 
 class Base : public Entity

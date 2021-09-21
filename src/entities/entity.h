@@ -7,10 +7,13 @@
 #define ENEMY_SHOOT_DELTA 1000
 #define TANK_SPEED 4
 #define BULLET_SPEED 6
+#define SCORE_DURATION 2000
 
 #include <QObject>
 #include <QGraphicsObject>
 #include <QMap>
+#include <QTimer>
+#include <QGraphicsScene>
 #include <QDebug>
 
 class Entity : public QObject, public QGraphicsPixmapItem

@@ -16,6 +16,18 @@ EnemyTank::EnemyTank(int pixmapWidth) :
     m_shootTimer->start(ENEMY_SHOOT_DELTA);
 }
 
+void EnemyTank::advance(int phase)
+{
+    if (phase) {
+        if (isRequireToDestroy()) {
+            Score *score = new Score(pixmap().width());
+            scene()->addItem(score);
+            score->setPos(scenePos());
+        }
+        Tank::advance(phase);
+    }
+}
+
 void EnemyTank::changeDirection()
 {
     int value = rand() % 4;

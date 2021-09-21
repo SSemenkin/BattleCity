@@ -1,8 +1,6 @@
 ﻿#ifndef EXPLOSION_H
 #define EXPLOSION_H
 
-#include <QTimer>
-
 #include "entities/entity.h"
 
 class Explosion : public Entity

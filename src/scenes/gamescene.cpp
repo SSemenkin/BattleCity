@@ -10,7 +10,7 @@ GameScene::GameScene(QObject *parent) :
 {
     calcRects();
     setSceneRect(qApp->primaryScreen()->availableGeometry());
-    setBackgroundBrush(QColor(47,79,79));
+    setBackgroundBrush(QColor(126, 126, 126));
 }
 
 bool GameScene::loadLevel(const Level &level)
@@ -39,13 +39,14 @@ bool GameScene::loadLevel(const Level &level)
 
         initPlayer(level.playerPos());
         initBase(level.basePos());
+        initInterface();
 
         QObject::connect(m_gameTimer,        &QTimer::timeout, this, &GameScene::advance);
         QObject::connect(m_enemySpawnTimer,  &QTimer::timeout, this, &GameScene::spawnEnemy);
         QObject::connect(m_bonusTimer,       &QTimer::timeout, this, &GameScene::spawnBonus);
         QObject::connect(m_base, &Base::destroyed, this, [this]()->void{
             m_base = nullptr;
-            gameOver();
+            m_player->setRequireToDestroy();
         });
         QObject::connect(m_player, &PlayerTank::destroyed, this, [this]()->void{
             m_player = nullptr;
@@ -80,15 +81,14 @@ QRectF GameScene::interfaceRect() const
 
 void GameScene::gameOver()
 {
-    qDebug() << __PRETTY_FUNCTION__;
     m_bonusTimer->stop();
     m_enemySpawnTimer->stop();
-    if (m_player) m_player->setRequireToDestroy();
 
-    Entity *entity = new Entity(QPixmap(":/images/gameover.png").scaled(m_lengthBlock, m_lengthBlock));
-    addItem(entity);
-    entity->setPos(gameplayRect().width()/2 - entity->pixmap().width()/2,
-                   gameplayRect().height()/2 - entity->pixmap().height()/2);
+    GameOverItem *gameover = new GameOverItem(QPointF(gameplayRect().width()/2 - m_lengthBlock/2,
+                                                    gameplayRect().height()/2 - m_lengthBlock/2), m_lengthBlock);
+    addItem(gameover);
+    gameover->setPos(gameplayRect().width()/2 - gameover->pixmap().width()/2,
+                     gameplayRect().height());
 }
 
 void GameScene::calcRects()
@@ -116,12 +116,15 @@ void GameScene::initBase(const QPointF &pos)
 
 void GameScene::spawnEnemy()
 {
-    const QPointF spawnPos = getAvaliablePoint();
-    Blink *blink = new Blink(m_lengthBlock);
-    blink->setBorderPoint(m_player->borderPoint());
-    addItem(blink);
-    blink->setPos(spawnPos);
-    blink->startAnimation();
+    if (m_enemySpawned < ENEMY_COUNT) {
+        const QPointF spawnPos = getAvaliablePoint();
+        Blink *blink = new Blink(m_lengthBlock);
+        blink->setBorderPoint(m_player->borderPoint());
+        addItem(blink);
+        blink->setPos(spawnPos);
+        blink->startAnimation();
+        m_enemySpawned++;
+    }
 }
 
 void GameScene::spawnBonus()
@@ -211,6 +214,34 @@ void GameScene::resetBorderTimers()
     m_borderBlinkTimer->start(BONUS_DURATION - 2000);
 }
 
+void GameScene::initInterface()
+{
+//    int widthPixmap = m_lengthBlock;
+
+//    int init_height = interfaceRect().y() + 10;
+
+//    for (int i = 0; i < ENEMY_COUNT; i++) {
+//        Entity *entity = new Entity(QPixmap(":/images/enemy.png").scaled(widthPixmap, widthPixmap));
+//        addItem(entity);
+//        entity->setPos(interfaceRect().x() + interfaceRect().width() -(m_lengthBlock * 3) + (i%2 * widthPixmap) + 10,
+//                       init_height);
+//        if (i%2 == 1) {
+//            init_height += m_lengthBlock;
+//        }
+//    }
+    int initWidth = interfaceRect().x() + m_lengthBlock;
+    int initHeight = interfaceRect().y() + 10;
+
+    for (int i = 0; i < ENEMY_COUNT; ++i) {
+        !(i % 2) ? initWidth -= m_lengthBlock :
+                   initWidth += m_lengthBlock ;
+        Entity *entity = new Entity(QPixmap(":images/enemy.png").scaled(m_lengthBlock, m_lengthBlock));
+        addItem(entity);
+        entity->setPos(initWidth, initHeight);
+        if (i % 2 ) initHeight += m_lengthBlock;
+    }
+}
+
 void GameScene::spawnExplosionAt(Entity *entity)
 {
     Explosion *explosion = new Explosion(QPointF(entity->x() - entity->pixmap().width(),
@@ -270,5 +301,13 @@ bool GameScene::isCellAvaliable(const QPointF &point) const
     QGraphicsItem *rightBottom = itemAt(QPointF(point.x() + m_lengthBlock, point.y() + m_lengthBlock), transform);
     QGraphicsItem *center = itemAt(QPointF(point.x() + m_lengthBlock/2, point.y() + m_lengthBlock/2), transform);
 
-    return !topLeft && !topRight && !leftBottom && !rightBottom && !center;
+    bool iAtPos = true;
+    for (int i = 0; i < m_border.size(); ++i) {
+        if (itemAt(point, transform) == m_border.at(i)) {
+            iAtPos = false;
+            break;
+        }
+    }
+
+    return !topLeft && !topRight && !leftBottom && !rightBottom && !center && iAtPos;
 }

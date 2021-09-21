@@ -46,5 +46,6 @@
         <file>sounds/explosion.wav</file>
         <file>sounds/main.mp3</file>
         <file>sounds/shot.wav</file>
+        <file>images/enemy.png</file>
     </qresource>
 </RCC>

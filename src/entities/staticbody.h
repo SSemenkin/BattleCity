@@ -1,8 +1,6 @@
 ﻿#ifndef STATICBODY_H
 #define STATICBODY_H
 
-#include <QTimer>
-
 #include "entities/entity.h"
 
 class StaticBody : public Entity

@@ -16,8 +16,10 @@ SOURCES += \
     entities/enemytank.cpp \
     entities/entity.cpp \
     entities/explosion.cpp \
+    entities/gameoveritem.cpp \
     entities/playertank.cpp \
     entities/rigidbody.cpp \
+    entities/score.cpp \
     entities/shield.cpp \
     entities/staticbody.cpp \
     entities/tank.cpp \
@@ -35,8 +37,10 @@ HEADERS += \
     entities/enemytank.h \
     entities/entity.h \
     entities/explosion.h \
+    entities/gameoveritem.h \
     entities/playertank.h \
     entities/rigidbody.h \
+    entities/score.h \
     entities/shield.h \
     entities/staticbody.h \
     entities/tank.h \

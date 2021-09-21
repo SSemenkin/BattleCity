@@ -1,8 +1,6 @@
 ﻿#ifndef BLINK_H
 #define BLINK_H
 
-#include <QTimer>
-
 #include "entities/enemytank.h"
 
 class Blink : public Entity

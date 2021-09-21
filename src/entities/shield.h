@@ -1,8 +1,6 @@
 ﻿#ifndef SHIELD_H
 #define SHIELD_H
 
-#include <QTimer>
-
 #include "entity.h"
 
 class Shield : public Entity

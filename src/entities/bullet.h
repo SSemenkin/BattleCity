@@ -1,8 +1,6 @@
 ﻿#ifndef BULLET_H
 #define BULLET_H
 
-#include <QGraphicsScene>
-
 #include "entities/rigidbody.h"
 #include "entities/explosion.h"
 

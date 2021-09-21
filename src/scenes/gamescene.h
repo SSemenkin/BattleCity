@@ -5,9 +5,8 @@
 #define FPS_DELTA (1000/FPS)
 #define ENEMY_RESPAWN_DELTA 6000
 #define BONUS_RESPAWN_DELTA 6000
+#define ENEMY_COUNT 20
 
-#include <QGraphicsScene>
-#include <QTimer>
 #include <QApplication>
 #include <QScreen>
 
@@ -16,6 +15,7 @@
 #include "entities/blink.h"
 #include "entities/bonus.h"
 #include "entities/base.h"
+#include "entities/gameoveritem.h"
 #include "level.h"
 
 class GameScene : public QGraphicsScene
@@ -47,6 +47,7 @@ protected:
     QRectF m_interfaceRect;
 
     int m_lengthBlock;
+    int m_enemySpawned {0};
 
     PlayerTank *m_player;
     Base *m_base;
@@ -64,8 +65,8 @@ private:
     void startBorderBlinking();
     void borderBlink();
     void resetBorderTimers();
+    void initInterface();
     void spawnExplosionAt(Entity *entity);
-
 
     void hideEntityAndCreateConcrete(const QPointF &nearPos);
     void playerPickedBonus(int bonus);

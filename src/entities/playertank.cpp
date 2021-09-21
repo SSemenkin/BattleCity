@@ -21,6 +21,9 @@ void PlayerTank::pickupBonus(int type)
             createShield();
             break;
         case Bonus::Type::Star:
+            emit picked(static_cast<int>(Bonus::Type::Shovel));
+            emit picked(static_cast<int>(Bonus::Type::Granade));
+            createShield();
             break;
     }
 }
