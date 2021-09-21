@@ -14,12 +14,12 @@ Entity::Entity(const QPixmap &pixmap, QGraphicsItem *parentItem, QObject *parent
     setEntityName("Entity");
 }
 
-void Entity::setProperty(const Entity::Property &key, const QVariant &value) &
+void Entity::setProperty(const Entity::Property &key, const QVariant &value)
 {
     m_properties.insert(key, value);
 }
 
-const QVariant& Entity::getProperty(const Entity::Property &key) const &
+const QVariant& Entity::getProperty(const Entity::Property &key) const
 {
     return *m_properties.find(key);
 }

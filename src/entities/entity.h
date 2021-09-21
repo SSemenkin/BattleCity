@@ -66,6 +66,7 @@ public:
     bool isPickable() const;
     void setPickable(bool state);
 
+
 signals:
     void picked(int type);
     void livesLeftChanged(int health);
@@ -73,8 +74,8 @@ signals:
 protected:
     virtual void advance(int phase) override;
 
-    void setProperty(const Property &key, const QVariant &value) &;
-    const QVariant& getProperty(const Property &key) const &;
+    void setProperty(const Property &key, const QVariant &value);
+    const QVariant& getProperty(const Property &key) const;
 
 private:
     QMap<Property, QVariant> m_properties;

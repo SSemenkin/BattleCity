@@ -18,10 +18,12 @@ bool GameScene::loadLevel(const Level &level)
     bool result = level.isOk();
     if (result) {
 
+        m_enemyCount = level.enemyCount();
         LevelStructure environment = level.levelStructure();
 
         m_lengthBlock = qMin(gameplayRect().height() / environment.size(),
                              gameplayRect().width() / environment.first().size());
+        m_lastHeight = m_lengthBlock * environment.size();
 
         for (int i = 0; i < environment.size(); ++i) {
             for (int j = 0; j < environment.at(i).size(); ++j) {
@@ -103,7 +105,7 @@ void GameScene::initPlayer(const QPointF &pos)
     m_player = new PlayerTank(m_lengthBlock - 4);
     addItem(m_player);
     m_player->setRespawnPos(QPointF(pos.x() * m_lengthBlock, pos.y() * m_lengthBlock));
-    m_player->setBorderPoint(QPointF(m_gameplayRect.width(), m_gameplayRect.height()));
+    m_player->setBorderPoint(QPointF(gameplayRect().width(), m_lastHeight - m_lengthBlock));
 }
 
 void GameScene::initBase(const QPointF &pos)
@@ -116,13 +118,16 @@ void GameScene::initBase(const QPointF &pos)
 
 void GameScene::spawnEnemy()
 {
-    if (m_enemySpawned < ENEMY_COUNT) {
+    if (m_enemySpawned < m_enemyCount) {
         const QPointF spawnPos = getAvaliablePoint();
         Blink *blink = new Blink(m_lengthBlock);
         blink->setBorderPoint(m_player->borderPoint());
         addItem(blink);
         blink->setPos(spawnPos);
         blink->startAnimation();
+        QObject::connect(blink, &Blink::enemyRespawned, this,[this](EnemyTank *enemy)->void{
+           QObject::connect(enemy, &EnemyTank::destroyed, this, &GameScene::enemyDestroyed);
+        });
         m_enemySpawned++;
     }
 }
@@ -146,15 +151,18 @@ void GameScene::spawnBorder()
     hideEntityAndCreateConcrete(QPointF(basePoint.x() + m_lengthBlock, basePoint.y() - m_lengthBlock));
     hideEntityAndCreateConcrete(QPointF(basePoint.x(), basePoint.y() - m_lengthBlock));
     hideEntityAndCreateConcrete(QPointF(basePoint.x() - m_lengthBlock, basePoint.y() - m_lengthBlock));
-
+    hideEntityAndCreateConcrete(QPointF(basePoint.x() - m_lengthBlock, basePoint.y() + m_lengthBlock));
+    hideEntityAndCreateConcrete(QPointF(basePoint.x(), basePoint.y() + m_lengthBlock));
+    hideEntityAndCreateConcrete(QPointF(basePoint.x() + m_lengthBlock, basePoint.y() + m_lengthBlock));
 
     resetBorderTimers();
 }
 
 void GameScene::destroyAllEnemies()
 {
-    for (QGraphicsItem *item : items()) {
-        Entity *entity = qgraphicsitem_cast<Entity*>(item);
+    const auto allItems = items();
+    for (int i = 0; i < allItems.size(); ++i) {
+        Entity *entity = qgraphicsitem_cast<Entity*>(allItems.at(i));
         if (entity && entity->entityName() == "Enemy") {
             spawnExplosionAt(entity);
             entity->setRequireToDestroy();
@@ -216,30 +224,33 @@ void GameScene::resetBorderTimers()
 
 void GameScene::initInterface()
 {
-//    int widthPixmap = m_lengthBlock;
-
-//    int init_height = interfaceRect().y() + 10;
-
-//    for (int i = 0; i < ENEMY_COUNT; i++) {
-//        Entity *entity = new Entity(QPixmap(":/images/enemy.png").scaled(widthPixmap, widthPixmap));
-//        addItem(entity);
-//        entity->setPos(interfaceRect().x() + interfaceRect().width() -(m_lengthBlock * 3) + (i%2 * widthPixmap) + 10,
-//                       init_height);
-//        if (i%2 == 1) {
-//            init_height += m_lengthBlock;
-//        }
-//    }
-    int initWidth = interfaceRect().x() + m_lengthBlock;
+    int initWidth = interfaceRect().x() + m_lengthBlock * 2;
     int initHeight = interfaceRect().y() + 10;
 
-    for (int i = 0; i < ENEMY_COUNT; ++i) {
+    for (int i = 0; i < m_enemyCount; ++i) {
         !(i % 2) ? initWidth -= m_lengthBlock :
                    initWidth += m_lengthBlock ;
         Entity *entity = new Entity(QPixmap(":images/enemy.png").scaled(m_lengthBlock, m_lengthBlock));
         addItem(entity);
         entity->setPos(initWidth, initHeight);
         if (i % 2 ) initHeight += m_lengthBlock;
+        m_enemies.push_back(entity);
     }
+
+    initWidth -= m_lengthBlock;
+
+    QGraphicsTextItem *textItem = new QGraphicsTextItem("Score: ");
+    textItem->setDefaultTextColor(Qt::white);
+    textItem->setFont(QFont(textItem->font().family(), textItem->font().pointSize() * 4));
+    addItem(textItem);
+    textItem->setPos(initWidth, initHeight);
+
+    m_scoreItems.push_back(new Entity(QPixmap(":/images/digits/0.png").scaled(m_lengthBlock/2, m_lengthBlock/2)));
+
+    m_scoreY = initHeight + m_lengthBlock;
+    m_scoreX = initWidth;
+
+    showScore();
 }
 
 void GameScene::spawnExplosionAt(Entity *entity)
@@ -248,6 +259,48 @@ void GameScene::spawnExplosionAt(Entity *entity)
                                          entity->y() - entity->pixmap().height()), entity->pixmap().width());
     addItem(explosion);
     explosion->startAnimation();
+}
+
+void GameScene::enemyDestroyed()
+{
+    m_score+=100;
+    rebuildScore();
+    if (!m_enemies.isEmpty()) {
+        m_enemies.last()->setRequireToDestroy();
+        m_enemies.pop_back();
+    }
+}
+
+void GameScene::rebuildScore()
+{
+    while(!m_scoreItems.isEmpty()) {
+        m_scoreItems.first()->setRequireToDestroy();
+        m_scoreItems.pop_front();
+    }
+
+    QVector<int> digits;
+    int score = m_score;
+    while(score) {
+        digits.push_back(score % 10);
+        score /= 10;
+    }
+
+    for (int i = 0; i < digits.size()/2; ++i)
+        std::swap(digits[i], digits[digits.size() - 1 - i]);
+
+    for (int i = 0; i < digits.size(); ++i) {
+        m_scoreItems.push_back(new Entity(QPixmap(":/images/digits/"+QString::number(digits.at(i))+".png").scaled(
+                                              m_lengthBlock/2, m_lengthBlock/2)));
+    }
+    showScore();
+}
+
+void GameScene::showScore()
+{
+    for (int i = 0 ; i < m_scoreItems.size(); ++i) {
+        addItem(m_scoreItems.at(i));
+        m_scoreItems.at(i)->setPos(m_scoreX + i * m_lengthBlock, m_scoreY);
+    }
 }
 
 void GameScene::hideEntityAndCreateConcrete(const QPointF &nearPos)
@@ -283,8 +336,8 @@ QPointF GameScene::getAvaliablePoint() const
     QPointF p;
 
     for (;;) {
-        p.setX(rand() % static_cast<int>(m_gameplayRect.width()));
-        p.setY(rand() % static_cast<int>(m_gameplayRect.height()));
+        p.setX(rand() % static_cast<int>(interfaceRect().width() - m_lengthBlock));
+        p.setY(rand() % static_cast<int>(m_lastHeight - m_lengthBlock));
 
         if (isCellAvaliable(p)) {
             return p;
@@ -308,6 +361,5 @@ bool GameScene::isCellAvaliable(const QPointF &point) const
             break;
         }
     }
-
     return !topLeft && !topRight && !leftBottom && !rightBottom && !center && iAtPos;
 }

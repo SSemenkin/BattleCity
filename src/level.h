@@ -12,6 +12,7 @@ class Level
 public:
     Level(const QString &path);
     [[nodiscard]] int levelId() const;
+    [[nodiscard]] int enemyCount() const;
     [[nodiscard]] QPointF playerPos() const;
     [[nodiscard]] QPointF basePos() const;
     [[nodiscard]] bool isOk() const;
@@ -19,6 +20,7 @@ public:
 
 private:
     int m_levelId {-1};
+    int m_enemyCount {0};
     QPointF m_invalidPos {-1, -1};
     QPointF m_playerPos;
     QPointF m_basePos;

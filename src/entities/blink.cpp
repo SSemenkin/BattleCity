@@ -40,4 +40,5 @@ void Blink::createEnemyTank()
     enemy->setBorderPoint(borderPoint());
     scene()->addItem(enemy);
     enemy->setPos(scenePos());
+    emit enemyRespawned(enemy);
 }

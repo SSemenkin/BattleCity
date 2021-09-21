@@ -5,7 +5,6 @@
 #define FPS_DELTA (1000/FPS)
 #define ENEMY_RESPAWN_DELTA 6000
 #define BONUS_RESPAWN_DELTA 6000
-#define ENEMY_COUNT 20
 
 #include <QApplication>
 #include <QScreen>
@@ -47,13 +46,22 @@ protected:
     QRectF m_interfaceRect;
 
     int m_lengthBlock;
+    int m_lastHeight;
     int m_enemySpawned {0};
+    int m_enemyCount {0};
+    int m_score {0};
+    int m_scoreY;
+    int m_scoreX;
+
 
     PlayerTank *m_player;
     Base *m_base;
 
+    QVector<Entity*> m_scoreItems;
+
     QVector<Entity *> m_hides;
     QVector<Entity *> m_border;
+    QVector<Entity *> m_enemies;
 private:
     void gameOver();
     void calcRects();
@@ -67,6 +75,9 @@ private:
     void resetBorderTimers();
     void initInterface();
     void spawnExplosionAt(Entity *entity);
+    void enemyDestroyed();
+    void rebuildScore();
+    void showScore();
 
     void hideEntityAndCreateConcrete(const QPointF &nearPos);
     void playerPickedBonus(int bonus);

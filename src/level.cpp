@@ -10,6 +10,11 @@ int Level::levelId() const
     return m_levelId;
 }
 
+int Level::enemyCount() const
+{
+    return m_enemyCount;
+}
+
 QPointF Level::playerPos() const
 {
     return m_playerPos;
@@ -49,6 +54,7 @@ void Level::load(const QString &path)
                 return;
             }
             m_levelId = fileContent.first().split(' ').first().toInt();
+            m_enemyCount = fileContent.first().split(' ').at(1).toInt();
 
             m_levelStructure.reserve(fileContent.size() - 1);
             for(int i = 1; i < fileContent.size(); ++i) {

@@ -9,7 +9,8 @@ class Blink : public Entity
 public:
     explicit Blink(int pixmapWidth);
     void startAnimation();
-
+signals:
+    void enemyRespawned(EnemyTank *enemy);
 private:
     QTimer *m_framesTimer;
 

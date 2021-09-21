@@ -17,7 +17,7 @@ Game::Game()
     m_view = new QGraphicsView;
     m_menuScene = new MenuScene;
 
-    startGameAtLevel(0);
+    startGameAtLevel(1);
 
     QObject::connect(m_menuScene, &MenuScene::startGameAtLevel, this, &Game::startGameAtLevel);
 
