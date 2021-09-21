@@ -96,10 +96,9 @@ void GameScene::gameOver()
 
 void GameScene::gameWin()
 {
-    QTimer *m_winningTimer = new QTimer(this);
-
-    QObject::connect(m_winningTimer, &QTimer::timeout, this, &GameScene::toMenu);
-    m_winningTimer->start(BONUS_DURATION);
+    m_bonusTimer->stop();
+    m_enemySpawnTimer->stop();
+    emit toMenu();
 }
 
 void GameScene::calcRects()
@@ -250,7 +249,6 @@ void GameScene::initInterface()
 
     QGraphicsTextItem *textItem = new QGraphicsTextItem("Score: ");
     textItem->setDefaultTextColor(Qt::white);
-    //textItem->setFont(QFont(textItem->font().family(), textItem->font().pointSize() * 4));
     addItem(textItem);
     textItem->setPos(initWidth, initHeight);
 
@@ -273,6 +271,9 @@ void GameScene::spawnExplosionAt(Entity *entity)
 void GameScene::enemyDestroyed()
 {
     m_score+=100;
+    if (m_score  == m_enemyCount * 100) {
+        gameWin();
+    }
     rebuildScore();
     if (!m_enemies.isEmpty()) {
         m_enemies.last()->setRequireToDestroy();

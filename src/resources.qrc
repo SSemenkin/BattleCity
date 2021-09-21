@@ -45,7 +45,7 @@
         <file>levels/3_level.txt</file>
         <file>sounds/explosion.wav</file>
         <file>sounds/main.mp3</file>
-        <file>sounds/shot.wav</file>
+        <file>sounds/shoot.wav</file>
         <file>images/enemy.png</file>
         <file>images/pause.png</file>
     </qresource>

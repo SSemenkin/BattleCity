@@ -19,8 +19,6 @@ protected:
     virtual bool canMoveInDirection(int dx, int dy) const;
     void moveAndCollide(int dx, int dy);
     void advance(int phase) override;
-
-
 };
 
 #endif // TANK_H

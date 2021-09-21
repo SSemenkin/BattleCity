@@ -16,6 +16,8 @@
 #include <QGraphicsScene>
 #include <QDebug>
 
+#include "sounds.h"
+
 class Entity : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT

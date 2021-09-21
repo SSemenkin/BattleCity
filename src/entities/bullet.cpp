@@ -11,6 +11,7 @@ Bullet::Bullet(RigidBody::Direction direction, int width) :
     rotatePixmap(m_direction, direction);
     m_direction = direction;
     init();
+    Sounds::playShoot();
 }
 
 void Bullet::advance(int phase)

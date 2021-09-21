@@ -7,7 +7,7 @@ class GameOverItem : public Entity
 {
     Q_OBJECT
 public:
-    explicit GameOverItem(const QPointF& centerOfSceen, int pixmapWidth);
+    explicit GameOverItem(const QPointF& centerOfSceen);
 signals:
     void movedToCenter();
 protected:
