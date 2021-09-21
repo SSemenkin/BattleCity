@@ -67,9 +67,6 @@ void Bullet::handleCollision(Entity *entity)
     if (entity->isBulletCanMoveThroughObject()) {
         return;
     }
-    if (entity->isDestructible()) {
-       entity->takeDamage();
-    }
 
     Explosion *explosion = new Explosion(QPointF(entity->pos().x() + entity->pixmap().width(),
                                          entity->pos().y() + entity->pixmap().height()),
@@ -78,6 +75,9 @@ void Bullet::handleCollision(Entity *entity)
     explosion->startAnimation();
     setRequireToDestroy();
 
+    if (entity->isDestructible()) {
+       entity->takeDamage();
+    }
 }
 
 void Bullet::handleBorderOfScene()

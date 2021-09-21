@@ -64,6 +64,8 @@ private:
     void startBorderBlinking();
     void borderBlink();
     void resetBorderTimers();
+    void spawnExplosionAt(Entity *entity);
+
 
     void hideEntityAndCreateConcrete(const QPointF &nearPos);
     void playerPickedBonus(int bonus);

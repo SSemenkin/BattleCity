@@ -14,7 +14,8 @@ class PlayerTank final : public Tank
 public:
     explicit PlayerTank(int width);
     void pickupBonus(int type);
-
+    void setRespawnPos(const QPointF &respawn);
+    const QPointF &respawnPos() const;
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
@@ -22,9 +23,11 @@ protected:
     virtual bool canMoveInDirection(int dx, int dy) const override;
 private:
     void createShield();
+    void respawn();
     virtual void takeDamage() override;
 private:
     Shield *m_shield {nullptr};
+    QPointF m_respawn;
 };
 
 #endif // PLAYERTANK_H

@@ -5,9 +5,7 @@ PlayerTank::PlayerTank(int width) :
 {
     setFlag(QGraphicsItem::ItemIsFocusable);
     setFocus();
-
     setLivesLeft(3);
-    createShield();
 }
 
 void PlayerTank::pickupBonus(int type)
@@ -17,7 +15,7 @@ void PlayerTank::pickupBonus(int type)
     switch(bonusType) {
         case Bonus::Type::Granade:
         case Bonus::Type::Shovel:
-            emit picked(static_cast<int>(bonusType));
+            emit picked(type);
             break;
         case Bonus::Type::Shield:
             createShield();
@@ -25,6 +23,17 @@ void PlayerTank::pickupBonus(int type)
         case Bonus::Type::Star:
             break;
     }
+}
+
+void PlayerTank::setRespawnPos(const QPointF &respawnPos)
+{
+    m_respawn = respawnPos;
+    respawn();
+}
+
+const QPointF &PlayerTank::respawnPos() const
+{
+    return m_respawn;
 }
 
 void PlayerTank::keyPressEvent(QKeyEvent *event)
@@ -84,10 +93,19 @@ void PlayerTank::createShield()
     }
 }
 
+void PlayerTank::respawn()
+{
+    setPos(respawnPos());
+    createShield();
+}
+
 void PlayerTank::takeDamage()
 {
     if (m_shield) {
         return;
-    } else Entity::takeDamage();
+    } else {
+        respawn();
+        Entity::takeDamage();
+    }
 }
 

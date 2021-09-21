@@ -3,14 +3,16 @@
 Base::Base(int width) :
     Entity(QPixmap(":/images/base.png").scaled(width, width))
 {
-
+    setDestructible(true);
 }
 
 void Base::advance(int phase)
 {
     if (phase) {
         if (isRequireToDestroy()) {
-            scene()->addItem(new Entity(QPixmap(":/images/loss.png").scaled(pixmap().width(), pixmap().width())));
+            Entity *entity = new Entity(QPixmap(":/images/loss.png").scaled(pixmap().width(), pixmap().width()));
+            scene()->addItem(entity);
+            entity->setPos(scenePos());
         }
 
         Entity::advance(phase);

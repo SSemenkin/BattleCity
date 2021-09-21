@@ -11,7 +11,6 @@ GameScene::GameScene(QObject *parent) :
     calcRects();
     setSceneRect(qApp->primaryScreen()->availableGeometry());
     setBackgroundBrush(QColor(47,79,79));
-    //addRect(m_gameplayRect);
 }
 
 bool GameScene::loadLevel(const Level &level)
@@ -44,6 +43,14 @@ bool GameScene::loadLevel(const Level &level)
         QObject::connect(m_gameTimer,        &QTimer::timeout, this, &GameScene::advance);
         QObject::connect(m_enemySpawnTimer,  &QTimer::timeout, this, &GameScene::spawnEnemy);
         QObject::connect(m_bonusTimer,       &QTimer::timeout, this, &GameScene::spawnBonus);
+        QObject::connect(m_base, &Base::destroyed, this, [this]()->void{
+            m_base = nullptr;
+            gameOver();
+        });
+        QObject::connect(m_player, &PlayerTank::destroyed, this, [this]()->void{
+            m_player = nullptr;
+            gameOver();
+        });
 
         QObject::connect(m_player, &PlayerTank::picked, this, &GameScene::playerPickedBonus);
 
@@ -73,7 +80,15 @@ QRectF GameScene::interfaceRect() const
 
 void GameScene::gameOver()
 {
+    qDebug() << __PRETTY_FUNCTION__;
+    m_bonusTimer->stop();
+    m_enemySpawnTimer->stop();
+    if (m_player) m_player->setRequireToDestroy();
 
+    Entity *entity = new Entity(QPixmap(":/images/gameover.png").scaled(m_lengthBlock, m_lengthBlock));
+    addItem(entity);
+    entity->setPos(gameplayRect().width()/2 - entity->pixmap().width()/2,
+                   gameplayRect().height()/2 - entity->pixmap().height()/2);
 }
 
 void GameScene::calcRects()
@@ -87,8 +102,7 @@ void GameScene::initPlayer(const QPointF &pos)
 {
     m_player = new PlayerTank(m_lengthBlock - 4);
     addItem(m_player);
-    m_player->setPos(pos.x() * m_lengthBlock,
-                     pos.y() * m_lengthBlock);
+    m_player->setRespawnPos(QPointF(pos.x() * m_lengthBlock, pos.y() * m_lengthBlock));
     m_player->setBorderPoint(QPointF(m_gameplayRect.width(), m_gameplayRect.height()));
 }
 
@@ -122,6 +136,7 @@ void GameScene::spawnBonus()
 
 void GameScene::spawnBorder()
 {
+    if (!m_base) return;
     const QPointF basePoint = m_base->scenePos();
     hideEntityAndCreateConcrete(QPointF(basePoint.x() + m_lengthBlock, basePoint.y()));
     hideEntityAndCreateConcrete(QPointF(basePoint.x() - m_lengthBlock, basePoint.y()));
@@ -138,6 +153,7 @@ void GameScene::destroyAllEnemies()
     for (QGraphicsItem *item : items()) {
         Entity *entity = qgraphicsitem_cast<Entity*>(item);
         if (entity && entity->entityName() == "Enemy") {
+            spawnExplosionAt(entity);
             entity->setRequireToDestroy();
         }
     }
@@ -193,6 +209,14 @@ void GameScene::resetBorderTimers()
 
     m_borderTimer->start(BONUS_DURATION);
     m_borderBlinkTimer->start(BONUS_DURATION - 2000);
+}
+
+void GameScene::spawnExplosionAt(Entity *entity)
+{
+    Explosion *explosion = new Explosion(QPointF(entity->x() - entity->pixmap().width(),
+                                         entity->y() - entity->pixmap().height()), entity->pixmap().width());
+    addItem(explosion);
+    explosion->startAnimation();
 }
 
 void GameScene::hideEntityAndCreateConcrete(const QPointF &nearPos)
