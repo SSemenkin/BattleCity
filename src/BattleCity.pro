@@ -26,6 +26,7 @@ SOURCES += \
     game.cpp \
     level.cpp \
     main.cpp \
+    menutextitem.cpp \
     scenes/gamescene.cpp \
     scenes/menuscene.cpp
 
@@ -46,6 +47,7 @@ HEADERS += \
     entities/tank.h \
     game.h \
     level.h \
+    menutextitem.h \
     scenes/gamescene.h \
     scenes/menuscene.h
 

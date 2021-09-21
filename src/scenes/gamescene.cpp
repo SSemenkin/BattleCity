@@ -91,6 +91,7 @@ void GameScene::gameOver()
     addItem(gameover);
     gameover->setPos(gameplayRect().width()/2 - gameover->pixmap().width()/2,
                      gameplayRect().height());
+    QObject::connect(gameover, &GameOverItem::movedToCenter, this, &GameScene::toMenu);
 }
 
 void GameScene::calcRects()
@@ -241,7 +242,7 @@ void GameScene::initInterface()
 
     QGraphicsTextItem *textItem = new QGraphicsTextItem("Score: ");
     textItem->setDefaultTextColor(Qt::white);
-    textItem->setFont(QFont(textItem->font().family(), textItem->font().pointSize() * 4));
+    //textItem->setFont(QFont(textItem->font().family(), textItem->font().pointSize() * 4));
     addItem(textItem);
     textItem->setPos(initWidth, initHeight);
 
@@ -308,17 +309,19 @@ void GameScene::hideEntityAndCreateConcrete(const QPointF &nearPos)
     QTransform transform;
     QGraphicsItem *item = itemAt(QPointF(nearPos.x() + m_lengthBlock/2, nearPos.y() + m_lengthBlock/2), transform);
 
+    Entity *entity = nullptr;
     if (item) {
-        Entity *entity = qgraphicsitem_cast<Entity*>(item);
+        entity = qgraphicsitem_cast<Entity*>(item);
         if (entity && entity->entityName() == "StaticBody") {
             m_hides.push_back(entity);
             entity->hide();
-
-            m_border.push_back(new StaticBody(StaticBody::Type::Concrete, m_lengthBlock));
-            addItem(m_border.last());
-            m_border.last()->setPos(entity->scenePos());
         }
     }
+    m_border.push_back(new StaticBody(StaticBody::Type::Concrete, m_lengthBlock));
+    addItem(m_border.last());
+
+    entity ? m_border.last()->setPos(entity->pos()) :
+             m_border.last()->setPos(nearPos);
 }
 
 void GameScene::playerPickedBonus(int bonus)

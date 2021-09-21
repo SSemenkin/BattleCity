@@ -8,7 +8,8 @@ class GameOverItem : public Entity
     Q_OBJECT
 public:
     explicit GameOverItem(const QPointF& centerOfSceen, int pixmapWidth);
-
+signals:
+    void movedToCenter();
 protected:
     void advance(int phase) override;
 private:

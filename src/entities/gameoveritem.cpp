@@ -13,6 +13,7 @@ void GameOverItem::advance(int phase)
         if (y() > m_center.y()) {
             moveBy(0, -2);
         } else {
+            emit movedToCenter();
             setRequireToDestroy();
         }
         Entity::advance(phase);

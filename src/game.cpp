@@ -12,14 +12,16 @@ Game *Game::init()
     return &game;
 }
 
-Game::Game()
+Game::Game() :
+    m_view(new QGraphicsView),
+    m_menuScene(new MenuScene)
 {
-    m_view = new QGraphicsView;
-    m_menuScene = new MenuScene;
+    m_menuScene->initLevels(m_levelVector);
 
-    startGameAtLevel(1);
+    toMenu();
 
     QObject::connect(m_menuScene, &MenuScene::startGameAtLevel, this, &Game::startGameAtLevel);
+    QObject::connect(m_menuScene, &MenuScene::quit, m_view, &QGraphicsView::close);
 
     m_view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
