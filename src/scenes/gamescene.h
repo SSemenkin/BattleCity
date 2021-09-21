@@ -64,6 +64,8 @@ protected:
     QVector<Entity *> m_enemies;
 private:
     void gameOver();
+    void gameWin();
+
     void calcRects();
     void spawnEnemy();
     void spawnBonus();

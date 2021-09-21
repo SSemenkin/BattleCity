@@ -4,8 +4,10 @@ MenuScene::MenuScene(QObject *parent) : QGraphicsScene(parent),
     m_play(new MenuTextItem("Play")),
     m_quit(new MenuTextItem("Quit")),
     m_back(new MenuTextItem("Back")),
-    m_logo(new QGraphicsPixmapItem(QPixmap(":/images/logo.png")))
+    m_logo(new QGraphicsPixmapItem(QPixmap(":/images/logo.png"))),
+    m_tankItem(new QGraphicsPixmapItem(QPixmap(":/images/player2right.png")))
 {
+
     QObject::connect(m_play, &MenuTextItem::clicked, this, &MenuScene::onItemClicked);
     QObject::connect(m_back, &MenuTextItem::clicked, this, &MenuScene::onItemClicked);
     QObject::connect(m_quit, &MenuTextItem::clicked, this, &MenuScene::onItemClicked);
@@ -25,7 +27,9 @@ MenuScene::MenuScene(QObject *parent) : QGraphicsScene(parent),
     addItem(m_play);
     addItem(m_quit);
     addItem(m_back);
+    addItem(m_tankItem);
     m_back->hide();
+    m_tankItem->hide();
 
 
     toStartScreen();
@@ -127,6 +131,7 @@ void MenuScene::hideLastShowedItems()
         m_lastDisplayed.first()->setState(false);
         m_lastDisplayed.pop_front();
     }
+    m_tankItem->hide();
 }
 
 void MenuScene::enterPressed()
@@ -150,6 +155,7 @@ void MenuScene::enterPressed()
 
 void MenuScene::changeCurrentButton(Qt::Key key)
 {
+    m_tankItem->show();
     int value = key == Qt::Key_Up ? -1 : 1;
 
     int currIndex = -1;
@@ -163,6 +169,7 @@ void MenuScene::changeCurrentButton(Qt::Key key)
 
     if (currIndex == -1) {
         m_lastDisplayed.at(0)->setState(true);
+        moveTankToItem(m_lastDisplayed.first());
     } else {
         m_lastDisplayed.at(currIndex)->setState(false);
 
@@ -170,10 +177,13 @@ void MenuScene::changeCurrentButton(Qt::Key key)
 
         if (currIndex == m_lastDisplayed.size()) {
             m_lastDisplayed.first()->setState(true);
+            moveTankToItem(m_lastDisplayed.first());
         } else if (currIndex < 0){
             m_lastDisplayed.last()->setState(true);
+            moveTankToItem(m_lastDisplayed.last());
         } else {
             m_lastDisplayed.at(currIndex)->setState(true);
+            moveTankToItem(m_lastDisplayed.at(currIndex));
         }
     }
 }
@@ -188,4 +198,13 @@ void MenuScene::deaktivateAllButNotSender()
         }
     }
     qobject_cast<MenuTextItem*>(sender())->setState(true);
+    moveTankToItem(qobject_cast<MenuTextItem*>(sender()));
+    m_tankItem->show();
+
+}
+
+void MenuScene::moveTankToItem(QGraphicsItem *item)
+{
+    m_tankItem->setPos(item->pos().x() - m_tankItem->pixmap().width(),
+                       item->pos().y() + m_tankItem->pixmap().height()/2);
 }

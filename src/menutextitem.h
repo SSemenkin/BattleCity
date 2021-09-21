@@ -25,7 +25,7 @@ signals:
 
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
-    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+    virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event) override;
 
 private:
     bool m_state {false};

@@ -35,10 +35,10 @@ void MenuTextItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
     QGraphicsTextItem::mousePressEvent(event);
 }
 
-void MenuTextItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+void MenuTextItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
     emit hovered();
     setState(true);
     updateTextColor();
-    QGraphicsTextItem::mouseMoveEvent(event);
+    QGraphicsTextItem::hoverEnterEvent(event);
 }

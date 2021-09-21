@@ -43,6 +43,7 @@ bool GameScene::loadLevel(const Level &level)
         initBase(level.basePos());
         initInterface();
 
+
         QObject::connect(m_gameTimer,        &QTimer::timeout, this, &GameScene::advance);
         QObject::connect(m_enemySpawnTimer,  &QTimer::timeout, this, &GameScene::spawnEnemy);
         QObject::connect(m_bonusTimer,       &QTimer::timeout, this, &GameScene::spawnBonus);
@@ -54,7 +55,6 @@ bool GameScene::loadLevel(const Level &level)
             m_player = nullptr;
             gameOver();
         });
-
         QObject::connect(m_player, &PlayerTank::picked, this, &GameScene::playerPickedBonus);
 
 
@@ -92,6 +92,14 @@ void GameScene::gameOver()
     gameover->setPos(gameplayRect().width()/2 - gameover->pixmap().width()/2,
                      gameplayRect().height());
     QObject::connect(gameover, &GameOverItem::movedToCenter, this, &GameScene::toMenu);
+}
+
+void GameScene::gameWin()
+{
+    QTimer *m_winningTimer = new QTimer(this);
+
+    QObject::connect(m_winningTimer, &QTimer::timeout, this, &GameScene::toMenu);
+    m_winningTimer->start(BONUS_DURATION);
 }
 
 void GameScene::calcRects()

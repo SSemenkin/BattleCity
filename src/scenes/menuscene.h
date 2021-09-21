@@ -32,6 +32,7 @@ private:
     QVector<MenuTextItem*> m_levels;
     QGraphicsPixmapItem *m_logo;
     QVector<MenuTextItem*> m_lastDisplayed;
+    QGraphicsPixmapItem *m_tankItem;
     int m_offset {20};
 private:
     void onItemClicked();
@@ -40,6 +41,7 @@ private:
     void enterPressed();
     void changeCurrentButton(Qt::Key key);
     void deaktivateAllButNotSender();
+    void moveTankToItem(QGraphicsItem *item);
 };
 
 #endif // MENUSCENE_H
