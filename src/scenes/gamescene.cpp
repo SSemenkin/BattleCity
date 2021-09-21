@@ -87,7 +87,7 @@ void GameScene::gameOver()
     m_enemySpawnTimer->stop();
 
     GameOverItem *gameover = new GameOverItem(QPointF(gameplayRect().width()/2 - m_lengthBlock/2,
-                                                    gameplayRect().height()/2 - m_lengthBlock/2), m_lengthBlock);
+                                                    gameplayRect().height()/2 - m_lengthBlock/2));
     addItem(gameover);
     gameover->setPos(gameplayRect().width()/2 - gameover->pixmap().width()/2,
                      gameplayRect().height());
