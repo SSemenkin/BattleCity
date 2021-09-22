@@ -47,14 +47,8 @@ bool GameScene::loadLevel(const Level &level)
         QObject::connect(m_gameTimer,        &QTimer::timeout, this, &GameScene::advance);
         QObject::connect(m_enemySpawnTimer,  &QTimer::timeout, this, &GameScene::spawnEnemy);
         QObject::connect(m_bonusTimer,       &QTimer::timeout, this, &GameScene::spawnBonus);
-        QObject::connect(m_base, &Base::destroyed, this, [this]()->void{
-            m_base = nullptr;
-            m_player->setRequireToDestroy();
-        });
-        QObject::connect(m_player, &PlayerTank::destroyed, this, [this]()->void{
-            m_player = nullptr;
-            gameOver();
-        });
+        QObject::connect(m_base, &Base::destroyed, m_player, &PlayerTank::setRequireToDestroy);
+        QObject::connect(m_player, &PlayerTank::destroyed, this, &GameScene::gameOver);
         QObject::connect(m_player, &PlayerTank::picked, this, &GameScene::playerPickedBonus);
 
 
@@ -244,6 +238,7 @@ void GameScene::initInterface()
         if (i % 2 ) initHeight += m_lengthBlock;
         m_enemies.push_back(entity);
     }
+    if (m_enemyCount & 1) initHeight += m_lengthBlock;
 
     initWidth -= m_lengthBlock;
 

@@ -19,9 +19,10 @@ public:
 
 private:
     Game();
-    QScopedPointer<MenuScene> m_menuScene;
     QScopedPointer<GameScene> m_gameScene;
+    QScopedPointer<MenuScene> m_menuScene;
     QScopedPointer<QGraphicsView> m_view;
+
     static QVector<Level> m_levelVector;
 
 private:

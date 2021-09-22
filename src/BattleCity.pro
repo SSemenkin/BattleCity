@@ -28,8 +28,7 @@ SOURCES += \
     main.cpp \
     menutextitem.cpp \
     scenes/gamescene.cpp \
-    scenes/menuscene.cpp \
-    sounds.cpp
+    scenes/menuscene.cpp
 
 HEADERS += \
     entities/base.h \
@@ -50,8 +49,7 @@ HEADERS += \
     level.h \
     menutextitem.h \
     scenes/gamescene.h \
-    scenes/menuscene.h \
-    sounds.h
+    scenes/menuscene.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

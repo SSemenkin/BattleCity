@@ -3,6 +3,7 @@
 
 #include "entities/entity.h"
 
+
 class Explosion : public Entity
 {
     Q_OBJECT

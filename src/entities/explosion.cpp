@@ -10,6 +10,7 @@ Explosion::Explosion(const QPointF& fixedCenter, int pixmapWidth) :
     setLivesLeft(1);
     setZValue(3);
 
+
     m_frames = {
         QPixmap(":/images/explosion/explosion1.png"),
         QPixmap(":/images/explosion/explosion2.png"),
