@@ -23,7 +23,7 @@ SOURCES += \
     entities/shield.cpp \
     entities/staticbody.cpp \
     entities/tank.cpp \
-    game.cpp \
+    gameview.cpp \
     level.cpp \
     main.cpp \
     menutextitem.cpp \
@@ -45,7 +45,7 @@ HEADERS += \
     entities/shield.h \
     entities/staticbody.h \
     entities/tank.h \
-    game.h \
+    gameview.h \
     level.h \
     menutextitem.h \
     scenes/gamescene.h \
