@@ -6,25 +6,23 @@ QVector<Level> Game::m_levelVector = {
     Level(":/levels/3_level.txt")
 };
 
-Game *Game::init()
-{
-    static Game game;
-    return &game;
-}
-
 Game::Game() :
     m_menuScene(new MenuScene),
     m_view(new QGraphicsView)
 {
     m_menuScene->initLevels(m_levelVector);
 
-    toMenu();
 
     QObject::connect(m_menuScene.data(), &MenuScene::startGameAtLevel, this, &Game::startGameAtLevel);
     QObject::connect(m_menuScene.data(), &MenuScene::quit, m_view.data(), &QGraphicsView::close);
 
     m_view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+}
+
+void Game::start()
+{
+    toMenu();
     m_view->showFullScreen();
 }
 

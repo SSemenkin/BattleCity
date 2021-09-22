@@ -13,12 +13,16 @@ class Game : public QObject
 {
     Q_OBJECT
 public:
-    static Game* init();
+    Game();
     Game(const Game& rhs) = delete;
     Game& operator=(const Game& rhs) = delete;
 
+    void start();
+
 private:
-    Game();
+    /// now member on right order definition
+    /// if QGraphicsView will deleted before them scenes you will have trouble ( uses nullptr in QGraphicsScene::~QGraphicsScene())
+
     QScopedPointer<GameScene> m_gameScene;
     QScopedPointer<MenuScene> m_menuScene;
     QScopedPointer<QGraphicsView> m_view;
