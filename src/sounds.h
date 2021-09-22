@@ -10,11 +10,6 @@ class Sounds : public QObject
 public:
     Sounds();
 
-    static void playShoot();
-    static void playExplosion();
-private:
-    static QSound m_shoot;
-    static QSound m_explosion;
 };
 
 #endif // SOUNDS_H

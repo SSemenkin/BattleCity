@@ -20,8 +20,8 @@ Game::Game() :
 
     toMenu();
 
-    QObject::connect(m_menuScene, &MenuScene::startGameAtLevel, this, &Game::startGameAtLevel);
-    QObject::connect(m_menuScene, &MenuScene::quit, m_view, &QGraphicsView::close);
+    QObject::connect(m_menuScene.data(), &MenuScene::startGameAtLevel, this, &Game::startGameAtLevel);
+    QObject::connect(m_menuScene.data(), &MenuScene::quit, m_view.data(), &QGraphicsView::close);
 
     m_view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -30,25 +30,15 @@ Game::Game() :
 
 void Game::startGameAtLevel(int levelId)
 {
-    if (m_gameScene) {
-        delete m_gameScene;
-    }
-    m_gameScene = new GameScene;
+    m_gameScene.reset(new GameScene);
     m_gameScene->loadLevel(m_levelVector.at(levelId));
 
-    m_view->setScene(m_gameScene);
-    QObject::connect(m_gameScene, &GameScene::toMenu, this, &Game::toMenu);
+    m_view->setScene(m_gameScene.data());
+    QObject::connect(m_gameScene.data(), &GameScene::toMenu, this, &Game::toMenu);
 }
 
 void Game::toMenu()
 {
-    m_view->setScene(m_menuScene);
+    m_view->setScene(m_menuScene.data());
 }
 
-Game::~Game() noexcept
-{
-    m_menuScene->deleteLater();
-    if (m_gameScene)
-        m_gameScene->deleteLater();
-    m_view->deleteLater();
-}

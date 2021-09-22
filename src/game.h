@@ -16,13 +16,12 @@ public:
     static Game* init();
     Game(const Game& rhs) = delete;
     Game& operator=(const Game& rhs) = delete;
-    virtual ~Game() noexcept;
 
 private:
     Game();
-    QGraphicsView *m_view;
-    MenuScene *m_menuScene;
-    GameScene *m_gameScene {nullptr};
+    QScopedPointer<QGraphicsView> m_view;
+    QScopedPointer<MenuScene> m_menuScene;
+    QScopedPointer<GameScene> m_gameScene;
     static QVector<Level> m_levelVector;
 
 private:

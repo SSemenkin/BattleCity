@@ -26,7 +26,6 @@ public:
            QGraphicsItem *parentItem = nullptr,
            QObject *parent = nullptr);
 
-    virtual ~Entity() noexcept {}
     enum class Property : int8_t {
         Destructible = 0,
         CanBulletMovesThroughObject,

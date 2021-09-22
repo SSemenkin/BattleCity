@@ -18,7 +18,6 @@ Explosion::Explosion(const QPointF& fixedCenter, int pixmapWidth) :
         QPixmap(":/images/explosion/explosion5.png")
     };
     changePixmap();
-    Sounds::playExplosion();
 }
 
 void Explosion::startAnimation()
