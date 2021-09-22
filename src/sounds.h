@@ -2,7 +2,6 @@
 #define SOUNDS_H
 
 #include <QObject>
-#include <QSound>
 
 class Sounds : public QObject
 {

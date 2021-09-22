@@ -41,7 +41,7 @@ void Level::load(const QString &path)
 #ifdef WIN32
     #define SEPARATOR "\r\n"
 #else
-    SEPARATOR "\n"
+    #define SEPARATOR "\n"
 #endif
     QFile file(path);
     if (file.exists()) {
@@ -53,8 +53,14 @@ void Level::load(const QString &path)
                 qDebug() << "File " << path << " is empty";
                 return;
             }
-            m_levelId = fileContent.first().split(' ').first().toInt();
-            m_enemyCount = fileContent.first().split(' ').at(1).toInt();
+            const QStringList firstRowElements = fileContent.first().split(' ');
+            if (firstRowElements.size() < 2) {
+                qDebug() << "First row of file not contains enought symbols";
+                file.close();
+                return;
+            }
+            m_levelId = firstRowElements.first().toInt();
+            m_enemyCount = firstRowElements.at(1).toInt();
 
             m_levelStructure.reserve(fileContent.size() - 1);
             for(int i = 1; i < fileContent.size(); ++i) {

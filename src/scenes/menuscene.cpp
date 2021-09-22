@@ -36,18 +36,6 @@ MenuScene::MenuScene(QObject *parent) : QGraphicsScene(parent),
 
 }
 
-MenuScene::~MenuScene() noexcept
-{
-    delete m_play;
-    delete m_quit;
-    delete m_back;
-    delete m_logo;
-
-    while (!m_levels.isEmpty()) {
-        delete m_levels.first();
-        m_levels.pop_front();
-    }
-}
 
 void MenuScene::initLevels(const QVector<Level> &levels)
 {

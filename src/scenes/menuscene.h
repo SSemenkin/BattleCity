@@ -15,7 +15,6 @@ class MenuScene : public QGraphicsScene
     Q_OBJECT
 public:
     explicit MenuScene(QObject *parent = nullptr);
-    virtual ~MenuScene() noexcept;
     void initLevels(const QVector<Level> &levels);
     void toStartScreen();
     void toLevelScreen();
