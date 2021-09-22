@@ -107,7 +107,7 @@ void GameScene::initPlayer(const QPointF &pos)
     m_player = new PlayerTank(m_lengthBlock - 4);
     addItem(m_player);
     m_player->setRespawnPos(QPointF(pos.x() * m_lengthBlock, pos.y() * m_lengthBlock));
-    m_player->setBorderPoint(QPointF(gameplayRect().width(), m_lastHeight - m_lengthBlock));
+    m_player->setBorderPoint(QPointF(gameplayRect().width(), m_lastHeight));
 }
 
 void GameScene::initBase(const QPointF &pos)

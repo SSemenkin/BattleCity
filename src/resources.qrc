@@ -48,5 +48,6 @@
         <file>sounds/shoot.wav</file>
         <file>images/enemy.png</file>
         <file>images/pause.png</file>
+        <file>levels/4_level.txt</file>
     </qresource>
 </RCC>

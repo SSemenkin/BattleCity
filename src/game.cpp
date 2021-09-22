@@ -3,7 +3,8 @@
 QVector<Level> Game::m_levelVector = {
     Level(":/levels/1_level.txt"),
     Level(":/levels/2_level.txt"),
-    Level(":/levels/3_level.txt")
+    Level(":/levels/3_level.txt"),
+    Level(":/levels/4_level.txt")
 };
 
 Game::Game() :
