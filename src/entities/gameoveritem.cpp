@@ -4,7 +4,7 @@ GameOverItem::GameOverItem(const QPointF &centerOfSceen) :
     Entity(QPixmap(":/images/gameover.png")),
     m_center(centerOfSceen)
 {
-
+    setZValue(5);
 }
 
 void GameOverItem::advance(int phase)

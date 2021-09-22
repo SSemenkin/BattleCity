@@ -13,8 +13,8 @@ Game *Game::init()
 }
 
 Game::Game() :
-    m_view(new QGraphicsView),
-    m_menuScene(new MenuScene)
+    m_menuScene(new MenuScene),
+    m_view(new QGraphicsView)
 {
     m_menuScene->initLevels(m_levelVector);
 
@@ -41,4 +41,6 @@ void Game::toMenu()
 {
     m_view->setScene(m_menuScene.data());
 }
+
+
 
