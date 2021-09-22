@@ -23,7 +23,6 @@ signals:
     void quit();
 protected:
     void keyPressEvent(QKeyEvent *event);
-
 private:
     MenuTextItem *m_play;
     MenuTextItem *m_quit;

@@ -62,6 +62,7 @@ protected:
     QVector<Entity *> m_hides;
     QVector<Entity *> m_border;
     QVector<Entity *> m_enemies;
+
 private:
     void gameOver();
     void gameWin();

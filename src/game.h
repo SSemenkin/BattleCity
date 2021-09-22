@@ -9,7 +9,7 @@
 #include "scenes/gamescene.h"
 
 
-class Game : public QWidget
+class Game : public QObject
 {
     Q_OBJECT
 public:
