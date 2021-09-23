@@ -5,8 +5,17 @@ EnemyTank::EnemyTank(int pixmapWidth) :
     m_directionTimer(new QTimer(this)),
     m_shootTimer(new QTimer(this))
 {
-    m_speed = TANK_SPEED;
-    setLivesLeft(1);
+    bool r = rand() & 1;
+    if (r) {
+        setPixmap(QPixmap(":/images/tank2up.png").scaled(pixmapWidth, pixmapWidth));
+        m_speed = TANK_SPEED;
+        setLivesLeft(1);
+    } else {
+        m_speed = TANK_SPEED * 2;
+        setLivesLeft(2);
+    }
+    changeDirection();
+
     setEntityName("Enemy");
 
     QObject::connect(m_directionTimer, &QTimer::timeout, this, &EnemyTank::changeDirection);
