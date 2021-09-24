@@ -48,6 +48,8 @@ void PlayerTank::keyPressEvent(QKeyEvent *event)
     case Qt::Key_Right:
         m_speed = TANK_SPEED;
         m_direction = getNewDirection(static_cast<Qt::Key>(event->key()));
+        if (!m_directionQueue.contains(static_cast<Qt::Key>(event->key())))
+            m_directionQueue.push_back(static_cast<Qt::Key>(event->key()));
         break;
     case Qt::Key_Space:
         shoot();
@@ -64,7 +66,12 @@ void PlayerTank::keyReleaseEvent(QKeyEvent *event)
     case Qt::Key_Down:
     case Qt::Key_Left:
     case Qt::Key_Right:
-        m_speed = 0;
+        m_directionQueue.removeOne(static_cast<Qt::Key>(event->key()));
+        if (m_directionQueue.isEmpty()) {
+            m_speed = 0;
+        } else {
+            m_direction = getNewDirection(m_directionQueue.last());
+        }
         break;
     default:
         Tank::keyPressEvent(event);

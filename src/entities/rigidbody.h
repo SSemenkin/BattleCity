@@ -18,14 +18,8 @@ protected:
         Left,
         Right
     };
-    enum class ObjectType : int8_t {
-        NonType,
-        Bullet,
-        Actor
-    };
 
     Direction m_direction {Direction::Up};
-    ObjectType m_objectType {ObjectType::NonType};
 
 protected:
     void rotatePixmap(qreal angle);

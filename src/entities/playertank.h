@@ -27,6 +27,7 @@ private:
 private:
     Shield *m_shield {nullptr};
     QPointF m_respawn;
+    QVector<Qt::Key> m_directionQueue;
 };
 
 #endif // PLAYERTANK_H
