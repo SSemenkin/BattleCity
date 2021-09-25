@@ -57,11 +57,11 @@ protected:
     PlayerTank *m_player;
     Base *m_base;
 
-    QVector<Entity*> m_scoreItems;
+    QVector<Entity *> m_scoreItems;
+    QVector<Entity *> m_enemiesLives;
 
     QVector<Entity *> m_hides;
     QVector<Entity *> m_border;
-    QVector<Entity *> m_enemies;
 
 private:
     void gameOver();

@@ -236,7 +236,7 @@ void GameScene::initInterface()
         addItem(entity);
         entity->setPos(initWidth, initHeight);
         if (i % 2 ) initHeight += m_lengthBlock;
-        m_enemies.push_back(entity);
+        m_enemiesLives.push_back(entity);
     }
     if (m_enemyCount & 1) initHeight += m_lengthBlock;
 
@@ -270,9 +270,9 @@ void GameScene::enemyDestroyed()
         gameWin();
     }
     rebuildScore();
-    if (!m_enemies.isEmpty()) {
-        m_enemies.last()->setRequireToDestroy();
-        m_enemies.pop_back();
+    if (!m_enemiesLives.isEmpty()) {
+        m_enemiesLives.last()->setRequireToDestroy();
+        m_enemiesLives.pop_back();
     }
 }
 
