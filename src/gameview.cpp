@@ -1,15 +1,15 @@
 ﻿#include "gameview.h"
 
-QVector<Level> GameView::m_levelVector = {
-    Level(":/levels/1_level.txt"),
-    Level(":/levels/2_level.txt"),
-    Level(":/levels/3_level.txt"),
-    Level(":/levels/4_level.txt")
-};
 
 GameView::GameView() :
     m_menuScene(new MenuScene)
 {
+   m_levelVector = {
+       Level(":/levels/1_level.txt"),
+       Level(":/levels/2_level.txt"),
+       Level(":/levels/3_level.txt"),
+       Level(":/levels/4_level.txt")
+   };
     m_menuScene->initLevels(m_levelVector);
 
 

@@ -16,13 +16,15 @@ public:
     GameView();
     GameView(const GameView& rhs) = delete;
     GameView& operator=(const GameView& rhs) = delete;
+    GameView(GameView &&) = delete;
+    GameView& operator=(GameView&&) = delete;
 
 private:
 
     QScopedPointer<GameScene> m_gameScene;
     QScopedPointer<MenuScene> m_menuScene;
 
-    static QVector<Level> m_levelVector;
+    QVector<Level> m_levelVector;
 
 private:
     void startGameAtLevel(int levelId);
