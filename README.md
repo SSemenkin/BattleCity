@@ -10,6 +10,3 @@ Battle City Game Clone
 ![Alt text](/screenshots/1_level.png?raw=true "1 Level")
 ## Menu
 ![Alt text](/screenshots/menu.png?raw=true "Menu")
-You can also add your own level as txt-extention file:
--in first row you need to write level number (will read until space occurred) and enemy counter
--in each other paint level structure (0 - brick, 1 - bush, 2 - concrete, 3 - water, p - player respawn pos, b - base position)
