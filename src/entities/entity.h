@@ -15,6 +15,7 @@
 #include <QTimer>
 #include <QGraphicsScene>
 #include <QDebug>
+#include <QSound>
 
 class Entity : public QObject, public QGraphicsPixmapItem
 {

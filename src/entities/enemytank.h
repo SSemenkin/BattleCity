@@ -9,6 +9,7 @@ class EnemyTank : public Tank
     Q_OBJECT
 public:
     explicit EnemyTank(int pixmapWidth);
+    ~EnemyTank() override;
 protected:
     void advance(int phase) override;
 private:
@@ -16,6 +17,8 @@ private:
     QTimer *m_shootTimer;
 private:
     void changeDirection();
+
+    static QSound destroy_sound;
 };
 
 #endif // ENEMYTANK_H

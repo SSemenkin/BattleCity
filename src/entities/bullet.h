@@ -2,7 +2,6 @@
 #define BULLET_H
 
 #include "entities/rigidbody.h"
-#include "entities/explosion.h"
 
 class Bullet : public RigidBody
 {
@@ -14,10 +13,13 @@ protected:
 private:
     int m_dx {0};
     int m_dy {0};
+
 private:
     void init();
     void handleCollision(Entity *entity);
     void handleBorderOfScene();
+
+    static QSound sound;
 };
 
 #endif // BULLET_H

@@ -1,5 +1,7 @@
 ﻿#include "gamescene.h"
 
+#include "entities/explosion.h"
+
 GameScene::GameScene(QObject *parent) :
     QGraphicsScene(parent),
     m_gameTimer(new QTimer(this)),

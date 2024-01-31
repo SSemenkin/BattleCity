@@ -1,5 +1,7 @@
 ﻿#include "enemytank.h"
 
+QSound EnemyTank::destroy_sound("qrc:/sounds/explosion.wav");
+
 EnemyTank::EnemyTank(int pixmapWidth) :
     Tank(QPixmap(":/images/tank1up.png").scaled(pixmapWidth, pixmapWidth)),
     m_directionTimer(new QTimer(this)),
@@ -23,6 +25,11 @@ EnemyTank::EnemyTank(int pixmapWidth) :
 
     m_directionTimer->start(ENEMY_SWAP_DIRECTION_DELTA);
     m_shootTimer->start(ENEMY_SHOOT_DELTA);
+}
+
+EnemyTank::~EnemyTank()
+{
+    destroy_sound.play();
 }
 
 void EnemyTank::advance(int phase)

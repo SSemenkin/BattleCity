@@ -1,4 +1,7 @@
 ﻿#include "bullet.h"
+#include "entities/explosion.h"
+
+QSound Bullet::sound("qrc:/sounds/shoot.wav");
 
 Bullet::Bullet(RigidBody::Direction direction, int width) :
     RigidBody(QPixmap(":/images/bullet.png").scaled(width, width))
@@ -7,6 +10,8 @@ Bullet::Bullet(RigidBody::Direction direction, int width) :
     setLivesLeft(1);
     setBulletCanMoveThroughObject(false);
     setActorCanMoveThroughObject(false);
+
+    sound.play();
 
     rotatePixmap(m_direction, direction);
     m_direction = direction;
@@ -31,6 +36,7 @@ void Bullet::advance(int phase)
         Entity::advance(phase);
     }
 }
+
 
 void Bullet::init()
 {
